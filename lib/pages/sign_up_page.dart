@@ -1,8 +1,8 @@
 // ignore: file_names
-import 'package:advance_employee_management/pages/home_page.dart';
-import 'package:advance_employee_management/pages/phone_auth.dart';
-import 'package:advance_employee_management/pages/sign_in_page.dart';
+import 'package:advance_employee_management/locator.dart';
+import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
+import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
@@ -46,8 +46,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 authClass.googleSignIn(context);
               }),
               buttonItem("images/phone.png", "Continue with Phone", 25, () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (builder) => const PhoneAuth()));
+                locator<NavigationService>()
+                    .globalNavigateTo(PhoneAuthLog, context);
               }),
               const SizedBox(
                 height: 15,
@@ -83,11 +83,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (builder) => const SignInPage()),
-                          (route) => false);
+                      locator<NavigationService>()
+                          .globalNavigateTo(LonginRoute, context);
                     },
                     child: const Text(
                       "Login",
@@ -136,18 +133,13 @@ class _SignUpPageState extends State<SignUpPage> {
           circular = true;
         });
         try {
-          firebase_auth.UserCredential userCredential =
-              await firebaseAuth.createUserWithEmailAndPassword(
-                  email: _emailController.text,
-                  password: _passwordController.text);
+          await firebaseAuth.createUserWithEmailAndPassword(
+              email: _emailController.text, password: _passwordController.text);
 
           setState(() {
             circular = false;
           });
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (builder) => const HomePage()),
-              (route) => false);
+          locator<NavigationService>().globalNavigateTo(LayOutRoute, context);
         } catch (e) {
           final snackbar = SnackBar(content: Text(e.toString()));
           ScaffoldMessenger.of(context).showSnackBar(snackbar);

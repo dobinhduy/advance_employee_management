@@ -1,8 +1,5 @@
 // ignore: file_names
 
-import 'package:advance_employee_management/pages/home_page.dart';
-import 'package:advance_employee_management/pages/phone_auth.dart';
-import 'package:advance_employee_management/pages/sign_up_page.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
@@ -165,11 +162,7 @@ class _SignUpPageState extends State<SignInPage> {
           setState(() {
             circular = true;
           });
-
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (builder) => const HomePage()),
-              (route) => false);
+          locator<NavigationService>().globalNavigateTo(LayOutRoute, context);
         } catch (e) {
           final snackbar = SnackBar(content: Text(e.toString()));
           ScaffoldMessenger.of(context).showSnackBar(snackbar);

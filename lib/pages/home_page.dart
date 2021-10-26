@@ -1,7 +1,9 @@
 import 'package:advance_employee_management/Custom/todo_card.dart';
-import 'package:advance_employee_management/pages/sign_up_page.dart';
+import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/pages/view_data.dart';
+import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
+import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -103,11 +105,8 @@ class _HomePageState extends State<HomePage> {
               icon: InkWell(
                 onTap: () async {
                   await authClass.logout();
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (builder) => const SignUpPage()),
-                      (route) => false);
+                  locator<NavigationService>()
+                      .globalNavigateTo(SignupRoute, context);
                 },
                 child: const Icon(
                   Icons.logout,

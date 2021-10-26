@@ -1,4 +1,6 @@
-import 'package:advance_employee_management/pages/home_page.dart';
+import 'package:advance_employee_management/locator.dart';
+import 'package:advance_employee_management/rounting/route_names.dart';
+import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -34,10 +36,7 @@ class AuthClass {
           UserCredential userCredential =
               await auth.signInWithCredential(credential);
           storeTokenAndData(userCredential);
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (builder) => const HomePage()),
-              (route) => false);
+          locator<NavigationService>().globalNavigateTo(MainHomeP, context);
         } catch (e) {
           final snackbar = SnackBar(content: Text(e.toString()));
           ScaffoldMessenger.of(context).showSnackBar(snackbar);
@@ -111,10 +110,7 @@ class AuthClass {
       UserCredential userCredential =
           await auth.signInWithCredential(credential);
       storeTokenAndData(userCredential);
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (builder) => const HomePage()),
-          (route) => false);
+      locator<NavigationService>().globalNavigateTo(LayOutRoute, context);
       showSnackBar(context, "Logged in ");
     } catch (e) {
       showSnackBar(context, e.toString());
