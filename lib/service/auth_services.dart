@@ -36,7 +36,7 @@ class AuthClass {
           UserCredential userCredential =
               await auth.signInWithCredential(credential);
           storeTokenAndData(userCredential);
-          locator<NavigationService>().globalNavigateTo(MainHomeP, context);
+          locator<NavigationService>().globalNavigateTo(LayOutRoute, context);
         } catch (e) {
           final snackbar = SnackBar(content: Text(e.toString()));
           ScaffoldMessenger.of(context).showSnackBar(snackbar);

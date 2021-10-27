@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/pages/sign_up_page.dart';
 import 'package:advance_employee_management/provider/app_provider.dart';
@@ -11,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:provider/provider.dart';
+import 'package:universal_io/io.dart';
 
 //  flutter run -d chrome --web-hostname localhost --web-port 5000
 
@@ -36,6 +35,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Platform: ${Platform.operatingSystem}');
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Advance Employee Management',

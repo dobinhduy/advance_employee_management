@@ -1,3 +1,7 @@
+import 'package:advance_employee_management/locator.dart';
+import 'package:advance_employee_management/rounting/route.dart';
+import 'package:advance_employee_management/rounting/route_names.dart';
+import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:advance_employee_management/widgets/slide_menu/side_menu.dart';
 import 'package:flutter/material.dart';
 
@@ -11,9 +15,18 @@ class LayoutRoute extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Row(
         children: [
-          SideMenu(),
+          const SideMenu(),
           Expanded(
-            child: Column(),
+            child: Column(
+              children: [
+                Expanded(
+                    child: Navigator(
+                  key: locator<NavigationService>().navigatorKey,
+                  onGenerateRoute: generateRoute,
+                  initialRoute: MainHomeP,
+                ))
+              ],
+            ),
           )
         ],
       ),

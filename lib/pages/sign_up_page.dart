@@ -107,7 +107,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget textItem(
       String text, TextEditingController controller, bool obscureText) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width - 70,
+      width: MediaQuery.of(context).size.width / 3,
       height: 50,
       child: TextFormField(
           controller: controller,
@@ -149,7 +149,7 @@ class _SignUpPageState extends State<SignUpPage> {
         }
       },
       child: Container(
-        width: MediaQuery.of(context).size.width - 90,
+        width: MediaQuery.of(context).size.width / 3,
         height: 60,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(17),
@@ -176,7 +176,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return InkWell(
       onTap: onTap,
       child: SizedBox(
-        width: MediaQuery.of(context).size.width - 60,
+        width: MediaQuery.of(context).size.width / 3,
         height: 60,
         child: Card(
           color: Colors.black,
