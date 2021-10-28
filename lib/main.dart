@@ -11,7 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:provider/provider.dart';
 import 'package:universal_io/io.dart';
 
-//  flutter run -d chrome --web-hostname localhost --web-port 5000
+// flutter run -d chrome --web-hostname localhost --web-port 5000 --no-sound-null-safety
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

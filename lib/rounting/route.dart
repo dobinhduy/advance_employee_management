@@ -1,3 +1,4 @@
+import 'package:advance_employee_management/pages/UserPage/user_page.dart';
 import 'package:advance_employee_management/pages/home_page.dart';
 import 'package:advance_employee_management/pages/phone_auth.dart';
 import 'package:advance_employee_management/pages/sign_in_page.dart';
@@ -19,6 +20,8 @@ PageRoute generateRoute(RouteSettings settings) {
       return _getPageRoute(const HomePage());
     case LayOutRoute:
       return _getPageRoute(LayoutRoute());
+    case UserLayout:
+      return _getPageRoute(UsersPage());
 
     default:
       return _getPageRoute(const SignInPage());

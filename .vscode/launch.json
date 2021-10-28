@@ -8,14 +8,24 @@
             "name": "advance_employee_management",
             "request": "launch",
             "type": "dart",
-            "args": ["-d","chrome","","--web-port","5000"],
+            "args": [
+                "--no-sound-null-safety"
+            ]
         },
         {
             "name": "advance_employee_management (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile",
-            "args": ["-d","chrome","--web-port","5000"],
+            "args": [
+                "--no-sound-null-safety"
+            ]
+        },
+        {
+            "name": "Flutter (lib\\main.dart)",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib\\main.dart"
         }
     ]
 }

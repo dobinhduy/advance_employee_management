@@ -43,7 +43,7 @@ class SildeMenuTabletDesktop extends StatelessWidget {
                 icon: Icons.people,
                 onTap: () {
                   appProvider.changeCurrentPage(DisplayedPage.USERS);
-                  locator<NavigationService>().navigateTo(SignupRoute);
+                  locator<NavigationService>().navigateTo(UserLayout);
                 }),
           ],
         ),

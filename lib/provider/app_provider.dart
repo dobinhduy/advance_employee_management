@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum DisplayedPage { HOME, PRODUCTS, ORDERS, USERS }
+enum DisplayedPage { HOME, USERS, MANAGERS }
 
 class AppProvider with ChangeNotifier {
   late DisplayedPage currentPage;
