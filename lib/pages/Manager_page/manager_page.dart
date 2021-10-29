@@ -2,20 +2,20 @@ import 'dart:math';
 
 import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
 import 'package:flutter/material.dart';
-import 'package:responsive_table/DatatableHeader.dart';
-import 'package:responsive_table/ResponsiveDatatable.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:responsive_table/responsive_table.dart';
 
-class UsersPage extends StatefulWidget {
-  const UsersPage({Key? key}) : super(key: key);
+class ManagerPage extends StatefulWidget {
+  const ManagerPage({Key? key}) : super(key: key);
 
   @override
-  _UsersPageState createState() => _UsersPageState();
+  _ManagerPageState createState() => _ManagerPageState();
 }
 
-class _UsersPageState extends State<UsersPage> {
+class _ManagerPageState extends State<ManagerPage> {
   final List<DatatableHeader> _headers = [
     DatatableHeader(
-        text: "Employee ID",
+        text: "Manager ID",
         value: "id",
         show: true,
         sortable: true,
@@ -70,18 +70,16 @@ class _UsersPageState extends State<UsersPage> {
         sortable: false,
         sourceBuilder: (value, row) {
           List list = List.from(value);
-          return Container(
-            child: Column(
-              children: [
-                Container(
-                  width: 85,
-                  child: LinearProgressIndicator(
-                    value: list.first / list.last,
-                  ),
+          return Column(
+            children: [
+              SizedBox(
+                width: 85,
+                child: LinearProgressIndicator(
+                  value: list.first / list.last,
                 ),
-                Text("${list.first} of ${list.last}")
-              ],
-            ),
+              ),
+              Text("${list.first} of ${list.last}")
+            ],
           );
         },
         textAlign: TextAlign.center),

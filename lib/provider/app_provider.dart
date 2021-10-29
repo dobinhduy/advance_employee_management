@@ -1,6 +1,8 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 
-enum DisplayedPage { HOME, USERS, MANAGERS }
+enum DisplayedPage { HOME, USERS, MANAGERS, DASHBOARD, NOTIFICATION, SETTING }
 
 class AppProvider with ChangeNotifier {
   late DisplayedPage currentPage;

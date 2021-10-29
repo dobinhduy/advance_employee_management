@@ -29,12 +29,15 @@ class SildeMenuTabletDesktop extends StatelessWidget {
         child: Column(
           children: [
             const NavBarLogo(),
+            const SizedBox(
+              height: 30,
+            ),
             SileMenuItemDesktop(
-                active: appProvider.currentPage == DisplayedPage.HOME,
+                active: appProvider.currentPage == DisplayedPage.DASHBOARD,
                 text: "Dashboard",
                 icon: Icons.dashboard,
                 onTap: () {
-                  appProvider.changeCurrentPage(DisplayedPage.HOME);
+                  appProvider.changeCurrentPage(DisplayedPage.DASHBOARD);
                   locator<NavigationService>().navigateTo(MainHomeP);
                 }),
             SileMenuItemDesktop(
@@ -44,6 +47,14 @@ class SildeMenuTabletDesktop extends StatelessWidget {
                 onTap: () {
                   appProvider.changeCurrentPage(DisplayedPage.USERS);
                   locator<NavigationService>().navigateTo(UserLayout);
+                }),
+            SileMenuItemDesktop(
+                active: appProvider.currentPage == DisplayedPage.MANAGERS,
+                text: "Manager",
+                icon: Icons.dashboard,
+                onTap: () {
+                  appProvider.changeCurrentPage(DisplayedPage.MANAGERS);
+                  locator<NavigationService>().navigateTo(ManagerLayout);
                 }),
           ],
         ),
