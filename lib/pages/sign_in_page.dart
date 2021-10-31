@@ -6,6 +6,7 @@ import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:get_it/get_it.dart';
 
 import '../locator.dart';
 
@@ -20,12 +21,14 @@ class _SignUpPageState extends State<SignInPage> {
   firebase_auth.FirebaseAuth firebaseAuth = firebase_auth.FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _name = TextEditingController();
   bool circular = false;
   AuthClass authClass = AuthClass();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        physics: const ScrollPhysics(),
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,

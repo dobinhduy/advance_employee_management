@@ -1,13 +1,27 @@
+import 'dart:convert';
+
 import 'package:advance_employee_management/locator.dart';
+import 'package:advance_employee_management/models/user.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
+import 'package:advance_employee_management/service/user_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthClass {
+  late User _user;
+
+  final UserServices _userServices = UserServices();
+  late UserModel _userModel;
+
+  final Future<FirebaseApp> initialization = Firebase.initializeApp();
+
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
       'email',
@@ -16,6 +30,7 @@ class AuthClass {
   );
   final storage = const FlutterSecureStorage();
   FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   String user() {
     final User user = auth.currentUser!;
@@ -35,7 +50,7 @@ class AuthClass {
         try {
           UserCredential userCredential =
               await auth.signInWithCredential(credential);
-          storeTokenAndData(userCredential);
+
           locator<NavigationService>().globalNavigateTo(LayOutRoute, context);
         } catch (e) {
           final snackbar = SnackBar(content: Text(e.toString()));
@@ -109,9 +124,23 @@ class AuthClass {
           verificationId: verificationId, smsCode: smsCode);
       UserCredential userCredential =
           await auth.signInWithCredential(credential);
-      storeTokenAndData(userCredential);
+
       locator<NavigationService>().globalNavigateTo(LayOutRoute, context);
       showSnackBar(context, "Logged in ");
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  Future<void> signUpWithEmailPass(
+      String name, String email, String password, BuildContext context) async {
+    try {
+      await auth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((value) async {
+        _userServices.createUser(user(), name, email);
+        locator<NavigationService>().globalNavigateTo(LayOutRoute, context);
+      });
     } catch (e) {
       showSnackBar(context, e.toString());
     }
@@ -120,5 +149,14 @@ class AuthClass {
   void showSnackBar(BuildContext context, String text) {
     final snackbar = SnackBar(content: Text(text));
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
+  //Query user
+  Future<void> reloadUserModel() async {
+    _userModel = await _userServices.getUserbyID(_user.uid);
+  }
+
+  updateUserData(Map<String, dynamic> data) async {
+    _userServices.updateUser(data);
   }
 }

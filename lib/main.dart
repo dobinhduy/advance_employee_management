@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: avoid_print
     print('Platform: ${Platform.operatingSystem}');
     return MaterialApp(
       debugShowCheckedModeBanner: false,

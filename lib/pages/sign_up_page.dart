@@ -3,6 +3,7 @@ import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
+import 'package:advance_employee_management/service/user_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
@@ -19,11 +20,13 @@ class _SignUpPageState extends State<SignUpPage> {
   firebase_auth.FirebaseAuth firebaseAuth = firebase_auth.FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _name = TextEditingController();
   bool circular = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        physics: const ScrollPhysics(),
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -59,11 +62,18 @@ class _SignUpPageState extends State<SignUpPage> {
               const SizedBox(
                 height: 15,
               ),
+              textItem("Name", _name, false),
+              const SizedBox(
+                height: 15,
+              ),
               textItem("Email...", _emailController, false),
               const SizedBox(
                 height: 15,
               ),
               textItem("Password...", _passwordController, false),
+              const SizedBox(
+                height: 15,
+              ),
               const SizedBox(
                 height: 15,
               ),
@@ -133,13 +143,12 @@ class _SignUpPageState extends State<SignUpPage> {
           circular = true;
         });
         try {
-          await firebaseAuth.createUserWithEmailAndPassword(
-              email: _emailController.text, password: _passwordController.text);
+          authClass.signUpWithEmailPass(_name.text, _emailController.text,
+              _passwordController.text, context);
 
           setState(() {
             circular = false;
           });
-          locator<NavigationService>().globalNavigateTo(LayOutRoute, context);
         } catch (e) {
           final snackbar = SnackBar(content: Text(e.toString()));
           ScaffoldMessenger.of(context).showSnackBar(snackbar);
