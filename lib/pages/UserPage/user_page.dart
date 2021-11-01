@@ -1,8 +1,14 @@
 import 'dart:math';
 
+import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
+import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:advance_employee_management/rounting/route_names.dart';
+import 'package:advance_employee_management/service/navigation_service.dart';
+import 'package:advance_employee_management/service/user_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:responsive_table/DatatableHeader.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_table/ResponsiveDatatable.dart';
 
 class UsersPage extends StatefulWidget {
@@ -13,132 +19,6 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPageState extends State<UsersPage> {
-  final List<DatatableHeader> _headers = [
-    DatatableHeader(
-        text: "Employee ID",
-        value: "id",
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.center),
-    DatatableHeader(
-        text: "Name",
-        value: "name",
-        show: true,
-        flex: 2,
-        sortable: true,
-        textAlign: TextAlign.left),
-    DatatableHeader(
-        text: "Gender",
-        value: "gender",
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.center),
-    DatatableHeader(
-        text: "Birthday",
-        value: "birthday",
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.left),
-    DatatableHeader(
-        text: "Address",
-        value: "address",
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.left),
-    DatatableHeader(
-        text: "Phome Number",
-        value: "phone",
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.left),
-    DatatableHeader(
-        text: "Email",
-        value: "email",
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.left),
-    DatatableHeader(
-        text: "Department",
-        value: "department",
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.left),
-    DatatableHeader(
-        text: "Work day",
-        value: "workday",
-        show: true,
-        sortable: false,
-        sourceBuilder: (value, row) {
-          List list = List.from(value);
-          return Container(
-            child: Column(
-              children: [
-                Container(
-                  width: 85,
-                  child: LinearProgressIndicator(
-                    value: list.first / list.last,
-                  ),
-                ),
-                Text("${list.first} of ${list.last}")
-              ],
-            ),
-          );
-        },
-        textAlign: TextAlign.center),
-  ];
-
-  final List<int> _perPages = [5, 10, 15, 100];
-  final int _total = 100;
-  int _currentPerPage = 10;
-  int _currentPage = 1;
-  bool _isSearch = false;
-  // ignore: deprecated_member_use
-  final List<Map<String, dynamic>> _source = <Map<String, dynamic>>[];
-  List<Map<String, dynamic>> _selecteds = <Map<String, dynamic>>[];
-  final String _selectableKey = "id";
-
-  String _sortColumn = "";
-  bool _sortAscending = true;
-  bool _isLoading = true;
-  final bool _showSelect = true;
-
-  List<Map<String, dynamic>> _generateData({int n: 100}) {
-    final List source = List.filled(n, Random.secure());
-    List<Map<String, dynamic>> temps = <Map<String, dynamic>>[];
-    var i = _source.length;
-    print(i);
-    for (var data in source) {
-      temps.add({
-        "id": i,
-        "gender": "$i\ 000$i",
-        "name": "Product Product Product Product $i",
-        "birthday": "Category-$i",
-        "address": "${i}0.00",
-        "phone": "20.00",
-        "email": "${i}0.20",
-        "department": "${i}0",
-        "alert": "5",
-        "workday": [i + 20, 150]
-      });
-      i++;
-    }
-    return temps;
-  }
-
-  _initData() async {
-    setState(() => _isLoading = true);
-    Future.delayed(const Duration(seconds: 2)).then((value) {
-      _source.addAll(_generateData(n: 1000));
-      setState(() => _isLoading = false);
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initData();
-  }
-
   @override
   void dispose() {
     super.dispose();
@@ -146,6 +26,8 @@ class _UsersPageState extends State<UsersPage> {
 
   @override
   Widget build(BuildContext context) {
+    final TableProvider userProvider = Provider.of<TableProvider>(context);
+
     return SingleChildScrollView(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -165,19 +47,21 @@ class _UsersPageState extends State<UsersPage> {
               shadowColor: Colors.black,
               clipBehavior: Clip.none,
               child: ResponsiveDatatable(
-                headers: _headers,
-                source: _source,
-                selecteds: _selecteds,
-                showSelect: _showSelect,
+                headers: userProvider.headers,
+                source: userProvider.source,
+                selecteds: userProvider.selecteds,
+                showSelect: userProvider.showSelect,
                 autoHeight: false,
-                title: !_isSearch
+                title: !userProvider.isSearch
                     ? ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          userProvider.addUsers();
+                        },
                         icon: const Icon(Icons.add),
                         label: const Text("ADD CATEGORY"))
                     : null,
                 actions: [
-                  if (_isSearch)
+                  if (userProvider.isSearch)
                     Expanded(
                         child: TextField(
                       decoration: InputDecoration(
@@ -185,104 +69,68 @@ class _UsersPageState extends State<UsersPage> {
                               icon: const Icon(Icons.cancel),
                               onPressed: () {
                                 setState(() {
-                                  _isSearch = false;
+                                  userProvider.isSearch = false;
                                 });
                               }),
                           suffixIcon: IconButton(
                               icon: const Icon(Icons.search),
                               onPressed: () {})),
                     )),
-                  if (!_isSearch)
+                  if (!userProvider.isSearch)
                     IconButton(
                         icon: const Icon(Icons.search),
                         onPressed: () {
                           setState(() {
-                            _isSearch = true;
+                            userProvider.isSearch = true;
                           });
                         })
                 ],
                 onTabRow: (data) {
                   print(data);
                 },
-                onSort: (value) {
-                  setState(() {
-                    _sortColumn = value;
-                    _sortAscending = !_sortAscending;
-                    if (_sortAscending) {
-                      _source.sort(
-                          (a, b) => b[_sortColumn].compareTo(a[_sortColumn]));
-                    } else {
-                      _source.sort(
-                          (a, b) => a[_sortColumn].compareTo(b[_sortColumn]));
-                    }
-                  });
-                },
-                sortAscending: _sortAscending,
-                sortColumn: _sortColumn,
-                isLoading: _isLoading,
-                onSelect: (value, item) {
-                  print("$value  $item ");
-                  if (value) {
-                    setState(() => _selecteds.add(item));
-                  } else {
-                    setState(
-                        () => _selecteds.removeAt(_selecteds.indexOf(item)));
-                  }
-                },
-                onSelectAll: (value) {
-                  if (value) {
-                    setState(() => _selecteds =
-                        _source.map((entry) => entry).toList().cast());
-                  } else {
-                    setState(() => _selecteds.clear());
-                  }
-                },
+                onSort: userProvider.onSort,
+                sortAscending: userProvider.sortAscending,
+                sortColumn: userProvider.sortColumn,
+                isLoading: userProvider.isLoading,
+                onSelect: userProvider.onSelect,
+                onSelectAll: userProvider.onSelectAll,
                 footers: [
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: const Text("Rows per page:"),
                   ),
                   // ignore: unnecessary_null_comparison
-                  if (_perPages != null)
+                  if (userProvider.perPages != null)
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: DropdownButton(
-                          value: _currentPerPage,
-                          items: _perPages
+                          value: userProvider.currentPerPage,
+                          items: userProvider.perPages
                               .map((e) => DropdownMenuItem(
                                     child: Text("$e"),
                                     value: e,
                                   ))
                               .toList(),
-                          onChanged: (int? value) {
-                            setState(() {
-                              _currentPerPage = value!;
-                            });
+                          onChanged: (value) {
+                            userProvider.onChange;
                           }),
                     ),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Text("$_currentPage - $_currentPerPage of $_total"),
+                    child: Text(
+                        "${userProvider.currentPage} - ${userProvider.currentPerPage} of ${userProvider.total}"),
                   ),
                   IconButton(
                     icon: const Icon(
                       Icons.arrow_back_ios,
                       size: 16,
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _currentPage = _currentPage >= 2 ? _currentPage - 1 : 1;
-                      });
-                    },
+                    onPressed: userProvider.previous,
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                   ),
                   IconButton(
                     icon: const Icon(Icons.arrow_forward_ios, size: 16),
-                    onPressed: () {
-                      setState(() {
-                        _currentPage++;
-                      });
-                    },
+                    onPressed: userProvider.next,
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                   )
                 ],

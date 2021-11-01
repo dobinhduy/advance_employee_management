@@ -19,6 +19,14 @@ class UserServices {
         .update(values);
   }
 
+  void addUser() {
+    FirebaseFirestore.instance.collection("employees").add({
+      "id": "123",
+      "name": "Duy",
+      "email": "sasa",
+    });
+  }
+
   Future<UserModel> getUserbyID(String id) => FirebaseFirestore.instance
           .collection(collection)
           .doc(id)

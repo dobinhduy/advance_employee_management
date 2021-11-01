@@ -1,6 +1,7 @@
 import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/pages/sign_up_page.dart';
 import 'package:advance_employee_management/provider/app_provider.dart';
+import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
@@ -20,6 +21,7 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider.value(value: AppProvider.init()),
+      ChangeNotifierProvider.value(value: TableProvider.init()),
     ],
     child: MyApp(),
   ));

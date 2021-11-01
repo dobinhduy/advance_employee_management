@@ -22,7 +22,7 @@ PageRoute generateRoute(RouteSettings settings) {
     case LayOutRoute:
       return _getPageRoute(LayoutRoute());
     case UserLayout:
-      return _getPageRoute(UsersPage());
+      return _getPageRoute(const UsersPage());
     case ManagerLayout:
       return _getPageRoute(const ManagerPage());
 
