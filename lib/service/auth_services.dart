@@ -12,13 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthClass {
-  late User _user;
-
   final UserServices _userServices = UserServices();
-  late UserModel _userModel;
 
   final Future<FirebaseApp> initialization = Firebase.initializeApp();
 
@@ -152,9 +148,7 @@ class AuthClass {
   }
 
   //Query user
-  Future<void> reloadUserModel() async {
-    _userModel = await _userServices.getUserbyID(_user.uid);
-  }
+  Future<void> reloadUserModel() async {}
 
   updateUserData(Map<String, dynamic> data) async {
     _userServices.updateUser(data);

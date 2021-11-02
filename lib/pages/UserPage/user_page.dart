@@ -1,14 +1,11 @@
-import 'dart:math';
-
 import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
-import 'package:advance_employee_management/service/user_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:responsive_table/ResponsiveDatatable.dart';
 
 class UsersPage extends StatefulWidget {
@@ -20,13 +17,8 @@ class UsersPage extends StatefulWidget {
 
 class _UsersPageState extends State<UsersPage> {
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final TableProvider userProvider = Provider.of<TableProvider>(context);
+    TableProvider userProvider = Provider.of<TableProvider>(context);
 
     return SingleChildScrollView(
         child: Column(
@@ -55,7 +47,17 @@ class _UsersPageState extends State<UsersPage> {
                 title: !userProvider.isSearch
                     ? ElevatedButton.icon(
                         onPressed: () {
-                          userProvider.addUsers();
+                          userProvider.displayDialog(context);
+                          // setState(() {
+                          //   userProvider.addUsers();
+                          //   userProvider.source.add({
+                          //     "name": "xx",
+                          //     "id": "xx",
+                          //     "email": "xx",
+                          //   });
+                          // });
+
+                          locator<NavigationService>().navigateTo(UserLayout);
                         },
                         icon: const Icon(Icons.add),
                         label: const Text("ADD CATEGORY"))
@@ -112,7 +114,8 @@ class _UsersPageState extends State<UsersPage> {
                                   ))
                               .toList(),
                           onChanged: (value) {
-                            userProvider.onChange;
+                            int? num = value as int?;
+                            userProvider.onChange(num!);
                           }),
                     ),
                   Container(

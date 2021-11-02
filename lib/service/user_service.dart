@@ -1,6 +1,5 @@
 import 'package:advance_employee_management/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'auth_services.dart';
 
 class UserServices {
   String collection = "employees";
@@ -20,10 +19,10 @@ class UserServices {
   }
 
   void addUser() {
-    FirebaseFirestore.instance.collection("employees").add({
-      "id": "123",
-      "name": "Duy",
-      "email": "sasa",
+    FirebaseFirestore.instance.collection(collection).add({
+      "id": "xxx",
+      "name": "xxx",
+      "email": "xxx",
     });
   }
 
@@ -40,6 +39,7 @@ class UserServices {
         for (DocumentSnapshot user in result.docs) {
           users.add(UserModel.fromSnapshot(user));
         }
+
         return users;
       });
 }
