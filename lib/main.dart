@@ -8,7 +8,6 @@ import 'package:advance_employee_management/service/auth_services.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:provider/provider.dart';
 import 'package:universal_io/io.dart';
 
@@ -30,10 +29,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   Widget currentPage = const SignUpPage();
   AuthClass authClass = AuthClass();
-
-  void checkLogin() async {
-    String token = await authClass.getToken() as String;
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,8 @@
 import 'package:advance_employee_management/locator.dart';
+import 'package:advance_employee_management/models/employee.dart';
+import 'package:advance_employee_management/pages/EmployeePage/employee_information_page.dart';
 import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
+
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
@@ -8,17 +11,17 @@ import 'package:provider/provider.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:responsive_table/ResponsiveDatatable.dart';
 
-class UsersPage extends StatefulWidget {
-  const UsersPage({Key? key}) : super(key: key);
+class EmployeePage extends StatefulWidget {
+  const EmployeePage({Key? key}) : super(key: key);
 
   @override
-  _UsersPageState createState() => _UsersPageState();
+  _EmployeePageState createState() => _EmployeePageState();
 }
 
-class _UsersPageState extends State<UsersPage> {
+class _EmployeePageState extends State<EmployeePage> {
   @override
   Widget build(BuildContext context) {
-    TableProvider userProvider = Provider.of<TableProvider>(context);
+    TableProvider employeeProvider = Provider.of<TableProvider>(context);
 
     return SingleChildScrollView(
         child: Column(
@@ -26,10 +29,10 @@ class _UsersPageState extends State<UsersPage> {
             mainAxisSize: MainAxisSize.max,
             children: [
           const PageHeader(
-            text: 'USERS',
+            text: 'Employee Table',
           ),
           Container(
-            margin: const EdgeInsets.all(10),
+            margin: const EdgeInsets.all(5),
             padding: const EdgeInsets.all(0),
             constraints: const BoxConstraints(
               maxHeight: 700,
@@ -39,15 +42,14 @@ class _UsersPageState extends State<UsersPage> {
               shadowColor: Colors.black,
               clipBehavior: Clip.none,
               child: ResponsiveDatatable(
-                headers: userProvider.headers,
-                source: userProvider.source,
-                selecteds: userProvider.selecteds,
-                showSelect: userProvider.showSelect,
+                headers: employeeProvider.employeeHeaders,
+                source: employeeProvider.employeeSource,
+                selecteds: employeeProvider.selecteds,
+                showSelect: employeeProvider.showSelect,
                 autoHeight: false,
-                title: !userProvider.isSearch
+                title: !employeeProvider.isSearch
                     ? ElevatedButton.icon(
                         onPressed: () {
-                          userProvider.displayDialog(context);
                           // setState(() {
                           //   userProvider.addUsers();
                           //   userProvider.source.add({
@@ -56,14 +58,12 @@ class _UsersPageState extends State<UsersPage> {
                           //     "email": "xx",
                           //   });
                           // });
-
-                          locator<NavigationService>().navigateTo(UserLayout);
                         },
                         icon: const Icon(Icons.add),
                         label: const Text("ADD CATEGORY"))
                     : null,
                 actions: [
-                  if (userProvider.isSearch)
+                  if (employeeProvider.isSearch)
                     Expanded(
                         child: TextField(
                       decoration: InputDecoration(
@@ -71,43 +71,62 @@ class _UsersPageState extends State<UsersPage> {
                               icon: const Icon(Icons.cancel),
                               onPressed: () {
                                 setState(() {
-                                  userProvider.isSearch = false;
+                                  employeeProvider.isSearch = false;
                                 });
                               }),
                           suffixIcon: IconButton(
                               icon: const Icon(Icons.search),
                               onPressed: () {})),
                     )),
-                  if (!userProvider.isSearch)
+                  if (!employeeProvider.isSearch)
                     IconButton(
                         icon: const Icon(Icons.search),
                         onPressed: () {
                           setState(() {
-                            userProvider.isSearch = true;
+                            employeeProvider.isSearch = true;
                           });
                         })
                 ],
                 onTabRow: (data) {
                   print(data);
+
+                  Map<String, dynamic> map =
+                      Map<String, dynamic>.from(data as Map<String, dynamic>);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UserInforPage(
+                              name: map.values.elementAt(0),
+                              email: map.values.elementAt(1),
+                              id: map.values.elementAt(2))));
+
+                  print(map.values.elementAt(1));
+
+                  // Navigator.pushAndRemoveUntil(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (builder) =>
+                  //             UserInforPage(name: arr, email: email, id: id)),
+                  //     (route) => false);
                 },
-                onSort: userProvider.onSort,
-                sortAscending: userProvider.sortAscending,
-                sortColumn: userProvider.sortColumn,
-                isLoading: userProvider.isLoading,
-                onSelect: userProvider.onSelect,
-                onSelectAll: userProvider.onSelectAll,
+                onSort: employeeProvider.onSort,
+                sortAscending: employeeProvider.sortAscending,
+                sortColumn: employeeProvider.sortColumn,
+                isLoading: employeeProvider.isLoading,
+                onSelect: employeeProvider.onSelect,
+                onSelectAll: employeeProvider.onSelectAll,
                 footers: [
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: const Text("Rows per page:"),
                   ),
                   // ignore: unnecessary_null_comparison
-                  if (userProvider.perPages != null)
+                  if (employeeProvider.perPages != null)
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: DropdownButton(
-                          value: userProvider.currentPerPage,
-                          items: userProvider.perPages
+                          value: employeeProvider.currentPerPage,
+                          items: employeeProvider.perPages
                               .map((e) => DropdownMenuItem(
                                     child: Text("$e"),
                                     value: e,
@@ -115,25 +134,25 @@ class _UsersPageState extends State<UsersPage> {
                               .toList(),
                           onChanged: (value) {
                             int? num = value as int?;
-                            userProvider.onChange(num!);
+                            employeeProvider.onChange(num!);
                           }),
                     ),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Text(
-                        "${userProvider.currentPage} - ${userProvider.currentPerPage} of ${userProvider.total}"),
+                        "${employeeProvider.currentPage} - ${employeeProvider.currentPerPage} of ${employeeProvider.total}"),
                   ),
                   IconButton(
                     icon: const Icon(
                       Icons.arrow_back_ios,
                       size: 16,
                     ),
-                    onPressed: userProvider.previous,
+                    onPressed: employeeProvider.previous,
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                   ),
                   IconButton(
                     icon: const Icon(Icons.arrow_forward_ios, size: 16),
-                    onPressed: userProvider.next,
+                    onPressed: employeeProvider.next,
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                   )
                 ],

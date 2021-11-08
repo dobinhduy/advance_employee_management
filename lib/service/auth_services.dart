@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:advance_employee_management/locator.dart';
-import 'package:advance_employee_management/models/user.dart';
+import 'package:advance_employee_management/models/employee.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
-import 'package:advance_employee_management/service/user_service.dart';
+import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,7 +14,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthClass {
-  final UserServices _userServices = UserServices();
+  final EmployeeServices _userServices = EmployeeServices();
 
   final Future<FirebaseApp> initialization = Firebase.initializeApp();
 
@@ -134,7 +134,7 @@ class AuthClass {
       await auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) async {
-        _userServices.createUser(user(), name, email);
+        _userServices.createEmployee(user(), name, email);
         locator<NavigationService>().globalNavigateTo(LayOutRoute, context);
       });
     } catch (e) {
@@ -151,6 +151,6 @@ class AuthClass {
   Future<void> reloadUserModel() async {}
 
   updateUserData(Map<String, dynamic> data) async {
-    _userServices.updateUser(data);
+    _userServices.updateEmployee(data);
   }
 }

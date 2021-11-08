@@ -2,7 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ManagerModel {
+class EmployeeModel {
   static const ID = "id";
   static const NAME = "name";
   static const EMAIL = "email";
@@ -26,7 +26,7 @@ class ManagerModel {
   String get phone => _phone;
   String get birthday => _birthday;
 
-  ManagerModel.fromSnapshot(DocumentSnapshot snapshot) {
+  EmployeeModel.fromSnapshot(DocumentSnapshot snapshot) {
     _name = (snapshot.data() as dynamic)[NAME];
     _email = (snapshot.data() as dynamic)[EMAIL];
     _id = (snapshot.data() as dynamic)[ID];

@@ -1,9 +1,9 @@
-import 'package:advance_employee_management/models/user.dart';
+import 'package:advance_employee_management/models/employee.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class UserServices {
+class EmployeeServices {
   String collection = "employees";
-  void createUser(String id, String name, String email) {
+  void createEmployee(String id, String name, String email) {
     FirebaseFirestore.instance.collection(collection).doc(id).set({
       "id": id,
       "name": name,
@@ -11,14 +11,14 @@ class UserServices {
     });
   }
 
-  void updateUser(Map<String, dynamic> values) {
+  void updateEmployee(Map<String, dynamic> values) {
     FirebaseFirestore.instance
         .collection(collection)
         .doc(values['id'])
         .update(values);
   }
 
-  void addUser() {
+  void addEmployee() {
     FirebaseFirestore.instance.collection(collection).add({
       "id": "xxx",
       "name": "xxx",
@@ -26,18 +26,18 @@ class UserServices {
     });
   }
 
-  Future<UserModel> getUserbyID(String id) => FirebaseFirestore.instance
+  Future<EmployeeModel> getEmployeebyID(String id) => FirebaseFirestore.instance
           .collection(collection)
           .doc(id)
           .get()
           .then((doc) {
-        return UserModel.fromSnapshot(doc);
+        return EmployeeModel.fromSnapshot(doc);
       });
-  Future<List<UserModel>> getAllUser() async =>
+  Future<List<EmployeeModel>> getAllEmployee() async =>
       FirebaseFirestore.instance.collection(collection).get().then((result) {
-        List<UserModel> users = [];
+        List<EmployeeModel> users = [];
         for (DocumentSnapshot user in result.docs) {
-          users.add(UserModel.fromSnapshot(user));
+          users.add(EmployeeModel.fromSnapshot(user));
         }
 
         return users;

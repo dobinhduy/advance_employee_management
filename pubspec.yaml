@@ -37,10 +37,12 @@ dependencies:
   flutter_svg: ^0.22.0
   get_it: ^7.2.0
   google_sign_in: ^5.1.1
+  intl: ^0.17.0
   otp_text_field: ^1.1.1
   provider: ^6.0.1
   responsive_builder: ^0.4.1
   responsive_table: ^0.1.1+8
+  rflutter_alert: ^2.0.4
   shared_preferences: ^2.0.8
   universal_io: ^2.0.4
   universal_platform: ^1.0.0+1

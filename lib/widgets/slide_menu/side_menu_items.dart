@@ -23,7 +23,7 @@ class SileMenuItemDesktop extends StatelessWidget {
       title: CustomText(
           text: text,
           size: active ? 19 : 16,
-          color: active ? Colors.red : Colors.black,
+          color: active ? Colors.white : Colors.white60,
           fontWeight: FontWeight.bold),
       leading: Icon(
         icon,

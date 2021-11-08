@@ -19,10 +19,11 @@ class SildeMenuTabletDesktop extends StatelessWidget {
       decoration: const BoxDecoration(
           color: Colors.white,
           gradient: LinearGradient(
-            colors: [Colors.grey, Colors.black54],
+            colors: [Colors.indigo, Colors.blue],
           ),
           boxShadow: [
-            BoxShadow(color: Colors.red, offset: Offset(3, 5), blurRadius: 17)
+            BoxShadow(
+                color: Colors.lightBlue, offset: Offset(3, 5), blurRadius: 10)
           ]),
       width: 250,
       child: Container(
@@ -41,12 +42,12 @@ class SildeMenuTabletDesktop extends StatelessWidget {
                   locator<NavigationService>().navigateTo(MainHomeP);
                 }),
             SileMenuItemDesktop(
-                active: appProvider.currentPage == DisplayedPage.USERS,
-                text: "User",
+                active: appProvider.currentPage == DisplayedPage.EMPLOYEES,
+                text: "Employee",
                 icon: Icons.people,
                 onTap: () {
-                  appProvider.changeCurrentPage(DisplayedPage.USERS);
-                  locator<NavigationService>().navigateTo(UserLayout);
+                  appProvider.changeCurrentPage(DisplayedPage.EMPLOYEES);
+                  locator<NavigationService>().navigateTo(EmployeeLayout);
                 }),
             SileMenuItemDesktop(
                 active: appProvider.currentPage == DisplayedPage.MANAGERS,
