@@ -18,12 +18,28 @@ class EmployeeServices {
         .update(values);
   }
 
-  void addEmployee() {
+  void addEmployee(String id, String name, String birthday, String phone,
+      String address, String position, String email, String gender) {
     FirebaseFirestore.instance.collection(collection).add({
-      "id": "xxx",
-      "name": "xxx",
-      "email": "xxx",
+      "id": id,
+      "name": name,
+      "email": email,
+      "birthday": birthday,
+      "address": address,
+      "phone": phone,
+      "position": position,
+      "gender": gender,
     });
+  }
+
+  bool checkExistEmployee(String email) {
+    if (FirebaseFirestore.instance
+            .collection(collection)
+            .where("email", isEqualTo: email) !=
+        null) {
+      return false;
+    }
+    return true;
   }
 
   Future<EmployeeModel> getEmployeebyID(String id) => FirebaseFirestore.instance
@@ -33,6 +49,7 @@ class EmployeeServices {
           .then((doc) {
         return EmployeeModel.fromSnapshot(doc);
       });
+
   Future<List<EmployeeModel>> getAllEmployee() async =>
       FirebaseFirestore.instance.collection(collection).get().then((result) {
         List<EmployeeModel> users = [];

@@ -1,7 +1,5 @@
-import 'dart:convert';
-
 import 'package:advance_employee_management/locator.dart';
-import 'package:advance_employee_management/models/employee.dart';
+
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
@@ -134,7 +132,6 @@ class AuthClass {
       await auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) async {
-        _userServices.createEmployee(user(), name, email);
         locator<NavigationService>().globalNavigateTo(LayOutRoute, context);
       });
     } catch (e) {
@@ -143,7 +140,14 @@ class AuthClass {
   }
 
   void showSnackBar(BuildContext context, String text) {
-    final snackbar = SnackBar(content: Text(text));
+    final snackbar = SnackBar(
+      content: Text(
+        text,
+        style: const TextStyle(color: Colors.white),
+      ),
+      backgroundColor: Colors.blue,
+      behavior: SnackBarBehavior.floating,
+    );
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 

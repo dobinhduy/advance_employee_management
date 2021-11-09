@@ -18,22 +18,11 @@ class AppProvider with ChangeNotifier {
   EmployeeServices employeeServices = EmployeeServices();
 
   AppProvider.init() {
-    getEmployee();
     changeCurrentPage(DisplayedPage.HOME);
   }
 
   changeCurrentPage(DisplayedPage newPage) {
     currentPage = newPage;
     notifyListeners();
-  }
-
-  void getEmployee() async {
-    await employeeServices.getAllEmployee().then((employees) {
-      for (EmployeeModel employee in employees) {
-        print("User Name: " + employee.name);
-        print("User id: " + employee.id);
-        print("User email: " + employee.email);
-      }
-    });
   }
 }

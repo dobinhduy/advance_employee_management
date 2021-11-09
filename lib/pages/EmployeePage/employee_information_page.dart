@@ -1,7 +1,4 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class UserInforPage extends StatefulWidget {
   const UserInforPage(
@@ -35,17 +32,15 @@ class _UserInforPageState extends State<UserInforPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Flutter Row Example"),
-      ),
       body: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width / 3,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 50),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 50, vertical: 50),
                 child: Column(
                   children: [
                     Image.asset("images/dog.jpg"),
@@ -99,7 +94,7 @@ class _UserInforPageState extends State<UserInforPage> {
                           Row(
                             children: [
                               titlebox("Address"),
-                              SizedBox(
+                              const SizedBox(
                                 width: 15,
                               ),
                               inputBox(idController),
@@ -163,48 +158,46 @@ class _UserInforPageState extends State<UserInforPage> {
   }
 
   Widget gender() {
-    return Container(
-      child: Row(
-        children: [
-          titlebox("Gender"),
-          SizedBox(
-            width: 80,
-          ),
-          titlebox("Male "),
-          SizedBox(
-            width: 10,
-          ),
-          Checkbox(
-            checkColor: Colors.black,
-            activeColor: Colors.red,
-            value: female,
-            onChanged: (bool? value) {
-              setState(() {
-                female = true;
-                male = false;
-              });
-            },
-          ),
-          SizedBox(
-            width: 30,
-          ),
-          titlebox("Female "),
-          SizedBox(
-            width: 10,
-          ),
-          Checkbox(
-            checkColor: Colors.black,
-            activeColor: Colors.red,
-            value: male,
-            onChanged: (bool? value) {
-              setState(() {
-                male = true;
-                female = false;
-              });
-            },
-          ),
-        ],
-      ),
+    return Row(
+      children: [
+        titlebox("Gender"),
+        const SizedBox(
+          width: 80,
+        ),
+        titlebox("Male "),
+        const SizedBox(
+          width: 10,
+        ),
+        Checkbox(
+          checkColor: Colors.black,
+          activeColor: Colors.red,
+          value: female,
+          onChanged: (bool? value) {
+            setState(() {
+              female = true;
+              male = false;
+            });
+          },
+        ),
+        const SizedBox(
+          width: 30,
+        ),
+        titlebox("Female "),
+        const SizedBox(
+          width: 10,
+        ),
+        Checkbox(
+          checkColor: Colors.black,
+          activeColor: Colors.red,
+          value: male,
+          onChanged: (bool? value) {
+            setState(() {
+              male = true;
+              female = false;
+            });
+          },
+        ),
+      ],
     );
   }
 }

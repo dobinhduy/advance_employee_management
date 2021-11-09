@@ -1,3 +1,4 @@
+import 'package:advance_employee_management/Custom/add_user_page.dart';
 import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/models/employee.dart';
 import 'package:advance_employee_management/pages/EmployeePage/employee_information_page.dart';
@@ -50,14 +51,11 @@ class _EmployeePageState extends State<EmployeePage> {
                 title: !employeeProvider.isSearch
                     ? ElevatedButton.icon(
                         onPressed: () {
-                          // setState(() {
-                          //   userProvider.addUsers();
-                          //   userProvider.source.add({
-                          //     "name": "xx",
-                          //     "id": "xx",
-                          //     "email": "xx",
-                          //   });
-                          // });
+                          AddEmployee addEmployee = AddEmployee();
+                          setState(() {
+                            addEmployee.displayDialog(
+                                context, employeeProvider);
+                          });
                         },
                         icon: const Icon(Icons.add),
                         label: const Text("ADD CATEGORY"))

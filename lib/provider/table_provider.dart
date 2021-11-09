@@ -1,16 +1,14 @@
-import 'dart:math';
-
 import 'package:advance_employee_management/models/employee.dart';
 import 'package:advance_employee_management/models/manager.dart';
 // ignore: unused_import
 import 'package:advance_employee_management/provider/app_provider.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/manager_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:responsive_table/DatatableHeader.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class TableProvider with ChangeNotifier {
   final List<DatatableHeader> employeeHeaders = [
@@ -24,39 +22,39 @@ class TableProvider with ChangeNotifier {
         text: "Name",
         value: "name",
         show: true,
-        flex: 1,
         sortable: true,
-        textAlign: TextAlign.left),
+        textAlign: TextAlign.center),
     DatatableHeader(
         text: "Gender",
         value: "gender",
         show: true,
         sortable: true,
-        textAlign: TextAlign.left),
+        textAlign: TextAlign.center),
     DatatableHeader(
         text: "Birthday",
         value: "birthday",
         show: true,
         sortable: true,
-        textAlign: TextAlign.left),
+        textAlign: TextAlign.center),
     DatatableHeader(
         text: "Email",
         value: "email",
+        flex: 2,
         show: true,
         sortable: true,
-        textAlign: TextAlign.left),
+        textAlign: TextAlign.center),
     DatatableHeader(
         text: "Address",
         value: "address",
         show: true,
         sortable: true,
-        textAlign: TextAlign.left),
+        textAlign: TextAlign.center),
     DatatableHeader(
         text: "Phone",
         value: "phone",
         show: true,
         sortable: true,
-        textAlign: TextAlign.left),
+        textAlign: TextAlign.center),
   ];
   final List<DatatableHeader> managerHeaders = [
     DatatableHeader(
@@ -71,37 +69,38 @@ class TableProvider with ChangeNotifier {
         show: true,
         flex: 1,
         sortable: true,
-        textAlign: TextAlign.left),
+        textAlign: TextAlign.center),
     DatatableHeader(
         text: "Gender",
         value: "gender",
         show: true,
         sortable: true,
-        textAlign: TextAlign.left),
+        textAlign: TextAlign.center),
     DatatableHeader(
         text: "Birthday",
         value: "birthday",
         show: true,
         sortable: true,
-        textAlign: TextAlign.left),
+        textAlign: TextAlign.center),
     DatatableHeader(
         text: "Email",
         value: "email",
+        flex: 2,
         show: true,
         sortable: true,
-        textAlign: TextAlign.left),
+        textAlign: TextAlign.center),
     DatatableHeader(
         text: "Address",
         value: "address",
         show: true,
         sortable: true,
-        textAlign: TextAlign.left),
+        textAlign: TextAlign.center),
     DatatableHeader(
         text: "Phone",
         value: "phone",
         show: true,
         sortable: true,
-        textAlign: TextAlign.left),
+        textAlign: TextAlign.center),
   ];
   final List<int> perPages = [5, 10, 15, 100];
   final int total = 100;
@@ -156,10 +155,6 @@ class TableProvider with ChangeNotifier {
     // ignore: avoid_print
     print(i);
     for (EmployeeModel employee in employees) {
-      // if (employee.birthday != null) {
-      //   print(employee.birthday.seconds);
-      // }
-
       temps.add({
         "id": employee.id,
         "name": employee.name,
@@ -173,16 +168,6 @@ class TableProvider with ChangeNotifier {
     }
 
     return temps;
-  }
-
-  void addManager() {
-    managerServices.addManager();
-    notifyListeners();
-  }
-
-  void addEmployees() {
-    employeeServices.addEmployee();
-    notifyListeners();
   }
 
   _initData() async {
@@ -249,56 +234,4 @@ class TableProvider with ChangeNotifier {
   TableProvider.init() {
     _initData();
   }
-  // openPopup(context) {
-  //   Alert(
-  //       context: context,
-  //       title: "LOGIN",
-  //       content: Row(
-  //         children: [
-  //           Column(
-  //             children: <Widget>[
-  //               TextField(
-  //                 decoration: InputDecoration(
-  //                   icon: Icon(Icons.account_circle),
-  //                   labelText: 'Username',
-  //                 ),
-  //               ),
-  //               TextField(
-  //                 obscureText: true,
-  //                 decoration: InputDecoration(
-  //                   icon: Icon(Icons.lock),
-  //                   labelText: 'Password',
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //           Column(
-  //             children: <Widget>[
-  //               TextField(
-  //                 decoration: InputDecoration(
-  //                   icon: Icon(Icons.account_circle),
-  //                   labelText: 'Username',
-  //                 ),
-  //               ),
-  //               TextField(
-  //                 obscureText: true,
-  //                 decoration: InputDecoration(
-  //                   icon: Icon(Icons.lock),
-  //                   labelText: 'Password',
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ],
-  //       ),
-  //       buttons: [
-  //         DialogButton(
-  //           onPressed: () => Navigator.pop(context),
-  //           child: Text(
-  //             "LOGIN",
-  //             style: TextStyle(color: Colors.white, fontSize: 20),
-  //           ),
-  //         )
-  //       ]).show();
-  // }
 }

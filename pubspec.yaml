@@ -37,6 +37,8 @@ dependencies:
   flutter_svg: ^0.22.0
   get_it: ^7.2.0
   google_sign_in: ^5.1.1
+  image_picker: ^0.8.4+4
+  image_picker_web: ^2.0.3+1
   intl: ^0.17.0
   otp_text_field: ^1.1.1
   provider: ^6.0.1

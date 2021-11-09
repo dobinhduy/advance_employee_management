@@ -18,11 +18,17 @@ class ManagerServices {
         .update(values);
   }
 
-  void addManager() {
+  void addManager(String id, String name, String birthday, String phone,
+      String address, String position, String email, String gender) {
     FirebaseFirestore.instance.collection(collection).add({
-      "id": "xxx",
-      "name": "xxx",
-      "email": "xxx",
+      "id": id,
+      "name": name,
+      "email": email,
+      "birthday": birthday,
+      "address": address,
+      "phone": phone,
+      "position": position,
+      "gender": gender,
     });
   }
 
