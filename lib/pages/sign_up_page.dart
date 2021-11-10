@@ -29,7 +29,7 @@ class _SignUpPageState extends State<SignUpPage> {
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          color: Colors.black,
+          color: Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -37,7 +37,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 "Sign Up",
                 style: TextStyle(
                     fontSize: 35,
-                    color: Colors.white,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold),
               ),
               const SizedBox(
@@ -56,7 +56,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               const Text(
                 'Or',
-                style: TextStyle(color: Colors.white, fontSize: 20),
+                style: TextStyle(color: Colors.black, fontSize: 20),
               ),
               const SizedBox(
                 height: 15,
@@ -65,11 +65,11 @@ class _SignUpPageState extends State<SignUpPage> {
               const SizedBox(
                 height: 15,
               ),
-              textItem("Email...", _emailController, false),
+              textItem("Email", _emailController, false),
               const SizedBox(
                 height: 15,
               ),
-              textItem("Password...", _passwordController, false),
+              textItem("Password", _passwordController, false),
               const SizedBox(
                 height: 15,
               ),
@@ -121,10 +121,10 @@ class _SignUpPageState extends State<SignUpPage> {
       child: TextFormField(
           controller: controller,
           obscureText: obscureText,
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             labelText: text,
-            labelStyle: const TextStyle(fontSize: 17, color: Colors.white),
+            labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
                 borderSide: const BorderSide(width: 1, color: Colors.amber)),
@@ -187,7 +187,7 @@ class _SignUpPageState extends State<SignUpPage> {
         width: MediaQuery.of(context).size.width / 3,
         height: 60,
         child: Card(
-          color: Colors.black,
+          color: Colors.white,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
               side: const BorderSide(width: 1, color: Colors.grey)),
@@ -204,7 +204,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               Text(
                 buttonName,
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.black),
               ),
             ],
           ),

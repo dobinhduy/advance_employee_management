@@ -18,8 +18,16 @@ class ManagerServices {
         .update(values);
   }
 
-  void addManager(String id, String name, String birthday, String phone,
-      String address, String position, String email, String gender) {
+  void addManager(
+      String id,
+      String name,
+      String birthday,
+      String phone,
+      String address,
+      String position,
+      String email,
+      String gender,
+      String photourl) {
     FirebaseFirestore.instance.collection(collection).add({
       "id": id,
       "name": name,
@@ -29,6 +37,7 @@ class ManagerServices {
       "phone": phone,
       "position": position,
       "gender": gender,
+      "photourl": photourl,
     });
   }
 

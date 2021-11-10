@@ -18,8 +18,28 @@ class EmployeeServices {
         .update(values);
   }
 
-  void addEmployee(String id, String name, String birthday, String phone,
-      String address, String position, String email, String gender) {
+  void getphotoURL(String id, String photoURL) {
+    FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: id)
+        .snapshots()
+        .forEach((element) {
+      FirebaseFirestore.instance.collection(collection).add({
+        "photourl": photoURL,
+      });
+    });
+  }
+
+  void addEmployee(
+      String id,
+      String name,
+      String birthday,
+      String phone,
+      String address,
+      String position,
+      String email,
+      String gender,
+      String photourl) {
     FirebaseFirestore.instance.collection(collection).add({
       "id": id,
       "name": name,
@@ -29,6 +49,7 @@ class EmployeeServices {
       "phone": phone,
       "position": position,
       "gender": gender,
+      "photourl": photourl,
     });
   }
 

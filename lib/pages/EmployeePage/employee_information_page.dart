@@ -1,12 +1,25 @@
+import 'dart:typed_data';
+
+import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_image/flutter_image.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:uuid/uuid.dart';
 
 class UserInforPage extends StatefulWidget {
   const UserInforPage(
-      {Key? key, required this.name, required this.email, required this.id})
+      {Key? key,
+      required this.name,
+      required this.email,
+      required this.id,
+      required this.photoURL})
       : super(key: key);
   final String name;
   final String email;
   final String id;
+  final String photoURL;
 
   @override
   State<UserInforPage> createState() => _UserInforPageState();
@@ -18,9 +31,13 @@ class _UserInforPageState extends State<UserInforPage> {
   late TextEditingController idController;
   late TextEditingController addressController;
   late TextEditingController nationController;
+  String _imageURL = "";
+
   bool edit = false;
   bool male = false;
   bool female = false;
+  bool timeup = false;
+
   @override
   void initState() {
     super.initState();
@@ -29,8 +46,27 @@ class _UserInforPageState extends State<UserInforPage> {
     nameController = TextEditingController(text: widget.name);
   }
 
+  getImage() async {
+    final ref = FirebaseStorage.instance.ref().child(widget.photoURL);
+    _imageURL = await ref.getDownloadURL();
+    setState(() {
+      _imageURL = _imageURL;
+    });
+  }
+
+  returnImage() {
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        timeup = true;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    getImage();
+    returnImage();
+
     return Scaffold(
       body: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -40,10 +76,16 @@ class _UserInforPageState extends State<UserInforPage> {
               width: MediaQuery.of(context).size.width / 3,
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 50, vertical: 50),
+                    const EdgeInsets.symmetric(horizontal: 150, vertical: 150),
                 child: Column(
                   children: [
-                    Image.asset("images/dog.jpg"),
+                    timeup == true
+                        ? Image.network(
+                            _imageURL,
+                            width: 300,
+                            height: 300,
+                          )
+                        : const CircularProgressIndicator()
                   ],
                 ),
               ),

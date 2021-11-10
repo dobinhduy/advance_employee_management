@@ -31,7 +31,19 @@ class _SignUpPageState extends State<SignInPage> {
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          color: Colors.black,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment(
+                  0.8, 0.0), // 10% of the width, so there are ten blinds.
+              colors: <Color>[
+                Color(0xffee0000),
+                Color(0xffeeee00)
+              ], // red to yellow
+              tileMode:
+                  TileMode.repeated, // repeats the gradient over the canvas
+            ),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -39,41 +51,52 @@ class _SignUpPageState extends State<SignInPage> {
                 "Sign In",
                 style: TextStyle(
                     fontSize: 35,
-                    color: Colors.white,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              textItem("Email", _emailController, false),
+              const SizedBox(
+                height: 15,
+              ),
+              textItem("Password", _passwordController, false),
+              const SizedBox(
+                height: 15,
               ),
               const SizedBox(
                 height: 20,
               ),
-              buttonItem(
-                "images/google.png",
-                "Continue with google",
-                25,
-                () {
-                  authClass.googleSignIn(context);
-                },
-              ),
-              buttonItem("images/phone.png", "Continue with Phone", 25, () {
-                locator<NavigationService>()
-                    .globalNavigateTo(PhoneAuthLog, context);
-              }),
-              const SizedBox(
-                height: 15,
-              ),
               const Text(
-                'Or',
-                style: TextStyle(color: Colors.white, fontSize: 20),
+                'Or continute with',
+                style: TextStyle(color: Colors.black, fontSize: 20),
               ),
               const SizedBox(
                 height: 15,
               ),
-              textItem("Email...", _emailController, false),
-              const SizedBox(
-                height: 15,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buttonItem(
+                    "images/google.png",
+                    "Google",
+                    25,
+                    () {
+                      authClass.googleSignIn(context);
+                    },
+                  ),
+                  const SizedBox(
+                    width: 30,
+                  ),
+                  buttonItem("images/phone.png", "Phone", 25, () {
+                    locator<NavigationService>()
+                        .globalNavigateTo(PhoneAuthLog, context);
+                  }),
+                ],
               ),
-              textItem("Password...", _passwordController, false),
               const SizedBox(
-                height: 15,
+                height: 30,
               ),
               colorButton(),
               const SizedBox(
@@ -131,15 +154,15 @@ class _SignUpPageState extends State<SignInPage> {
   Widget textItem(
       String text, TextEditingController controller, bool obscureText) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width / 3,
+      width: MediaQuery.of(context).size.width / 4.5,
       height: 50,
       child: TextFormField(
           controller: controller,
           obscureText: obscureText,
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             labelText: text,
-            labelStyle: const TextStyle(fontSize: 17, color: Colors.white),
+            labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
                 borderSide: const BorderSide(width: 1, color: Colors.amber)),
@@ -174,7 +197,7 @@ class _SignUpPageState extends State<SignInPage> {
         }
       },
       child: Container(
-        width: MediaQuery.of(context).size.width / 3,
+        width: MediaQuery.of(context).size.width / 4.5,
         height: 60,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(17),
@@ -201,10 +224,10 @@ class _SignUpPageState extends State<SignInPage> {
     return InkWell(
       onTap: onTap,
       child: SizedBox(
-        width: MediaQuery.of(context).size.width / 3,
-        height: 60,
+        width: MediaQuery.of(context).size.width / 10,
+        height: 50,
         child: Card(
-          color: Colors.black,
+          color: Colors.white,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
               side: const BorderSide(width: 1, color: Colors.grey)),
@@ -221,7 +244,7 @@ class _SignUpPageState extends State<SignInPage> {
               ),
               Text(
                 buttonName,
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.black),
               ),
             ],
           ),

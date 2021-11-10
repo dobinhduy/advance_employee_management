@@ -1,12 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:advance_employee_management/Custom/add_user_page.dart';
-import 'package:advance_employee_management/locator.dart';
-import 'package:advance_employee_management/models/employee.dart';
+
 import 'package:advance_employee_management/pages/EmployeePage/employee_information_page.dart';
 import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
-
 import 'package:advance_employee_management/provider/table_provider.dart';
-import 'package:advance_employee_management/rounting/route_names.dart';
-import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -51,11 +49,12 @@ class _EmployeePageState extends State<EmployeePage> {
                 title: !employeeProvider.isSearch
                     ? ElevatedButton.icon(
                         onPressed: () {
-                          AddEmployee addEmployee = AddEmployee();
-                          setState(() {
-                            addEmployee.displayDialog(
-                                context, employeeProvider);
-                          });
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (builder) => AddEmployee(
+                                      context: context,
+                                      employeeProvider: employeeProvider)));
                         },
                         icon: const Icon(Icons.add),
                         label: const Text("ADD CATEGORY"))
@@ -94,11 +93,11 @@ class _EmployeePageState extends State<EmployeePage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => UserInforPage(
-                              name: map.values.elementAt(0),
-                              email: map.values.elementAt(1),
-                              id: map.values.elementAt(2))));
-
-                  print(map.values.elementAt(1));
+                                name: map.values.elementAt(0),
+                                email: map.values.elementAt(1),
+                                id: map.values.elementAt(2),
+                                photoURL: map.values.elementAt(7),
+                              )));
 
                   // Navigator.pushAndRemoveUntil(
                   //     context,

@@ -11,6 +11,7 @@ class ManagerModel {
   static const ADDRESS = "address";
   static const PHONE = "phone";
   static const POSITION = "position";
+  static const PHOTOURL = "photourl";
 
   late String _id;
   late String _name;
@@ -20,6 +21,7 @@ class ManagerModel {
   late String _phone;
   late String _gender;
   late String _position;
+  late String _photourl;
   String get name => _name;
   String get id => _id;
   String get email => _email;
@@ -28,6 +30,7 @@ class ManagerModel {
   String get phone => _phone;
   String get birthday => _birthday;
   String get position => _position;
+  String get photourl => _photourl;
 
   ManagerModel.fromSnapshot(DocumentSnapshot snapshot) {
     _name = (snapshot.data() as dynamic)[NAME];
@@ -38,5 +41,6 @@ class ManagerModel {
     _birthday = (snapshot.data() as dynamic)[BIRTHDAY];
     _position = (snapshot.data() as dynamic)[POSITION];
     _gender = (snapshot.data() as dynamic)[GENDER];
+    _photourl = (snapshot.data() as dynamic)[PHOTOURL];
   }
 }

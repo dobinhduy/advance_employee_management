@@ -121,8 +121,10 @@ class TableProvider with ChangeNotifier {
 
   EmployeeServices employeeServices = EmployeeServices();
   ManagerServices managerServices = ManagerServices();
+
   List<EmployeeModel> employees = <EmployeeModel>[];
   List<ManagerModel> managers = <ManagerModel>[];
+
   Future loadDataFromFirebase() async {
     employees = await employeeServices.getAllEmployee();
     managers = await managerServices.getAllManger();
@@ -163,6 +165,7 @@ class TableProvider with ChangeNotifier {
         "email": employee.email,
         "address": employee.address,
         "phone": employee.phone,
+        "photourl": employee.photourl,
       });
       i++;
     }

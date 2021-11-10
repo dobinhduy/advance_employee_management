@@ -1,13 +1,29 @@
+import 'dart:typed_data';
+
 import 'package:advance_employee_management/provider/table_provider.dart';
 
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/manager_service.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class AddEmployee extends StatefulWidget {
-  AddEmployee({Key? key}) : super(key: key);
+  const AddEmployee(
+      {Key? key, required this.context, required this.employeeProvider})
+      : super(key: key);
+
+  final BuildContext context;
+  final TableProvider employeeProvider;
+
+  @override
+  _AddEmployeeState createState() => _AddEmployeeState();
+}
+
+class _AddEmployeeState extends State<AddEmployee> {
   final TextEditingController fisrtname = TextEditingController();
   final TextEditingController lastname = TextEditingController();
   final TextEditingController password = TextEditingController();
@@ -18,22 +34,193 @@ class AddEmployee extends StatefulWidget {
   final TextEditingController email = TextEditingController();
   final TextEditingController position = TextEditingController();
   final TextEditingController gender = TextEditingController();
+
   final AuthClass authClass = AuthClass();
 
   final EmployeeServices employeeServices = EmployeeServices();
   final ManagerServices managerServices = ManagerServices();
+  String _imageURL = "";
+  bool timeup = false;
+  void deplay() {
+    Future.delayed(Duration(seconds: 2), () {
+      timeup = true;
+    });
+  }
 
   @override
-  _AddEmployeeState createState() => _AddEmployeeState();
-  Widget titlebox(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-      child: Text(
-        title,
-        style: const TextStyle(
-          color: Colors.black,
-          fontSize: 17,
-          letterSpacing: 2,
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Add Employee")),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        color: Colors.white,
+        child: Row(
+          children: <Widget>[
+            Column(
+              children: [
+                SizedBox(
+                  height: 200,
+                ),
+                _imageURL != ""
+                    ? Image.network(
+                        _imageURL,
+                        width: 200,
+                        height: 200,
+                      )
+                    : Text("Upload image file here"),
+                SizedBox(
+                  height: 100,
+                ),
+                ElevatedButton(
+                    onPressed: () async {
+                      FilePickerResult? result = await FilePicker.platform
+                          .pickFiles(type: FileType.image);
+                      if (result != null) {
+                        Uint8List? uploadfile = result.files.single.bytes;
+                        // String fileName = result.files.single.name;
+                        Reference reference = FirebaseStorage.instance
+                            .ref()
+                            .child(const Uuid().v1());
+                        final UploadTask uploadTask =
+                            reference.putData(uploadfile!);
+                        uploadTask.whenComplete(() async {
+                          String image =
+                              await uploadTask.snapshot.ref.getDownloadURL();
+                          setState(() {
+                            _imageURL = image;
+                          });
+                        });
+                      }
+                    },
+                    child: const Text("Upload image")),
+              ],
+            ),
+            const SizedBox(
+              width: 50,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width / 4,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Row(
+                    children: [
+                      titlebox("Frist Name"),
+                      inputBox(fisrtname),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      titlebox("Password"),
+                      inputBox(password),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      titlebox("Birthday"),
+                      inputBox(birthday),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      titlebox("ID"),
+                      const SizedBox(
+                        width: 50,
+                      ),
+                      inputBox(id),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      titlebox("Gender"),
+                      inputBox(gender),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              width: 50,
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width / 3.5,
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                Colors.red,
+                Colors.yellow,
+              ])),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      titlebox("Last Name"),
+                                      inputBox(lastname),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      titlebox("Address"),
+                                      inputBox(address),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      titlebox("Phone"),
+                                      inputBox(phone),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      titlebox("Email"),
+                                      inputBox(email)
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      titlebox("Position"),
+                                      inputBox(position),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      butonCancle(context),
+                                      const SizedBox(
+                                        width: 50,
+                                      ),
+                                      butonAdd(
+                                          context, widget.employeeProvider),
+                                    ],
+                                  )
+                                ],
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -42,7 +229,7 @@ class AddEmployee extends StatefulWidget {
   Widget inputBox(TextEditingController controller) {
     return Container(
       height: 45,
-      width: 200,
+      width: 150,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Colors.blue,
@@ -87,14 +274,16 @@ class AddEmployee extends StatefulWidget {
             authClass.signUpWithEmailPass(lastname.text + fisrtname.text,
                 email.text, password.text, context);
             employeeServices.addEmployee(
-                id.text,
-                fisrtname.text + lastname.text,
-                birthday.text,
-                phone.text,
-                address.text,
-                position.text,
-                email.text,
-                gender.text);
+              id.text,
+              fisrtname.text + lastname.text,
+              birthday.text,
+              phone.text,
+              address.text,
+              position.text,
+              email.text,
+              gender.text,
+              _imageURL,
+            );
             provider.employeeSource.add({
               "id": id.text,
               "name": lastname.text + fisrtname.text,
@@ -116,7 +305,8 @@ class AddEmployee extends StatefulWidget {
                 address.text,
                 position.text,
                 email.text,
-                gender.text);
+                gender.text,
+                _imageURL);
             provider.managerSource.add({
               "id": id.text,
               "name": lastname.text + fisrtname.text,
@@ -133,161 +323,17 @@ class AddEmployee extends StatefulWidget {
         child: const Text("Add"));
   }
 
-  displayDialog(BuildContext context, TableProvider employeeProvider) {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: false,
-      transitionDuration: const Duration(milliseconds: 1000),
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        return FadeTransition(
-          opacity: animation,
-          child: ScaleTransition(
-            scale: animation,
-            child: child,
-          ),
-        );
-      },
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return Padding(
-          padding: const EdgeInsets.all(90.0),
-          child: Material(
-            child: Container(
-              width: MediaQuery.of(context).size.width / 2,
-              height: MediaQuery.of(context).size.height / 2,
-              color: Colors.white,
-              child: Row(
-                children: <Widget>[
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width / 3,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 50, vertical: 50),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              titlebox("Frist Name"),
-                              inputBox(fisrtname),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              titlebox("Password"),
-                              inputBox(password),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              titlebox("Birthday"),
-                              inputBox(birthday),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              titlebox("ID"),
-                              inputBox(id),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              titlebox("Gender"),
-                              inputBox(gender),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 30,
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width / 2 + 30,
-                    decoration: const BoxDecoration(
-                        gradient: LinearGradient(colors: [
-                      Colors.white,
-                      Colors.blue,
-                    ])),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 25),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            titlebox("Last Name"),
-                                            inputBox(lastname),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            titlebox("Address"),
-                                            inputBox(address),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            titlebox("Phone"),
-                                            inputBox(phone),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            titlebox("Email"),
-                                            inputBox(email)
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            titlebox("Position"),
-                                            inputBox(position),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            butonCancle(context),
-                                            const SizedBox(
-                                              width: 50,
-                                            ),
-                                            butonAdd(context, employeeProvider),
-                                          ],
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
-      },
+  Widget titlebox(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+      child: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.black,
+          fontSize: 17,
+          letterSpacing: 2,
+        ),
+      ),
     );
-  }
-}
-
-class _AddEmployeeState extends State<AddEmployee> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }
