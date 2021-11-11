@@ -93,18 +93,14 @@ class _EmployeePageState extends State<EmployeePage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => UserInforPage(
+                                gender: map.values.elementAt(2),
                                 name: map.values.elementAt(0),
                                 email: map.values.elementAt(1),
                                 id: map.values.elementAt(2),
+                                birthday: map.values.elementAt(3),
+                                address: map.values.elementAt(5),
                                 photoURL: map.values.elementAt(7),
                               )));
-
-                  // Navigator.pushAndRemoveUntil(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (builder) =>
-                  //             UserInforPage(name: arr, email: email, id: id)),
-                  //     (route) => false);
                 },
                 onSort: employeeProvider.onSort,
                 sortAscending: employeeProvider.sortAscending,
