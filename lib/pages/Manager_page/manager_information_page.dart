@@ -253,29 +253,30 @@ class _ManagerInPageState extends State<ManagerInPage> {
                       updateManager();
                       Map<String, dynamic> map = <String, dynamic>{};
                       map.addAll({
-                        "name": nameController.text,
                         "id": idController.text,
-                        "address": addressController.text,
-                        "email": emailController.text,
-                        "phone": phoneController.text,
+                        "name": nameController.text,
                         "gender": genderController,
-                        "position": positionController,
                         "birthday": birthdayController,
+                        "email": emailController.text,
+                        "address": addressController.text,
+                        "phone": phoneController.text,
                         "photoURL": photoURLController,
+                        "position": positionController,
                       });
                       if (positionController == "Employee") {
                         setState(() {
                           managerServices.deleteManager(emailController.text);
                           employeeServices.addEmployee(
-                              idController.text,
-                              nameController.text,
-                              birthdayController,
-                              phoneController.text,
-                              addressController.text,
-                              positionController,
-                              emailController.text,
-                              genderController,
-                              widget.photoURL);
+                            idController.text,
+                            nameController.text,
+                            genderController,
+                            birthdayController,
+                            emailController.text,
+                            phoneController.text,
+                            addressController.text,
+                            widget.photoURL,
+                            positionController,
+                          );
                           provider.employeeSource.add(map);
                           for (Map<String, dynamic> manager
                               in provider.managerSource) {

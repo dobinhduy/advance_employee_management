@@ -257,33 +257,34 @@ class _UserInforPageState extends State<UserInforPage> {
                       updateEmployee();
                       Map<String, dynamic> map = <String, dynamic>{};
                       map.addAll({
-                        "name": nameController.text,
                         "id": idController.text,
-                        "address": addressController.text,
-                        "email": emailController.text,
-                        "phone": phoneController.text,
+                        "name": nameController.text,
                         "gender": genderController,
-                        "position": positionController,
                         "birthday": birthdayController,
+                        "email": emailController.text,
+                        "address": addressController.text,
+                        "phone": phoneController.text,
                         "photoURL": photoURLController,
+                        "position": positionController,
                       });
 
                       if (positionController == "Manager") {
                         //Delete employee
 
                         setState(() {
+                          provider.managerSource.add(map);
                           employeeServices.deleteEmployee(emailController.text);
                           managerServices.addManager(
-                              idController.text,
-                              nameController.text,
-                              birthdayController,
-                              phoneController.text,
-                              addressController.text,
-                              positionController,
-                              emailController.text,
-                              genderController,
-                              widget.photoURL);
-                          provider.managerSource.add(map);
+                            idController.text,
+                            nameController.text,
+                            genderController,
+                            birthdayController,
+                            emailController.text,
+                            phoneController.text,
+                            addressController.text,
+                            widget.photoURL,
+                            positionController,
+                          );
 
                           for (Map<String, dynamic> employee
                               in provider.employeeSource) {

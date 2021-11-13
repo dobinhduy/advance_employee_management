@@ -46,15 +46,16 @@ class EmployeeServices {
   }
 
   void addEmployee(
-      String id,
-      String name,
-      String birthday,
-      String phone,
-      String address,
-      String position,
-      String email,
-      String gender,
-      String photourl) {
+    String id,
+    String name,
+    String gender,
+    String birthday,
+    String email,
+    String address,
+    String phone,
+    String photourl,
+    String position,
+  ) {
     FirebaseFirestore.instance.collection(collection).add({
       "id": id,
       "name": name,
