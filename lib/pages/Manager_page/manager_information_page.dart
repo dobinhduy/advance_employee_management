@@ -1,18 +1,18 @@
-import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/manager_service.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
-
-import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
-class UserInforPage extends StatefulWidget {
-  const UserInforPage(
+import '../../locator.dart';
+
+class ManagerInPage extends StatefulWidget {
+  const ManagerInPage(
       {Key? key,
       required this.name,
       required this.email,
@@ -35,10 +35,10 @@ class UserInforPage extends StatefulWidget {
   final String position;
 
   @override
-  State<UserInforPage> createState() => _UserInforPageState();
+  _ManagerInPageState createState() => _ManagerInPageState();
 }
 
-class _UserInforPageState extends State<UserInforPage> {
+class _ManagerInPageState extends State<ManagerInPage> {
   late TextEditingController emailController;
   late TextEditingController nameController;
   late TextEditingController idController;
@@ -48,12 +48,14 @@ class _UserInforPageState extends State<UserInforPage> {
   late String genderController;
   late String positionController;
   late String photoURLController;
-
+  ManagerServices managerServices = ManagerServices();
+  EmployeeServices employeeServices = EmployeeServices();
   String _imageURL = "";
-  String dropDownvalue = 'Employee';
+  String dropDownvalue = 'Manager';
   List<String> listPosition = ['Employee', 'Manager'];
 
   DateTime selectedDate = DateTime.now();
+  AuthClass authClass = AuthClass();
 
   bool male = false;
   bool female = false;
@@ -68,9 +70,6 @@ class _UserInforPageState extends State<UserInforPage> {
   bool editPhone = false;
   bool editBirthday = false;
   bool editPosition = false;
-  EmployeeServices employeeServices = EmployeeServices();
-  ManagerServices managerServices = ManagerServices();
-  AuthClass authClass = AuthClass();
 
   @override
   void initState() {
@@ -84,7 +83,6 @@ class _UserInforPageState extends State<UserInforPage> {
     birthdayController = widget.birthday;
     positionController = widget.position;
     photoURLController = widget.photoURL;
-
     if (genderController == "Male") {
       male = true;
     } else {
@@ -120,7 +118,7 @@ class _UserInforPageState extends State<UserInforPage> {
     }
   }
 
-  updateEmployee() {
+  updateManager() {
     setState(() {
       idController = idController;
       emailController = emailController;
@@ -138,12 +136,11 @@ class _UserInforPageState extends State<UserInforPage> {
   Widget build(BuildContext context) {
     getImage();
     TableProvider provider = Provider.of<TableProvider>(context);
-
     return Scaffold(
       backgroundColor: Colors.deepPurple[200],
       appBar: AppBar(
         backgroundColor: Colors.blueAccent,
-        title: const Text("Employee Information"),
+        title: const Text("Manager Information"),
       ),
       body: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <
           Widget>[
@@ -252,9 +249,8 @@ class _UserInforPageState extends State<UserInforPage> {
             ),
             editInfo
                 ? InkWell(
-                    onTap: () async {
-                      //Update controller
-                      updateEmployee();
+                    onTap: () {
+                      updateManager();
                       Map<String, dynamic> map = <String, dynamic>{};
                       map.addAll({
                         "name": nameController.text,
@@ -267,13 +263,10 @@ class _UserInforPageState extends State<UserInforPage> {
                         "birthday": birthdayController,
                         "photoURL": photoURLController,
                       });
-
-                      if (positionController == "Manager") {
-                        //Delete employee
-
+                      if (positionController == "Employee") {
                         setState(() {
-                          employeeServices.deleteEmployee(emailController.text);
-                          managerServices.addManager(
+                          managerServices.deleteManager(emailController.text);
+                          employeeServices.addEmployee(
                               idController.text,
                               nameController.text,
                               birthdayController,
@@ -283,52 +276,51 @@ class _UserInforPageState extends State<UserInforPage> {
                               emailController.text,
                               genderController,
                               widget.photoURL);
-                          provider.managerSource.add(map);
-
-                          for (Map<String, dynamic> employee
-                              in provider.employeeSource) {
-                            if (employee.values.elementAt(4) ==
+                          provider.employeeSource.add(map);
+                          for (Map<String, dynamic> manager
+                              in provider.managerSource) {
+                            if (manager.values.elementAt(4) ==
                                 emailController.text) {
-                              provider.employeeSource.remove(employee);
+                              provider.managerSource.remove(manager);
                             }
                           }
                         });
                       } else {
                         setState(() {
-                          employeeServices.updateEmployee(widget.email, map);
-                          for (Map<String, dynamic> employee
-                              in provider.employeeSource) {
-                            if (employee.values.elementAt(4) ==
+                          managerServices.updateManager(widget.email, map);
+                          for (Map<String, dynamic> manager
+                              in provider.managerSource) {
+                            if (manager.values.elementAt(4) ==
                                 emailController.text) {
-                              employee.update(
+                              manager.update(
                                 "name",
                                 (value) => nameController.text,
                               );
-                              employee.update(
+                              manager.update(
                                 "id",
                                 (value) => idController.text,
                               );
-                              employee.update(
+                              manager.update(
                                 "address",
                                 (value) => addressController.text,
                               );
-                              employee.update(
+                              manager.update(
                                 "email",
                                 (value) => emailController.text,
                               );
-                              employee.update(
+                              manager.update(
                                 "phone",
                                 (value) => phoneController.text,
                               );
-                              employee.update(
+                              manager.update(
                                 "gender",
                                 (value) => genderController,
                               );
-                              employee.update(
+                              manager.update(
                                 "position",
                                 (value) => positionController,
                               );
-                              employee.update(
+                              manager.update(
                                 "birthday",
                                 (value) => birthdayController,
                               );
@@ -340,7 +332,7 @@ class _UserInforPageState extends State<UserInforPage> {
                       authClass.showSnackBar(context, "Add success");
                       SchedulerBinding.instance?.addPostFrameCallback((_) {
                         Navigator.of(context)
-                            .pushReplacementNamed(EmployeeLayout);
+                            .pushReplacementNamed(ManagerLayout);
                       });
                     },
                     child: Container(
@@ -396,7 +388,7 @@ class _UserInforPageState extends State<UserInforPage> {
         Row(
           children: [
             Text(
-              birthdayController,
+              widget.birthday,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
             ),
             const SizedBox(
@@ -478,7 +470,7 @@ class _UserInforPageState extends State<UserInforPage> {
       children: [
         const Text(
           "Male",
-          style: TextStyle(fontSize: 18),
+          style: const TextStyle(fontSize: 18),
         ),
         Checkbox(
           checkColor: Colors.black,
@@ -488,7 +480,6 @@ class _UserInforPageState extends State<UserInforPage> {
             setState(() {
               female = false;
               male = true;
-              genderController = "Male";
             });
           },
         ),
@@ -497,7 +488,7 @@ class _UserInforPageState extends State<UserInforPage> {
         ),
         const Text(
           "Female",
-          style: TextStyle(fontSize: 18),
+          style: const TextStyle(fontSize: 18),
         ),
         Checkbox(
           checkColor: Colors.black,
@@ -505,9 +496,8 @@ class _UserInforPageState extends State<UserInforPage> {
           value: female,
           onChanged: (bool? value) {
             setState(() {
-              male = false;
               female = true;
-              genderController = "Female";
+              male = false;
             });
           },
         ),

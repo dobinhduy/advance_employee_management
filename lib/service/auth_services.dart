@@ -152,9 +152,5 @@ class AuthClass {
   }
 
   //Query user
-  Future<void> reloadUserModel() async {}
 
-  updateUserData(Map<String, dynamic> data) async {
-    _userServices.updateEmployee(data);
-  }
 }

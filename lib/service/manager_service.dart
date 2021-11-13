@@ -11,11 +11,26 @@ class ManagerServices {
     });
   }
 
-  void updateManager(Map<String, dynamic> values) {
-    FirebaseFirestore.instance
+  void deleteManager(String email) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)
-        .doc(values['id'])
-        .update(values);
+        .where("email", isEqualTo: email)
+        .get();
+    QueryDocumentSnapshot doc = querySnapshot.docs[0];
+    DocumentReference docref = doc.reference;
+
+    await docref.delete();
+  }
+
+  void updateManager(String email, Map<String, dynamic> map) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("email", isEqualTo: email)
+        .get();
+    QueryDocumentSnapshot doc = querySnapshot.docs[0];
+    DocumentReference docref = doc.reference;
+
+    await docref.update(map);
   }
 
   void addManager(

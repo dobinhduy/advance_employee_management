@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:advance_employee_management/pages/Manager_page/manager_information_page.dart';
 import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:flutter/material.dart';
@@ -24,10 +25,10 @@ class _ManagerPageState extends State<ManagerPage> {
             mainAxisSize: MainAxisSize.max,
             children: [
           const PageHeader(
-            text: 'Manager',
+            text: 'Manager table',
           ),
           Container(
-            margin: const EdgeInsets.all(10),
+            margin: const EdgeInsets.all(5),
             padding: const EdgeInsets.all(0),
             constraints: const BoxConstraints(
               maxHeight: 700,
@@ -75,6 +76,22 @@ class _ManagerPageState extends State<ManagerPage> {
                 ],
                 onTabRow: (data) {
                   print(data);
+                  Map<String, dynamic> map =
+                      Map<String, dynamic>.from(data as Map<String, dynamic>);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ManagerInPage(
+                                gender: map.values.elementAt(2),
+                                phone: map.values.elementAt(6),
+                                name: map.values.elementAt(1),
+                                email: map.values.elementAt(4),
+                                id: map.values.elementAt(0),
+                                birthday: map.values.elementAt(3),
+                                address: map.values.elementAt(5),
+                                photoURL: map.values.elementAt(7),
+                                position: map.values.elementAt(8),
+                              )));
                 },
                 onSort: managersProvider.onSort,
                 sortAscending: managersProvider.sortAscending,

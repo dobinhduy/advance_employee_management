@@ -10,7 +10,8 @@ enum DisplayedPage {
   MANAGERS,
   DASHBOARD,
   NOTIFICATION,
-  SETTING
+  SETTING,
+  ADD
 }
 
 class AppProvider with ChangeNotifier {

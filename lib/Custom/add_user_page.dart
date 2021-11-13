@@ -1,8 +1,7 @@
 import 'dart:typed_data';
-
 import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
-
+import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/manager_service.dart';
@@ -11,21 +10,18 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-class AddEmployee extends StatefulWidget {
-  const AddEmployee(
-      {Key? key, required this.context, required this.employeeProvider})
-      : super(key: key);
-
-  final BuildContext context;
-  final TableProvider employeeProvider;
+class AddUserPage extends StatefulWidget {
+  const AddUserPage({Key? key}) : super(key: key);
 
   @override
-  _AddEmployeeState createState() => _AddEmployeeState();
+  _AddUserPageState createState() => _AddUserPageState();
 }
 
-class _AddEmployeeState extends State<AddEmployee> {
+class _AddUserPageState extends State<AddUserPage> {
   final TextEditingController fisrtname = TextEditingController();
   final TextEditingController lastname = TextEditingController();
   final TextEditingController password = TextEditingController();
@@ -33,19 +29,21 @@ class _AddEmployeeState extends State<AddEmployee> {
   final TextEditingController address = TextEditingController();
   final TextEditingController phone = TextEditingController();
   final TextEditingController email = TextEditingController();
+  String position = "";
 
   final AuthClass authClass = AuthClass();
-  List<String> listPosition = ['Employee', 'Manager'];
+
   DateTime selectedDate = DateTime.now();
 
   final EmployeeServices employeeServices = EmployeeServices();
   final ManagerServices managerServices = ManagerServices();
   String _imageURL = "";
   bool timeup = false;
-  String positionSelected = 'Employee';
+
   bool male = false;
   bool female = false;
   String gender = "";
+  String dropDownvalue = 'Employee';
 
   void deplay() {
     Future.delayed(const Duration(seconds: 2), () {
@@ -60,10 +58,13 @@ class _AddEmployeeState extends State<AddEmployee> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2025),
     );
+
     if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
+      if (mounted) {
+        setState(() {
+          selectedDate = picked;
+        });
+      }
     }
   }
 
@@ -79,12 +80,12 @@ class _AddEmployeeState extends State<AddEmployee> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width / 5,
                 height: MediaQuery.of(context).size.height,
                 child: Column(
                   children: [
-                    Container(
+                    SizedBox(
                       width: MediaQuery.of(context).size.width / 5,
                       height: MediaQuery.of(context).size.height / 1.6,
                       child: Column(
@@ -97,7 +98,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                                   _imageURL,
                                   width: 300,
                                   height: 300,
-                                  fit: BoxFit.cover,
+                                  fit: BoxFit.fill,
                                 )
                               : Container(),
                           const SizedBox(
@@ -106,7 +107,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                         ],
                       ),
                     ),
-                    Container(
+                    SizedBox(
                       width: MediaQuery.of(context).size.width / 5,
                       height: MediaQuery.of(context).size.height / 5,
                       child: Column(
@@ -153,7 +154,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                 ),
                 inputBox(id),
                 const SizedBox(
-                  height: 20,
+                  height: 30,
                 ),
                 genderSelectedBox(),
               ],
@@ -168,6 +169,9 @@ class _AddEmployeeState extends State<AddEmployee> {
                 titlebox("Phone"),
                 titlebox("Email"),
                 titlebox("Position"),
+                const SizedBox(
+                  height: 90,
+                ),
                 butonCancle(context),
               ],
             ),
@@ -181,13 +185,13 @@ class _AddEmployeeState extends State<AddEmployee> {
                 inputBox(phone),
                 inputBox(email),
                 const SizedBox(
-                  height: 8,
+                  height: 15,
                 ),
                 selectPosition(),
                 const SizedBox(
-                  height: 20,
+                  height: 120,
                 ),
-                butonAdd(context, widget.employeeProvider),
+                butonAdd(context),
               ],
             )
           ],
@@ -198,9 +202,9 @@ class _AddEmployeeState extends State<AddEmployee> {
 
   Widget inputBox(TextEditingController controller) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 23),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
       child: Container(
-        height: 35,
+        height: 30,
         width: 200,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(0),
@@ -211,6 +215,7 @@ class _AddEmployeeState extends State<AddEmployee> {
           maxLines: 1,
           style: const TextStyle(color: Colors.black, fontSize: 17),
           decoration: const InputDecoration(
+            contentPadding: EdgeInsets.symmetric(vertical: 15),
             border: InputBorder.none,
           ),
         ),
@@ -231,13 +236,41 @@ class _AddEmployeeState extends State<AddEmployee> {
             final UploadTask uploadTask = reference.putData(uploadfile!);
             uploadTask.whenComplete(() async {
               String image = await uploadTask.snapshot.ref.getDownloadURL();
-              setState(() {
-                _imageURL = image;
-              });
+              if (mounted) {
+                setState(() {
+                  _imageURL = image;
+                });
+              }
             });
           }
         },
         child: const Text("Upload image"));
+  }
+
+  Widget selectPosition() {
+    return DropdownButton<String>(
+      value: dropDownvalue,
+      iconSize: 24,
+      elevation: 16,
+      style: const TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String? newValue) {
+        setState(() {
+          dropDownvalue = newValue!;
+          position = dropDownvalue;
+        });
+      },
+      items: <String>['Employee', 'Manager']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
   }
 
   Widget genderSelectedBox() {
@@ -255,7 +288,7 @@ class _AddEmployeeState extends State<AddEmployee> {
             setState(() {
               female = true;
               male = false;
-              gender = "female";
+              gender = "Female";
             });
           },
         ),
@@ -264,7 +297,7 @@ class _AddEmployeeState extends State<AddEmployee> {
         ),
         const Text(
           "Female",
-          style: const TextStyle(fontSize: 18),
+          style: TextStyle(fontSize: 18),
         ),
         Checkbox(
           checkColor: Colors.black,
@@ -274,7 +307,7 @@ class _AddEmployeeState extends State<AddEmployee> {
             setState(() {
               male = true;
               female = false;
-              gender = "male";
+              gender = "Male";
             });
           },
         ),
@@ -303,31 +336,6 @@ class _AddEmployeeState extends State<AddEmployee> {
     );
   }
 
-  Widget selectPosition() {
-    return DropdownButton<String>(
-      value: positionSelected,
-      iconSize: 24,
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (String? newValue) {
-        setState(() {
-          positionSelected = newValue!;
-        });
-      },
-      items: <String>['Employee', 'Manager']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-    );
-  }
-
   Widget butonCancle(BuildContext context) {
     return TextButton(
         style: ButtonStyle(
@@ -343,26 +351,27 @@ class _AddEmployeeState extends State<AddEmployee> {
         child: const Text("Cancle"));
   }
 
-  Widget butonAdd(BuildContext context, TableProvider provider) {
+  Widget butonAdd(BuildContext context) {
+    TableProvider provider = Provider.of<TableProvider>(context);
     return TextButton(
         style: ButtonStyle(
           overlayColor: MaterialStateProperty.resolveWith<Color?>(
               (Set<MaterialState> states) {
             if (states.contains(MaterialState.focused)) return Colors.red;
-            return null; // Defer to the widget's default.
+            return null;
           }),
         ),
         onPressed: () {
-          if (positionSelected == "Employee") {
-            authClass.signUpWithEmailPass(lastname.text + fisrtname.text,
-                email.text, password.text, context);
+          authClass.signUpWithEmailPass(lastname.text + fisrtname.text,
+              email.text, password.text, context);
+          if (position == "Employee") {
             employeeServices.addEmployee(
               id.text,
               fisrtname.text + lastname.text,
               "${selectedDate.toLocal()}".split(' ')[0].replaceAll("-", "/"),
               phone.text,
               address.text,
-              positionSelected,
+              "Employee",
               email.text,
               gender,
               _imageURL,
@@ -377,21 +386,21 @@ class _AddEmployeeState extends State<AddEmployee> {
               "email": email.text,
               "address": address.text,
               "phone": phone.text,
+              "photoURL": _imageURL,
+              "position": position
             });
-            Navigator.pop(context);
-          } else if (positionSelected == "Manager") {
-            authClass.signUpWithEmailPass(lastname.text + fisrtname.text,
-                email.text, password.text, context);
+          } else {
             managerServices.addManager(
-                id.text,
-                fisrtname.text + lastname.text,
-                "${selectedDate.toLocal()}".split(' ')[0].replaceAll("-", "/"),
-                phone.text,
-                address.text,
-                positionSelected,
-                email.text,
-                gender,
-                _imageURL);
+              id.text,
+              fisrtname.text + lastname.text,
+              "${selectedDate.toLocal()}".split(' ')[0].replaceAll("-", "/"),
+              phone.text,
+              address.text,
+              "Manager",
+              email.text,
+              gender,
+              _imageURL,
+            );
             provider.managerSource.add({
               "id": id.text,
               "name": lastname.text + fisrtname.text,
@@ -402,11 +411,15 @@ class _AddEmployeeState extends State<AddEmployee> {
               "email": email.text,
               "address": address.text,
               "phone": phone.text,
+              "photoURL": _imageURL,
+              "position": position
             });
-            Navigator.pop(context);
-          } else {
-            authClass.showSnackBar(context, "position is wrong");
           }
+
+          authClass.showSnackBar(context, "Add success");
+          SchedulerBinding.instance?.addPostFrameCallback((_) {
+            Navigator.of(context).pushReplacementNamed(AddUserLayout);
+          });
         },
         child: const Text("Add"));
   }

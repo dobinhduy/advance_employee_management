@@ -7,3 +7,4 @@ const String MainHomeP = "HomePage";
 const String LayOutRoute = "LayOutRoute";
 const String EmployeeLayout = "EmployeeLayout";
 const String ManagerLayout = "ManagerLayout";
+const String AddUserLayout = "AddUserLayout";

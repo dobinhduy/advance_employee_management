@@ -1,6 +1,4 @@
-import 'dart:typed_data';
-
-import 'package:advance_employee_management/Custom/add_user_page.dart';
+// ignore_for_file: unrelated_type_equality_checks
 
 import 'package:advance_employee_management/pages/EmployeePage/employee_information_page.dart';
 import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
@@ -48,14 +46,7 @@ class _EmployeePageState extends State<EmployeePage> {
                 autoHeight: false,
                 title: !employeeProvider.isSearch
                     ? ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (builder) => AddEmployee(
-                                      context: context,
-                                      employeeProvider: employeeProvider)));
-                        },
+                        onPressed: () {},
                         icon: const Icon(Icons.add),
                         label: const Text("ADD CATEGORY"))
                     : null,
@@ -93,13 +84,15 @@ class _EmployeePageState extends State<EmployeePage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => UserInforPage(
+                                id: map.values.elementAt(0),
+                                name: map.values.elementAt(1),
                                 gender: map.values.elementAt(2),
-                                name: map.values.elementAt(0),
-                                email: map.values.elementAt(1),
-                                id: map.values.elementAt(2),
                                 birthday: map.values.elementAt(3),
+                                email: map.values.elementAt(4),
                                 address: map.values.elementAt(5),
+                                phone: map.values.elementAt(6),
                                 photoURL: map.values.elementAt(7),
+                                position: map.values.elementAt(8),
                               )));
                 },
                 onSort: employeeProvider.onSort,

@@ -2,6 +2,7 @@ import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/pages/add_to_do.dart';
 import 'package:advance_employee_management/pages/sign_up_page.dart';
 import 'package:advance_employee_management/provider/app_provider.dart';
+import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:advance_employee_management/widgets/navbar/navbar_logo.dart';
@@ -36,7 +37,7 @@ class SildeMenuTabletDesktop extends StatelessWidget {
             SileMenuItemDesktop(
                 active: appProvider.currentPage == DisplayedPage.DASHBOARD,
                 text: "Dashboard",
-                icon: Icons.dashboard,
+                icon: Icons.dashboard_customize,
                 onTap: () {
                   appProvider.changeCurrentPage(DisplayedPage.DASHBOARD);
                   locator<NavigationService>().navigateTo(MainHomeP);
@@ -44,18 +45,28 @@ class SildeMenuTabletDesktop extends StatelessWidget {
             SileMenuItemDesktop(
                 active: appProvider.currentPage == DisplayedPage.EMPLOYEES,
                 text: "Employee",
-                icon: Icons.people,
+                icon: Icons.people_alt_outlined,
                 onTap: () {
+                  ChangeNotifierProvider.value(value: TableProvider.init());
                   appProvider.changeCurrentPage(DisplayedPage.EMPLOYEES);
                   locator<NavigationService>().navigateTo(EmployeeLayout);
                 }),
             SileMenuItemDesktop(
                 active: appProvider.currentPage == DisplayedPage.MANAGERS,
                 text: "Manager",
-                icon: Icons.dashboard,
+                icon: Icons.manage_accounts,
                 onTap: () {
                   appProvider.changeCurrentPage(DisplayedPage.MANAGERS);
                   locator<NavigationService>().navigateTo(ManagerLayout);
+                }),
+            SileMenuItemDesktop(
+                active: appProvider.currentPage == DisplayedPage.ADD,
+                text: "Add",
+                icon: Icons.add_box_outlined,
+                onTap: () {
+                  appProvider.changeCurrentPage(DisplayedPage.ADD);
+
+                  locator<NavigationService>().navigateTo(AddUserLayout);
                 }),
           ],
         ),

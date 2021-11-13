@@ -128,6 +128,7 @@ class TableProvider with ChangeNotifier {
   Future loadDataFromFirebase() async {
     employees = await employeeServices.getAllEmployee();
     managers = await managerServices.getAllManger();
+    notifyListeners();
   }
 
   List<Map<String, dynamic>> _getManagerData() {
@@ -144,6 +145,8 @@ class TableProvider with ChangeNotifier {
         "email": manager.email,
         "address": manager.address,
         "phone": manager.phone,
+        "photoURL": manager.photourl,
+        "position": manager.position,
       });
       i++;
     }
@@ -154,8 +157,7 @@ class TableProvider with ChangeNotifier {
   List<Map<String, dynamic>> _getEmployeeData() {
     List<Map<String, dynamic>> temps = <Map<String, dynamic>>[];
     var i = employees.length;
-    // ignore: avoid_print
-    print(i);
+
     for (EmployeeModel employee in employees) {
       temps.add({
         "id": employee.id,
@@ -166,6 +168,7 @@ class TableProvider with ChangeNotifier {
         "address": employee.address,
         "phone": employee.phone,
         "photourl": employee.photourl,
+        "position": employee.position,
       });
       i++;
     }
@@ -174,18 +177,15 @@ class TableProvider with ChangeNotifier {
   }
 
   _initData() async {
-    isLoading = true;
-
+    isLoading = false;
     notifyListeners();
     await loadDataFromFirebase();
-    if (isLoading == true) {
-      Future.delayed(const Duration(seconds: 2)).then((value) {
-        employeeSource.addAll(_getEmployeeData());
-        managerSource.addAll(_getManagerData());
-        isLoading = false;
-        notifyListeners();
-      });
-    }
+    print("abc");
+
+    employeeSource.addAll(_getEmployeeData());
+    managerSource.addAll(_getManagerData());
+
+    notifyListeners();
   }
 
   onSort(dynamic value) {
