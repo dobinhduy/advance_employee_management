@@ -1,6 +1,5 @@
 import 'package:advance_employee_management/locator.dart';
-import 'package:advance_employee_management/pages/add_to_do.dart';
-import 'package:advance_employee_management/pages/sign_up_page.dart';
+import 'package:advance_employee_management/pages/authentication/sign_up_page.dart';
 import 'package:advance_employee_management/provider/app_provider.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';

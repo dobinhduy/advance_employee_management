@@ -1,4 +1,4 @@
-import 'package:advance_employee_management/widgets/custom_text.dart';
+import 'package:advance_employee_management/Custom/custom_text.dart';
 import 'package:flutter/material.dart';
 
 class PageHeader extends StatelessWidget {

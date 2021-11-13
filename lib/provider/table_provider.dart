@@ -135,7 +135,7 @@ class TableProvider with ChangeNotifier {
     List<Map<String, dynamic>> temps = <Map<String, dynamic>>[];
     var i = managers.length;
     // ignore: avoid_print
-    print(i);
+
     for (ManagerModel manager in managers) {
       temps.add({
         "id": manager.id,
@@ -180,7 +180,6 @@ class TableProvider with ChangeNotifier {
     isLoading = false;
     notifyListeners();
     await loadDataFromFirebase();
-    print("abc");
 
     employeeSource.addAll(_getEmployeeData());
     managerSource.addAll(_getManagerData());

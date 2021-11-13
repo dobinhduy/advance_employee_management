@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
-import '../locator.dart';
+import '../../locator.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -98,7 +98,7 @@ class _SignUpPageState extends State<SignInPage> {
               const SizedBox(
                 height: 30,
               ),
-              colorButton(),
+              loginButton(),
               const SizedBox(
                 height: 15,
               ),
@@ -173,7 +173,7 @@ class _SignUpPageState extends State<SignInPage> {
     );
   }
 
-  Widget colorButton() {
+  Widget loginButton() {
     return InkWell(
       onTap: () async {
         setState(() {
