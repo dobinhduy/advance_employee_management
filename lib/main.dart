@@ -30,6 +30,8 @@ class MyApp extends StatelessWidget {
   Widget currentPage = const SignUpPage();
   AuthClass authClass = AuthClass();
 
+  MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     // ignore: avoid_print

@@ -368,13 +368,13 @@ class _AddUserPageState extends State<AddUserPage> {
             employeeServices.addEmployee(
               id.text,
               fisrtname.text + lastname.text,
-              "${selectedDate.toLocal()}".split(' ')[0].replaceAll("-", "/"),
-              phone.text,
-              address.text,
-              "Employee",
-              email.text,
               gender,
+              "${selectedDate.toLocal()}".split(' ')[0].replaceAll("-", "/"),
+              email.text,
+              address.text,
+              phone.text,
               _imageURL,
+              "Employee",
             );
             provider.employeeSource.add({
               "id": id.text,
@@ -393,13 +393,13 @@ class _AddUserPageState extends State<AddUserPage> {
             managerServices.addManager(
               id.text,
               fisrtname.text + lastname.text,
-              "${selectedDate.toLocal()}".split(' ')[0].replaceAll("-", "/"),
-              phone.text,
-              address.text,
-              "Manager",
-              email.text,
               gender,
+              "${selectedDate.toLocal()}".split(' ')[0].replaceAll("-", "/"),
+              email.text,
+              address.text,
+              phone.text,
               _imageURL,
+              "Manager",
             );
             provider.managerSource.add({
               "id": id.text,

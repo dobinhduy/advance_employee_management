@@ -1,7 +1,10 @@
 // ignore: file_names
 
+import 'package:advance_employee_management/pages/Admin_Manager_page/manager_information_page.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
+import 'package:advance_employee_management/service/employee_service.dart';
+import 'package:advance_employee_management/service/manager_service.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:flutter/material.dart';
 
@@ -20,9 +23,21 @@ class _SignUpPageState extends State<SignInPage> {
   firebase_auth.FirebaseAuth firebaseAuth = firebase_auth.FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  EmployeeServices employeeServices = EmployeeServices();
+  ManagerServices managerServices = ManagerServices();
 
   bool circular = false;
   AuthClass authClass = AuthClass();
+  bool isEmployee = false;
+  bool isManager = false;
+  checkisEmployee(String email) async {
+    isEmployee = await employeeServices.checkExistEmployee(email);
+  }
+
+  checkisManager(String email) async {
+    isManager = await managerServices.checkExisManager(email);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -176,18 +191,29 @@ class _SignUpPageState extends State<SignInPage> {
   Widget loginButton() {
     return InkWell(
       onTap: () async {
+        checkisEmployee(_emailController.text);
+        checkisManager(_emailController.text);
         setState(() {
           circular = true;
         });
         try {
-          firebase_auth.UserCredential userCredential =
-              await firebaseAuth.signInWithEmailAndPassword(
-                  email: _emailController.text,
-                  password: _passwordController.text);
+          await firebaseAuth.signInWithEmailAndPassword(
+              email: _emailController.text, password: _passwordController.text);
           setState(() {
             circular = true;
           });
-          locator<NavigationService>().globalNavigateTo(LayOutRoute, context);
+          if (isEmployee) {
+            print(isEmployee);
+            locator<NavigationService>()
+                .globalNavigateTo(EmployeeRouteLayout, context);
+          } else if (isManager) {
+            print(isManager);
+            locator<NavigationService>()
+                .globalNavigateTo(ManagerRouteLayout, context);
+          } else {
+            locator<NavigationService>()
+                .globalNavigateTo(AdLayOutRoute, context);
+          }
         } catch (e) {
           final snackbar = SnackBar(content: Text(e.toString()));
           ScaffoldMessenger.of(context).showSnackBar(snackbar);

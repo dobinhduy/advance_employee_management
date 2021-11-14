@@ -33,16 +33,29 @@ class EmployeeServices {
     await docref.delete();
   }
 
-  void getphotoURL(String id, String photoURL) {
-    FirebaseFirestore.instance
+  Future<String> getphotoURL(String email) async {
+    String photoURL = "";
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)
-        .where("id", isEqualTo: id)
-        .snapshots()
-        .forEach((element) {
-      FirebaseFirestore.instance.collection(collection).add({
-        "photourl": photoURL,
-      });
-    });
+        .where("email", isEqualTo: email)
+        .get();
+    DocumentSnapshot doc = querySnapshot.docs[0];
+    photoURL = (doc.data() as dynamic)['photourl'];
+    return photoURL;
+  }
+
+  Future<bool> checkExistEmployee(String email) async {
+    String position = "";
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("email", isEqualTo: email)
+        .get();
+    DocumentSnapshot doc = querySnapshot.docs[0];
+    position = (doc.data() as dynamic)['position'];
+    if (position == "Employee") {
+      return true;
+    }
+    return false;
   }
 
   void addEmployee(
@@ -67,16 +80,6 @@ class EmployeeServices {
       "gender": gender,
       "photourl": photourl,
     });
-  }
-
-  bool checkExistEmployee(String email) {
-    if (FirebaseFirestore.instance
-            .collection(collection)
-            .where("email", isEqualTo: email) !=
-        null) {
-      return false;
-    }
-    return true;
   }
 
   Future<EmployeeModel> getEmployeebyID(String id) => FirebaseFirestore.instance

@@ -2,7 +2,6 @@ import 'package:advance_employee_management/locator.dart';
 
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
-import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,9 +23,9 @@ class AuthClass {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-  String user() {
+  String? user() {
     final User user = auth.currentUser!;
-    return user.uid;
+    return user.email;
   }
 
   Future<void> googleSignIn(BuildContext context) async {
@@ -43,7 +42,7 @@ class AuthClass {
           UserCredential userCredential =
               await auth.signInWithCredential(credential);
 
-          locator<NavigationService>().globalNavigateTo(LayOutRoute, context);
+          locator<NavigationService>().globalNavigateTo(AdLayOutRoute, context);
         } catch (e) {
           final snackbar = SnackBar(content: Text(e.toString()));
           ScaffoldMessenger.of(context).showSnackBar(snackbar);
@@ -117,7 +116,7 @@ class AuthClass {
       UserCredential userCredential =
           await auth.signInWithCredential(credential);
 
-      locator<NavigationService>().globalNavigateTo(LayOutRoute, context);
+      locator<NavigationService>().globalNavigateTo(AdLayOutRoute, context);
       showSnackBar(context, "Logged in ");
     } catch (e) {
       showSnackBar(context, e.toString());
@@ -130,7 +129,7 @@ class AuthClass {
       await auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) async {
-        locator<NavigationService>().globalNavigateTo(LayOutRoute, context);
+        locator<NavigationService>().globalNavigateTo(AdLayOutRoute, context);
       });
     } catch (e) {
       showSnackBar(context, e.toString());

@@ -1,6 +1,6 @@
 // ignore_for_file: unrelated_type_equality_checks
 
-import 'package:advance_employee_management/pages/EmployeePage/employee_information_page.dart';
+import 'package:advance_employee_management/pages/Admin_Employee/employee_information_page.dart';
 import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:flutter/material.dart';

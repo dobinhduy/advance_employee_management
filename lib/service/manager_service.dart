@@ -22,6 +22,31 @@ class ManagerServices {
     await docref.delete();
   }
 
+  Future<String> getphotoURL(String email) async {
+    String photoURL = "";
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("email", isEqualTo: email)
+        .get();
+    DocumentSnapshot doc = querySnapshot.docs[0];
+    photoURL = (doc.data() as dynamic)['photourl'];
+    return photoURL;
+  }
+
+  Future<bool> checkExisManager(String email) async {
+    String position = "";
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("email", isEqualTo: email)
+        .get();
+    DocumentSnapshot doc = querySnapshot.docs[0];
+    position = (doc.data() as dynamic)['position'];
+    if (position == "Manager") {
+      return true;
+    }
+    return false;
+  }
+
   void updateManager(String email, Map<String, dynamic> map) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)

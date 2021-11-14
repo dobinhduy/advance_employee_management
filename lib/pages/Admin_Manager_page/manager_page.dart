@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:advance_employee_management/pages/Manager_page/manager_information_page.dart';
+import 'package:advance_employee_management/pages/Admin_Manager_page/manager_information_page.dart';
 import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:flutter/material.dart';
