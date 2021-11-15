@@ -1,1 +1,1 @@
-//flutter run -d chrome --web-hostname localhost --web-port 5000 --no-sound-null-safety
+//flutter run -d chrome --web-hostname localhost --web-port 5000 --no-sound-null-safety --web-renderer canvaskit

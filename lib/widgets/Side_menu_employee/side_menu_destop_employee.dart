@@ -27,25 +27,28 @@ class SideMenuEmployeeDesktop extends StatelessWidget {
       width: 250,
       child: Column(
         children: [
-          NavBarLogoEmployee(),
+          const NavBarLogoEmployee(),
           const SizedBox(
             height: 30,
           ),
           SileMenuItemDesktop(
-              active: appProvider.currentPage == DisplayedPage.DASHBOARD,
-              text: "Dashboard",
-              icon: Icons.dashboard_customize,
+              active:
+                  appProvider.currentPage == DisplayedPage.EMPLOYEEINFORMATION,
+              text: "Profile",
+              icon: Icons.people_alt,
               onTap: () {
-                appProvider.changeCurrentPage(DisplayedPage.DASHBOARD);
-                locator<NavigationService>().navigateTo(MainHomeP);
+                appProvider
+                    .changeCurrentPage(DisplayedPage.EMPLOYEEINFORMATION);
+                locator<NavigationService>()
+                    .navigateTo(EmployeeInformationRoute);
               }),
           SileMenuItemDesktop(
-              active: appProvider.currentPage == DisplayedPage.EMPLOYEES,
+              active: appProvider.currentPage == DisplayedPage.CELANDER,
               text: "Celendar",
               icon: Icons.calendar_view_week_rounded,
               onTap: () {
                 ChangeNotifierProvider.value(value: TableProvider.init());
-                appProvider.changeCurrentPage(DisplayedPage.EMPLOYEES);
+                appProvider.changeCurrentPage(DisplayedPage.CELANDER);
                 locator<NavigationService>().navigateTo(EmployeeLayout);
               }),
         ],

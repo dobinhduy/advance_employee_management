@@ -3,7 +3,6 @@ import 'package:advance_employee_management/provider/app_provider.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
-import 'package:advance_employee_management/widgets/navbar/navbar_logo_employee.dart';
 import 'package:advance_employee_management/widgets/navbar/navbar_logo_manager.dart';
 import 'package:advance_employee_management/widgets/slide_menu/side_menu_items.dart';
 import 'package:flutter/material.dart';
@@ -33,21 +32,32 @@ class SideMenuManagerDesktop extends StatelessWidget {
             height: 30,
           ),
           SileMenuItemDesktop(
-              active: appProvider.currentPage == DisplayedPage.DASHBOARD,
-              text: "Dashboard",
-              icon: Icons.dashboard_customize,
+              active:
+                  appProvider.currentPage == DisplayedPage.MANAGERINFORMATION,
+              text: "Profile",
+              icon: Icons.person,
               onTap: () {
-                appProvider.changeCurrentPage(DisplayedPage.DASHBOARD);
-                locator<NavigationService>().navigateTo(MainHomeP);
+                appProvider.changeCurrentPage(DisplayedPage.MANAGERINFORMATION);
+                locator<NavigationService>()
+                    .navigateTo(ManagerInformationRoute);
               }),
           SileMenuItemDesktop(
               active: appProvider.currentPage == DisplayedPage.EMPLOYEES,
-              text: "Celendar",
-              icon: Icons.calendar_view_week_rounded,
+              text: "Employee Table",
+              icon: Icons.people_alt,
               onTap: () {
                 ChangeNotifierProvider.value(value: TableProvider.init());
                 appProvider.changeCurrentPage(DisplayedPage.EMPLOYEES);
-                locator<NavigationService>().navigateTo(ManagerLayout);
+                locator<NavigationService>().navigateTo(EmployeeLayout);
+              }),
+          SileMenuItemDesktop(
+              active: appProvider.currentPage == DisplayedPage.MANAGERPROJECT,
+              text: "Project",
+              icon: Icons.task_sharp,
+              onTap: () {
+                ChangeNotifierProvider.value(value: TableProvider.init());
+                appProvider.changeCurrentPage(DisplayedPage.MANAGERPROJECT);
+                locator<NavigationService>().navigateTo(ProjectPageRoute);
               }),
         ],
       ),

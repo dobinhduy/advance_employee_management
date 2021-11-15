@@ -1,5 +1,6 @@
 import 'package:advance_employee_management/models/employee.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class EmployeeServices {
   String collection = "employees";
@@ -45,17 +46,22 @@ class EmployeeServices {
   }
 
   Future<bool> checkExistEmployee(String email) async {
-    String position = "";
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("email", isEqualTo: email)
+        .get();
+    List<DocumentSnapshot> doc = querySnapshot.docs;
+
+    return doc.length == 1;
+  }
+
+  Future<EmployeeModel> getEmployeebyEmail(String email) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)
         .where("email", isEqualTo: email)
         .get();
     DocumentSnapshot doc = querySnapshot.docs[0];
-    position = (doc.data() as dynamic)['position'];
-    if (position == "Employee") {
-      return true;
-    }
-    return false;
+    return EmployeeModel.fromSnapshot(doc);
   }
 
   void addEmployee(
@@ -81,14 +87,6 @@ class EmployeeServices {
       "photourl": photourl,
     });
   }
-
-  Future<EmployeeModel> getEmployeebyID(String id) => FirebaseFirestore.instance
-          .collection(collection)
-          .doc(id)
-          .get()
-          .then((doc) {
-        return EmployeeModel.fromSnapshot(doc);
-      });
 
   Future<List<EmployeeModel>> getAllEmployee() async =>
       FirebaseFirestore.instance.collection(collection).get().then((result) {

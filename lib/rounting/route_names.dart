@@ -4,9 +4,18 @@ const String LonginRoute = "Login";
 const String SignupRoute = "Signin";
 const String PhoneAuthLog = "PhoneAuth";
 const String MainHomeP = "HomePage";
+
+//Admin Route
 const String AdLayOutRoute = "AdminLayOutRoute";
 const String EmployeeLayout = "EmployeeLayout";
 const String ManagerLayout = "ManagerLayout";
 const String AddUserLayout = "AddUserLayout";
+
+//Employee Route
 const String EmployeeRouteLayout = "EmployeeRouteLayout";
+const String EmployeeInformationRoute = "EmployeeInformationRoute";
+
+//Manager Route
 const String ManagerRouteLayout = "ManagerRouteLayout";
+const String ManagerInformationRoute = "ManagerInformationRoute";
+const String ProjectPageRoute = "ProjectPageRoute";

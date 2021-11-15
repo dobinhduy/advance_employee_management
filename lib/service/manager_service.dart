@@ -34,17 +34,14 @@ class ManagerServices {
   }
 
   Future<bool> checkExisManager(String email) async {
-    String position = "";
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)
         .where("email", isEqualTo: email)
         .get();
-    DocumentSnapshot doc = querySnapshot.docs[0];
-    position = (doc.data() as dynamic)['position'];
-    if (position == "Manager") {
-      return true;
-    }
-    return false;
+
+    List<DocumentSnapshot> doc = querySnapshot.docs;
+
+    return doc.length == 1;
   }
 
   void updateManager(String email, Map<String, dynamic> map) async {
@@ -56,6 +53,15 @@ class ManagerServices {
     DocumentReference docref = doc.reference;
 
     await docref.update(map);
+  }
+
+  Future<ManagerModel> getManagerByEmail(String email) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("email", isEqualTo: email)
+        .get();
+    DocumentSnapshot doc = querySnapshot.docs[0];
+    return ManagerModel.fromSnapshot(doc);
   }
 
   void addManager(

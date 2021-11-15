@@ -1,9 +1,11 @@
 import 'package:advance_employee_management/models/employee.dart';
 import 'package:advance_employee_management/models/manager.dart';
+import 'package:advance_employee_management/models/project.dart';
 // ignore: unused_import
 import 'package:advance_employee_management/provider/app_provider.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/manager_service.dart';
+import 'package:advance_employee_management/service/project_service.dart';
 import 'package:flutter/material.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
@@ -102,9 +104,76 @@ class TableProvider with ChangeNotifier {
         sortable: true,
         textAlign: TextAlign.center),
   ];
+  final List<DatatableHeader> projectHeaders = [
+    DatatableHeader(
+        text: "Order",
+        value: "order",
+        show: true,
+        sortable: true,
+        textAlign: TextAlign.center),
+    DatatableHeader(
+        text: "Project ID",
+        value: "id",
+        show: true,
+        sortable: true,
+        textAlign: TextAlign.center),
+    DatatableHeader(
+        text: "Name",
+        value: "name",
+        show: true,
+        sortable: true,
+        textAlign: TextAlign.center),
+    DatatableHeader(
+        text: "Start Day",
+        value: "startday",
+        show: true,
+        sortable: true,
+        textAlign: TextAlign.center),
+    DatatableHeader(
+        text: "Birthday",
+        value: "endday",
+        show: true,
+        sortable: true,
+        textAlign: TextAlign.center),
+    DatatableHeader(
+        text: "Status",
+        value: "status",
+        flex: 1,
+        show: true,
+        sortable: true,
+        textAlign: TextAlign.center),
+    DatatableHeader(
+      text: "Complete(%)",
+      value: "complete",
+      show: true,
+      sortable: true,
+      textAlign: TextAlign.center,
+      sourceBuilder: (value, row) {
+        List list = List.from(value);
+        return Column(
+          children: [
+            SizedBox(
+              width: 85,
+              child: LinearProgressIndicator(
+                value: list.first / list.last,
+              ),
+            ),
+            Text("${list.first} of ${list.last}")
+          ],
+        );
+      },
+    ),
+    DatatableHeader(
+      text: "Action",
+      value: "action",
+      show: true,
+      sortable: true,
+      textAlign: TextAlign.center,
+    ),
+  ];
+
   final List<int> perPages = [5, 10, 15, 100];
   final int total = 100;
-
   int currentPerPage = 10;
   int currentPage = 1;
   bool isSearch = false;
@@ -116,28 +185,32 @@ class TableProvider with ChangeNotifier {
 
   List<Map<String, dynamic>> employeeSource = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> managerSource = <Map<String, dynamic>>[];
+  List<Map<String, dynamic>> projectSource = <Map<String, dynamic>>[];
 
   List<Map<String, dynamic>> selecteds = <Map<String, dynamic>>[];
 
   EmployeeServices employeeServices = EmployeeServices();
-  ManagerServices managerServices = ManagerServices();
-
   List<EmployeeModel> employees = <EmployeeModel>[];
+
+  ManagerServices managerServices = ManagerServices();
   List<ManagerModel> managers = <ManagerModel>[];
+
+  ProjectService projectService = ProjectService();
+  List<ProjectModel> projects = <ProjectModel>[];
 
   Future loadDataFromFirebase() async {
     employees = await employeeServices.getAllEmployee();
     managers = await managerServices.getAllManger();
+    projects = await projectService.getAllproject();
     notifyListeners();
   }
 
   List<Map<String, dynamic>> _getManagerData() {
     List<Map<String, dynamic>> temps = <Map<String, dynamic>>[];
-    var i = managers.length;
-    // ignore: avoid_print
-
+    var i = 0;
     for (ManagerModel manager in managers) {
       temps.add({
+        "order": i,
         "id": manager.id,
         "name": manager.name,
         "gender": manager.gender,
@@ -151,6 +224,26 @@ class TableProvider with ChangeNotifier {
       i++;
     }
 
+    return temps;
+  }
+
+  List<Map<String, dynamic>> _getProjectData() {
+    List<Map<String, dynamic>> temps = <Map<String, dynamic>>[];
+    var i = projects.length;
+    for (ProjectModel project in projects) {
+      temps.add({
+        "id": project.id,
+        "name": project.name,
+        "manager": project.manager,
+        "startday": project.startday,
+        "endday": project.endday,
+        "status": project.status,
+        "member": project.member,
+        "description": project.desciption,
+        "complete": project.complete,
+      });
+      i++;
+    }
     return temps;
   }
 
@@ -183,6 +276,7 @@ class TableProvider with ChangeNotifier {
 
     employeeSource.addAll(_getEmployeeData());
     managerSource.addAll(_getManagerData());
+    projectSource.addAll(_getProjectData());
 
     notifyListeners();
   }

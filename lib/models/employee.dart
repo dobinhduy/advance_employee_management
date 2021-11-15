@@ -22,16 +22,6 @@ class EmployeeModel {
   late String _gender;
   late String _position;
   late String _photourl;
-  String get name => _name;
-  String get id => _id;
-  String get email => _email;
-  String get gender => _gender;
-  String get address => _address;
-  String get phone => _phone;
-  String get birthday => _birthday;
-  String get position => _position;
-  String get photourl => _photourl;
-
   EmployeeModel.fromSnapshot(DocumentSnapshot snapshot) {
     _name = (snapshot.data() as dynamic)[NAME];
     _email = (snapshot.data() as dynamic)[EMAIL];
@@ -43,4 +33,13 @@ class EmployeeModel {
     _gender = (snapshot.data() as dynamic)[GENDER];
     _photourl = (snapshot.data() as dynamic)[PHOTOURL];
   }
+  String get address => _address;
+  String get birthday => _birthday;
+  String get email => _email;
+  String get gender => _gender;
+  String get id => _id;
+  String get name => _name;
+  String get phone => _phone;
+  String get photourl => _photourl;
+  String get position => _position;
 }
