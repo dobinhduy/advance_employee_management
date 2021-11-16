@@ -1,3 +1,6 @@
+import 'package:advance_employee_management/service/auth_services.dart';
+import 'package:advance_employee_management/service/manager_service.dart';
+import 'package:advance_employee_management/service/project_service.dart';
 import 'package:flutter/material.dart';
 
 class AddEntryDialog extends StatefulWidget {
@@ -20,15 +23,41 @@ class AddEntryDialogState extends State<AddEntryDialog> {
   TextEditingController memberID5 = TextEditingController();
   DateTime selectedStartDate = DateTime.now();
   DateTime selectedEndDate = DateTime.now();
+  String startDayCon = "";
+  String endayCon = "";
+  ManagerServices managerServices = ManagerServices();
+  ProjectService projectService = ProjectService();
+
+  String managerIDcontroller = "";
+  String email = AuthClass().user()!;
+  getManagerID() async {
+    managerIDcontroller = await managerServices.getManagerbyID(email);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
+    getManagerID();
     return Scaffold(
         appBar: AppBar(
           title: const Text('New Project'),
           actions: [
             TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  List<String> members = <String>[];
+                  members.add(memberID1.text);
+                  members.add(memberID2.text);
+                  projectService.createProject(
+                      id.text,
+                      projectName.text,
+                      managerIDcontroller,
+                      "${selectedStartDate.toLocal()}".split(' ')[0],
+                      "${selectedEndDate.toLocal()}".split(' ')[0],
+                      desController.text,
+                      members,
+                      "Open",
+                      0);
+                },
                 child: Text('SAVE',
                     style: Theme.of(context)
                         .textTheme

@@ -88,6 +88,17 @@ class ManagerServices {
     });
   }
 
+  Future<String> getManagerbyID(String email) async {
+    String id = "";
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("email", isEqualTo: email)
+        .get();
+    DocumentSnapshot doc = querySnapshot.docs[0];
+    id = (doc.data() as dynamic)['id'];
+    return id;
+  }
+
   Future<ManagerModel> getManagerID(String id) => FirebaseFirestore.instance
           .collection(collection)
           .doc(id)

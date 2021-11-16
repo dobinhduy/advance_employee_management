@@ -1,10 +1,9 @@
-import 'package:advance_employee_management/Custom/carditem_custom.dart';
 import 'package:advance_employee_management/Custom/entry_dialog.dart';
 import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_table/ResponsiveDatatable.dart';
+import 'package:responsive_table/responsive_table.dart';
 
 class ProjectPage extends StatefulWidget {
   const ProjectPage({Key? key}) : super(key: key);
@@ -196,7 +195,7 @@ class _ProjectPageState extends State<ProjectPage> {
   void _openAddEntryDialog() {
     Navigator.of(context).push(MaterialPageRoute<void>(
         builder: (BuildContext context) {
-          return const AddEntryDialog();
+          return AddEntryDialog();
         },
         fullscreenDialog: true));
   }

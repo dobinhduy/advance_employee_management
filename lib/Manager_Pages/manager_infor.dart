@@ -26,11 +26,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
 
   isLoading() {
     Future.delayed(const Duration(seconds: 2), () {
-      if (!mounted) {
-        setState(() {
-          loading = false;
-        });
-      }
+      setState(() {
+        loading = false;
+      });
     });
   }
 

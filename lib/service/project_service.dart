@@ -12,16 +12,18 @@ class ProjectService {
       String endDay,
       String description,
       List<String> listEmployee,
-      String status) {
-    FirebaseFirestore.instance.collection(collection).doc(id).set({
+      String status,
+      int complete) {
+    FirebaseFirestore.instance.collection(collection).add({
       "id": id,
       "name": name,
-      "managerid": managerID,
-      "startday": startDay,
-      "endday": endDay,
-      "employees": listEmployee,
-      "description": description,
+      "manager": managerID,
+      "start": startDay,
+      "end": endDay,
       "status": status,
+      "members": listEmployee,
+      "description": description,
+      "complete": complete,
     });
   }
 
@@ -45,7 +47,7 @@ class ProjectService {
           .then((doc) {
         return ProjectModel.fromSnapshot(doc);
       });
-  Future<List<ProjectModel>> getAllproject() async =>
+  Future<List<ProjectModel>> getAllProject() async =>
       FirebaseFirestore.instance.collection(collection).get().then((result) {
         List<ProjectModel> projects = [];
         for (DocumentSnapshot project in result.docs) {

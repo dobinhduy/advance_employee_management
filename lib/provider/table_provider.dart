@@ -106,12 +106,6 @@ class TableProvider with ChangeNotifier {
   ];
   final List<DatatableHeader> projectHeaders = [
     DatatableHeader(
-        text: "Order",
-        value: "order",
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.center),
-    DatatableHeader(
         text: "Project ID",
         value: "id",
         show: true,
@@ -125,20 +119,19 @@ class TableProvider with ChangeNotifier {
         textAlign: TextAlign.center),
     DatatableHeader(
         text: "Start Day",
-        value: "startday",
+        value: "start",
         show: true,
         sortable: true,
         textAlign: TextAlign.center),
     DatatableHeader(
-        text: "Birthday",
-        value: "endday",
+        text: "End day",
+        value: "end",
         show: true,
         sortable: true,
         textAlign: TextAlign.center),
     DatatableHeader(
         text: "Status",
         value: "status",
-        flex: 1,
         show: true,
         sortable: true,
         textAlign: TextAlign.center),
@@ -163,13 +156,6 @@ class TableProvider with ChangeNotifier {
         );
       },
     ),
-    DatatableHeader(
-      text: "Action",
-      value: "action",
-      show: true,
-      sortable: true,
-      textAlign: TextAlign.center,
-    ),
   ];
 
   final List<int> perPages = [5, 10, 15, 100];
@@ -189,28 +175,27 @@ class TableProvider with ChangeNotifier {
 
   List<Map<String, dynamic>> selecteds = <Map<String, dynamic>>[];
 
-  EmployeeServices employeeServices = EmployeeServices();
-  List<EmployeeModel> employees = <EmployeeModel>[];
-
   ManagerServices managerServices = ManagerServices();
   List<ManagerModel> managers = <ManagerModel>[];
 
   ProjectService projectService = ProjectService();
   List<ProjectModel> projects = <ProjectModel>[];
 
+  EmployeeServices employeeServices = EmployeeServices();
+  List<EmployeeModel> employees = <EmployeeModel>[];
+
   Future loadDataFromFirebase() async {
-    employees = await employeeServices.getAllEmployee();
     managers = await managerServices.getAllManger();
-    projects = await projectService.getAllproject();
+    projects = await projectService.getAllProject();
+    employees = await employeeServices.getAllEmployee();
     notifyListeners();
   }
 
   List<Map<String, dynamic>> _getManagerData() {
     List<Map<String, dynamic>> temps = <Map<String, dynamic>>[];
-    var i = 0;
+
     for (ManagerModel manager in managers) {
       temps.add({
-        "order": i,
         "id": manager.id,
         "name": manager.name,
         "gender": manager.gender,
@@ -221,7 +206,6 @@ class TableProvider with ChangeNotifier {
         "photoURL": manager.photourl,
         "position": manager.position,
       });
-      i++;
     }
 
     return temps;
@@ -229,23 +213,24 @@ class TableProvider with ChangeNotifier {
 
   List<Map<String, dynamic>> _getProjectData() {
     List<Map<String, dynamic>> temps = <Map<String, dynamic>>[];
-    var i = projects.length;
+    var i = 0;
     for (ProjectModel project in projects) {
       temps.add({
         "id": project.id,
         "name": project.name,
-        "manager": project.manager,
-        "startday": project.startday,
-        "endday": project.endday,
+        "start": project.start,
+        "end": project.end,
         "status": project.status,
-        "member": project.member,
+        "complete": [project.complete, 100],
+        "members": project.members,
+        "manager": project.manager,
         "description": project.desciption,
-        "complete": project.complete,
       });
       i++;
     }
     return temps;
   }
+  // "\$${project.complete}}"
 
   List<Map<String, dynamic>> _getEmployeeData() {
     List<Map<String, dynamic>> temps = <Map<String, dynamic>>[];
@@ -274,10 +259,10 @@ class TableProvider with ChangeNotifier {
     notifyListeners();
     await loadDataFromFirebase();
 
-    employeeSource.addAll(_getEmployeeData());
     managerSource.addAll(_getManagerData());
     projectSource.addAll(_getProjectData());
 
+    employeeSource.addAll(_getEmployeeData());
     notifyListeners();
   }
 

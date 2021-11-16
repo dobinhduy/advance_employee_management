@@ -278,7 +278,7 @@ class _AddUserPageState extends State<AddUserPage> {
       children: [
         const Text(
           "Male",
-          style: const TextStyle(fontSize: 18),
+          style: TextStyle(fontSize: 18),
         ),
         Checkbox(
           checkColor: Colors.black,

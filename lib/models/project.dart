@@ -25,9 +25,9 @@ class ProjectModel {
   String get id => _id;
   String get name => _name;
   String get manager => _manager;
-  String get startday => _startday;
-  String get endday => _endday;
-  List get member => _member;
+  String get start => _startday;
+  String get end => _endday;
+  List get members => _member;
   String get status => _status;
   int get complete => _complete;
   String get desciption => _description;
@@ -38,9 +38,9 @@ class ProjectModel {
     _manager = (snapshot.data() as dynamic)[MANAGERNAME];
     _startday = (snapshot.data() as dynamic)[STARTDAY];
     _endday = (snapshot.data() as dynamic)[ENDDAY];
-    _member = (snapshot.data() as dynamic)[MEMBER];
     _status = (snapshot.data() as dynamic)[STATUS];
-    _complete = (snapshot.data() as dynamic)[COMPLETE];
+    _member = (snapshot.data() as dynamic)[MEMBER];
     _description = (snapshot.data() as dynamic)[DESCRIPTION];
+    _complete = (snapshot.data() as dynamic)[COMPLETE];
   }
 }
