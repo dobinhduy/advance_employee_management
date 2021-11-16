@@ -45,6 +45,29 @@ class EmployeeServices {
     return photoURL;
   }
 
+  Future<String> getEmployeeName(String email) async {
+    String name = "";
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("email", isEqualTo: email)
+        .get();
+    DocumentSnapshot doc = querySnapshot.docs[0];
+    name = (doc.data() as dynamic)['name'];
+    return name;
+  }
+
+//Get employee id by email
+  Future<String> getEmployeeIDbyEmail(String email) async {
+    String id = "";
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("email", isEqualTo: email)
+        .get();
+    DocumentSnapshot doc = querySnapshot.docs[0];
+    id = (doc.data() as dynamic)['id'];
+    return id;
+  }
+
   Future<bool> checkExistEmployee(String email) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)

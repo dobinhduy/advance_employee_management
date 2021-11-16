@@ -1,10 +1,8 @@
-import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/manager_service.dart';
-import 'package:advance_employee_management/service/navigation_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -138,7 +136,6 @@ class _UserInforPageState extends State<UserInforPage> {
   Widget build(BuildContext context) {
     getImage();
     TableProvider provider = Provider.of<TableProvider>(context);
-
     return Scaffold(
       backgroundColor: Colors.deepPurple[200],
       appBar: AppBar(

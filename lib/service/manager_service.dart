@@ -1,4 +1,5 @@
 import 'package:advance_employee_management/models/manager.dart';
+import 'package:advance_employee_management/models/project.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ManagerServices {
@@ -9,6 +10,17 @@ class ManagerServices {
       "name": name,
       "email": email,
     });
+  }
+
+  Future<String> getEmployeeName(String email) async {
+    String name = "";
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("email", isEqualTo: email)
+        .get();
+    DocumentSnapshot doc = querySnapshot.docs[0];
+    name = (doc.data() as dynamic)['name'];
+    return name;
   }
 
   void deleteManager(String email) async {
@@ -106,6 +118,7 @@ class ManagerServices {
           .then((doc) {
         return ManagerModel.fromSnapshot(doc);
       });
+
   Future<List<ManagerModel>> getAllManger() async =>
       FirebaseFirestore.instance.collection(collection).get().then((result) {
         List<ManagerModel> managers = [];

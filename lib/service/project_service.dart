@@ -40,6 +40,19 @@ class ProjectService {
     });
   }
 
+  Future<List<ProjectModel>> getProjectByID(String id) async =>
+      FirebaseFirestore.instance
+          .collection(collection)
+          .where("id", isEqualTo: id)
+          .get()
+          .then((result) {
+        List<ProjectModel> projects = [];
+        for (DocumentSnapshot project in result.docs) {
+          projects.add(ProjectModel.fromSnapshot(project));
+        }
+        return projects;
+      });
+
   Future<ProjectModel> getProjectID(String id) => FirebaseFirestore.instance
           .collection(collection)
           .doc(id)

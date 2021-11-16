@@ -14,26 +14,48 @@ class _NavBarLogoEmployeeState extends State<NavBarLogoEmployee> {
 
   String email = AuthClass().user()!;
   String photoURL = "";
+  String name = "";
   getPhotoURl() async {
     photoURL = await employeeServices.getphotoURL(email);
     setState(() {}); //????????
   }
 
+  getName() async {
+    name = await employeeServices.getEmployeeName(email);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
+    getName();
     getPhotoURl();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 40),
-      child: SizedBox(
-        height: 50,
-        width: 100,
-        child: photoURL != ""
-            ? Image.network(
-                photoURL,
-                width: 100,
-                height: 100,
-              )
-            : const CircularProgressIndicator(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 70,
+            width: 70,
+            child: photoURL != ""
+                ? CircleAvatar(
+                    radius: 30,
+                    backgroundImage: NetworkImage(photoURL),
+                  )
+                : Container(),
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          name != ""
+              ? Text(
+                  name,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 15),
+                )
+              : Container()
+        ],
       ),
     );
   }

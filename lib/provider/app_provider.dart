@@ -15,7 +15,9 @@ enum DisplayedPage {
   DASHBOARD,
   NOTIFICATION,
   SETTING,
-  ADD
+  ADD,
+
+  PROJECTEMPLOYEEPAGE
 }
 
 class AppProvider with ChangeNotifier {

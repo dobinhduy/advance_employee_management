@@ -32,7 +32,9 @@ class AddEntryDialogState extends State<AddEntryDialog> {
   String email = AuthClass().user()!;
   getManagerID() async {
     managerIDcontroller = await managerServices.getManagerbyID(email);
-    setState(() {});
+    if (!mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -227,6 +229,7 @@ class AddEntryDialogState extends State<AddEntryDialog> {
       lastDate: DateTime(2025),
     );
     if (picked != null && picked != selectedStartDate) {
+      if (!mounted) {}
       setState(() {
         selectedStartDate = picked;
       });
@@ -241,9 +244,11 @@ class AddEntryDialogState extends State<AddEntryDialog> {
       lastDate: DateTime(2025),
     );
     if (picked != null && picked != selectedEndDate) {
-      setState(() {
-        selectedEndDate = picked;
-      });
+      if (!mounted) {
+        setState(() {
+          selectedEndDate = picked;
+        });
+      }
     }
   }
 }

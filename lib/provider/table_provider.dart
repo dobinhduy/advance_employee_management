@@ -3,6 +3,7 @@ import 'package:advance_employee_management/models/manager.dart';
 import 'package:advance_employee_management/models/project.dart';
 // ignore: unused_import
 import 'package:advance_employee_management/provider/app_provider.dart';
+import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/manager_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
@@ -39,15 +40,9 @@ class TableProvider with ChangeNotifier {
         sortable: true,
         textAlign: TextAlign.center),
     DatatableHeader(
-        text: "Email",
-        value: "email",
-        flex: 2,
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.center),
-    DatatableHeader(
         text: "Address",
         value: "address",
+        flex: 2,
         show: true,
         sortable: true,
         textAlign: TextAlign.center),
@@ -57,6 +52,36 @@ class TableProvider with ChangeNotifier {
         show: true,
         sortable: true,
         textAlign: TextAlign.center),
+    DatatableHeader(
+        text: "Action",
+        value: "action",
+        show: true,
+        sortable: true,
+        textAlign: TextAlign.center,
+        sourceBuilder: (value, row) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.delete_forever),
+                  color: Colors.red,
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.edit),
+                  color: Colors.blue,
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.remove_red_eye_sharp),
+                  color: Colors.grey,
+                )
+              ],
+            ),
+          );
+        }),
   ];
   final List<DatatableHeader> managerHeaders = [
     DatatableHeader(
@@ -85,15 +110,9 @@ class TableProvider with ChangeNotifier {
         sortable: true,
         textAlign: TextAlign.center),
     DatatableHeader(
-        text: "Email",
-        value: "email",
-        flex: 2,
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.center),
-    DatatableHeader(
         text: "Address",
         value: "address",
+        flex: 2,
         show: true,
         sortable: true,
         textAlign: TextAlign.center),
@@ -103,6 +122,36 @@ class TableProvider with ChangeNotifier {
         show: true,
         sortable: true,
         textAlign: TextAlign.center),
+    DatatableHeader(
+        text: "Action",
+        value: "action",
+        show: true,
+        sortable: true,
+        textAlign: TextAlign.center,
+        sourceBuilder: (value, row) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.delete_forever),
+                  color: Colors.red,
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.edit),
+                  color: Colors.blue,
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.remove_red_eye_sharp),
+                  color: Colors.grey,
+                )
+              ],
+            ),
+          );
+        }),
   ];
   final List<DatatableHeader> projectHeaders = [
     DatatableHeader(
@@ -156,6 +205,36 @@ class TableProvider with ChangeNotifier {
         );
       },
     ),
+    DatatableHeader(
+        text: "Action",
+        value: "action",
+        show: true,
+        sortable: true,
+        textAlign: TextAlign.center,
+        sourceBuilder: (value, row) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.delete_forever),
+                  color: Colors.red,
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.edit),
+                  color: Colors.blue,
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.remove_red_eye_sharp),
+                  color: Colors.grey,
+                )
+              ],
+            ),
+          );
+        }),
   ];
 
   final List<int> perPages = [5, 10, 15, 100];
@@ -168,6 +247,7 @@ class TableProvider with ChangeNotifier {
   bool isLoading = true;
   final bool showSelect = true;
   final String selectableKey = "id";
+  String employeeEmail = AuthClass().user()!;
 
   List<Map<String, dynamic>> employeeSource = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> managerSource = <Map<String, dynamic>>[];
@@ -205,6 +285,7 @@ class TableProvider with ChangeNotifier {
         "phone": manager.phone,
         "photoURL": manager.photourl,
         "position": manager.position,
+        "action": [null, null]
       });
     }
 
@@ -225,6 +306,7 @@ class TableProvider with ChangeNotifier {
         "members": project.members,
         "manager": project.manager,
         "description": project.desciption,
+        "action": [null, null],
       });
       i++;
     }
@@ -247,6 +329,7 @@ class TableProvider with ChangeNotifier {
         "phone": employee.phone,
         "photourl": employee.photourl,
         "position": employee.position,
+        "action": [null, null]
       });
       i++;
     }
@@ -263,7 +346,20 @@ class TableProvider with ChangeNotifier {
     projectSource.addAll(_getProjectData());
 
     employeeSource.addAll(_getEmployeeData());
+
     notifyListeners();
+  }
+
+  List<ProjectModel> getProjecTEmployee() {
+    List<ProjectModel> list = [];
+    for (ProjectModel project in projects) {
+      for (String member in project.members) {
+        if (member == employeeEmail) {
+          list.add(project);
+        }
+      }
+    }
+    return list;
   }
 
   onSort(dynamic value) {

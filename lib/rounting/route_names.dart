@@ -14,6 +14,7 @@ const String AddUserLayout = "AddUserLayout";
 //Employee Route
 const String EmployeeRouteLayout = "EmployeeRouteLayout";
 const String EmployeeInformationRoute = "EmployeeInformationRoute";
+const String ProjectPageEmployee = "ProjectPageEmployee";
 
 //Manager Route
 const String ManagerRouteLayout = "ManagerRouteLayout";

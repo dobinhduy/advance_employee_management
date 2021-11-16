@@ -43,13 +43,15 @@ class SideMenuEmployeeDesktop extends StatelessWidget {
                     .navigateTo(EmployeeInformationRoute);
               }),
           SileMenuItemDesktop(
-              active: appProvider.currentPage == DisplayedPage.CELANDER,
-              text: "Celendar",
-              icon: Icons.calendar_view_week_rounded,
+              active:
+                  appProvider.currentPage == DisplayedPage.PROJECTEMPLOYEEPAGE,
+              text: "Project",
+              icon: Icons.panorama_photosphere,
               onTap: () {
                 ChangeNotifierProvider.value(value: TableProvider.init());
-                appProvider.changeCurrentPage(DisplayedPage.CELANDER);
-                locator<NavigationService>().navigateTo(EmployeeLayout);
+                appProvider
+                    .changeCurrentPage(DisplayedPage.PROJECTEMPLOYEEPAGE);
+                locator<NavigationService>().navigateTo(ProjectPageEmployee);
               }),
         ],
       ),

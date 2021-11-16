@@ -4,78 +4,105 @@ import 'package:responsive_builder/responsive_builder.dart';
 
 class CardItem extends StatelessWidget {
   CardItem(
-      {required this.title,
-      required this.value,
+      {required this.projectname,
+      required this.projectid,
       required this.color1,
       required this.color2,
       required this.icon,
-      required this.subtitle});
-  final String subtitle;
-  final String title;
-  final String value;
+      required this.startday,
+      required this.manager,
+      required this.endday});
+  final String projectname;
+  final String projectid;
+  final String manager;
+  final String startday;
+  final String endday;
   final Color color1;
   final Color color2;
   final IconData icon;
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveBuilder(
-      builder: (context, sizingInformation) {
-        double titleSize = sizingInformation.screenSize.width <= 600 ? 12 : 16;
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            height: 80,
-            width: MediaQuery.of(context).size.width / 4,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                gradient: LinearGradient(
-                    colors: [color1, color2],
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.topRight),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.grey, offset: Offset(0, 3), blurRadius: 16)
-                ]),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: ListTile(
-                    title: CustomTextProject(
-                      text: title,
-                      size: titleSize,
-                      weight: FontWeight.bold,
-                      color: Colors.white,
+    return InkWell(
+      onTap: () {},
+      child: ResponsiveBuilder(
+        builder: (context, sizingInformation) {
+          // double titleSize =
+          //     sizingInformation.screenSize.width <= 600 ? 12 : 16;
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: 140,
+              width: 300,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  gradient: LinearGradient(
+                      colors: [color1, color2],
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.topRight),
+                  boxShadow: const [
+                    BoxShadow(
+                        color: Colors.grey,
+                        offset: Offset(0, 3),
+                        blurRadius: 16)
+                  ]),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        const Text("Project Name"),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        CustomTextProject(
+                            text: projectname,
+                            size: 16,
+                            color: Colors.black,
+                            weight: FontWeight.bold)
+                      ],
                     ),
-                    subtitle: CustomTextProject(
-                      text: subtitle,
-                      size: titleSize,
-                      weight: FontWeight.w400,
-                      color: Colors.white,
+                    SizedBox(
+                      height: 5,
                     ),
-                  ),
+                    Row(
+                      children: [
+                        const Text("Project ID"),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        CustomTextProject(
+                            text: projectid,
+                            size: 16,
+                            color: Colors.black,
+                            weight: FontWeight.bold)
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        const Text("Manager"),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        CustomTextProject(
+                            text: manager,
+                            size: 16,
+                            color: Colors.black,
+                            weight: FontWeight.bold)
+                      ],
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 14),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomTextProject(
-                        text: value,
-                        size: titleSize + 18,
-                        weight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
