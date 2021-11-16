@@ -21,4 +21,5 @@ Run Codde:
 3. Run in command line : flutter pub get
 4. Run in cmd: flutter run -d chrome --web-hostname localhost --web-port 5000 --no-sound-null-safety --web-renderer canvaskit
 5. Use your email to login as admin
-6. Or use this account to login as manager (email: ititwe18033@gmail.com, password: 123456)
+6. Use this account to login as manager (email: ititwe18033@gmail.com, password: 123456)
+7. Use this account to login as employee (email: duydo2302@gmail.com, password: 123456)
