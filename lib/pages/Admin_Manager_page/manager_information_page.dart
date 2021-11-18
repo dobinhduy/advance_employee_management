@@ -93,11 +93,7 @@ class _ManagerInPageState extends State<ManagerInPage> {
   getImage() async {
     final ref = FirebaseStorage.instance.ref().child(widget.photoURL);
     _imageURL = await ref.getDownloadURL();
-    if (mounted) {
-      setState(() {
-        _imageURL = _imageURL;
-      });
-    }
+    setState(() {});
   }
 
   _selectDate(BuildContext context) async {
@@ -108,13 +104,10 @@ class _ManagerInPageState extends State<ManagerInPage> {
       lastDate: DateTime(2025),
     );
     if (picked != null && picked != selectedDate) {
-      if (mounted) {
-        setState(() {
-          selectedDate = picked;
-          birthdayController =
-              "${selectedDate.toLocal()}".split(' ')[0].replaceAll("-", "/");
-        });
-      }
+      selectedDate = picked;
+      birthdayController =
+          "${selectedDate.toLocal()}".split(' ')[0].replaceAll("-", "/");
+      setState(() {});
     }
   }
 

@@ -23,6 +23,15 @@ class ManagerServices {
     return name;
   }
 
+  Future<ManagerModel> getManagerbyID(String id) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: id)
+        .get();
+    DocumentSnapshot doc = querySnapshot.docs[0];
+    return ManagerModel.fromSnapshot(doc);
+  }
+
   void deleteManager(String email) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)
@@ -100,7 +109,7 @@ class ManagerServices {
     });
   }
 
-  Future<String> getManagerbyID(String email) async {
+  Future<String> getManagerIDbyEmail(String email) async {
     String id = "";
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)

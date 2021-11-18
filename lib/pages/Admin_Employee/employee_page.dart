@@ -44,12 +44,9 @@ class _EmployeePageState extends State<EmployeePage> {
                 selecteds: employeeProvider.selecteds,
                 showSelect: employeeProvider.showSelect,
                 autoHeight: false,
-                title: !employeeProvider.isSearch
-                    ? ElevatedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(Icons.add),
-                        label: const Text("ADD CATEGORY"))
-                    : null,
+                title: Container(
+                  width: 900,
+                ),
                 actions: [
                   if (employeeProvider.isSearch)
                     Expanded(
@@ -68,6 +65,7 @@ class _EmployeePageState extends State<EmployeePage> {
                     )),
                   if (!employeeProvider.isSearch)
                     IconButton(
+                        hoverColor: Colors.blueAccent,
                         icon: const Icon(Icons.search),
                         onPressed: () {
                           setState(() {
@@ -84,15 +82,15 @@ class _EmployeePageState extends State<EmployeePage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => UserInforPage(
-                                id: map.values.elementAt(0),
-                                name: map.values.elementAt(1),
-                                gender: map.values.elementAt(2),
-                                birthday: map.values.elementAt(3),
-                                email: map.values.elementAt(4),
-                                address: map.values.elementAt(5),
-                                phone: map.values.elementAt(6),
-                                photoURL: map.values.elementAt(7),
-                                position: map.values.elementAt(8),
+                                id: map.values.elementAt(1),
+                                name: map.values.elementAt(2),
+                                gender: map.values.elementAt(3),
+                                birthday: map.values.elementAt(4),
+                                email: map.values.elementAt(5),
+                                address: map.values.elementAt(6),
+                                phone: map.values.elementAt(7),
+                                photoURL: map.values.elementAt(8),
+                                position: map.values.elementAt(9),
                               )));
                 },
                 onSort: employeeProvider.onSort,

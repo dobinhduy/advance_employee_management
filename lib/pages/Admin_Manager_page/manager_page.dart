@@ -43,12 +43,9 @@ class _ManagerPageState extends State<ManagerPage> {
                 selecteds: managersProvider.selecteds,
                 showSelect: managersProvider.showSelect,
                 autoHeight: false,
-                title: !managersProvider.isSearch
-                    ? ElevatedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(Icons.add),
-                        label: const Text("ADD CATEGORY"))
-                    : null,
+                title: Container(
+                  width: 900,
+                ),
                 actions: [
                   if (managersProvider.isSearch)
                     Expanded(
@@ -67,6 +64,7 @@ class _ManagerPageState extends State<ManagerPage> {
                     )),
                   if (!managersProvider.isSearch)
                     IconButton(
+                        hoverColor: Colors.blue,
                         icon: const Icon(Icons.search),
                         onPressed: () {
                           setState(() {
@@ -82,15 +80,15 @@ class _ManagerPageState extends State<ManagerPage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ManagerInPage(
-                                gender: map.values.elementAt(2),
+                                gender: map.values.elementAt(3),
                                 phone: map.values.elementAt(6),
-                                name: map.values.elementAt(1),
-                                email: map.values.elementAt(4),
-                                id: map.values.elementAt(0),
-                                birthday: map.values.elementAt(3),
+                                name: map.values.elementAt(2),
+                                email: map.values.elementAt(5),
+                                id: map.values.elementAt(1),
+                                birthday: map.values.elementAt(4),
                                 address: map.values.elementAt(5),
-                                photoURL: map.values.elementAt(7),
-                                position: map.values.elementAt(8),
+                                photoURL: map.values.elementAt(8),
+                                position: map.values.elementAt(9),
                               )));
                 },
                 onSort: managersProvider.onSort,

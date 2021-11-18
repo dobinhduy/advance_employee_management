@@ -25,7 +25,7 @@ class AuthClass {
 
   String? user() {
     final User user = auth.currentUser!;
-    return user.email;
+    return user.email!;
   }
 
   Future<void> googleSignIn(BuildContext context) async {

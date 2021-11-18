@@ -94,9 +94,7 @@ class _UserInforPageState extends State<UserInforPage> {
     final ref = FirebaseStorage.instance.ref().child(widget.photoURL);
     _imageURL = await ref.getDownloadURL();
     if (mounted) {
-      setState(() {
-        _imageURL = _imageURL;
-      });
+      setState(() {});
     }
   }
 
@@ -108,12 +106,11 @@ class _UserInforPageState extends State<UserInforPage> {
       lastDate: DateTime(2025),
     );
     if (picked != null && picked != selectedDate) {
+      selectedDate = picked;
+      birthdayController =
+          "${selectedDate.toLocal()}".split(' ')[0].replaceAll("-", "/");
       if (mounted) {
-        setState(() {
-          selectedDate = picked;
-          birthdayController =
-              "${selectedDate.toLocal()}".split(' ')[0].replaceAll("-", "/");
-        });
+        setState(() {});
       }
     }
   }
@@ -135,6 +132,7 @@ class _UserInforPageState extends State<UserInforPage> {
   @override
   Widget build(BuildContext context) {
     getImage();
+
     TableProvider provider = Provider.of<TableProvider>(context);
     return Scaffold(
       backgroundColor: Colors.deepPurple[200],
@@ -198,19 +196,23 @@ class _UserInforPageState extends State<UserInforPage> {
                 height: 100,
               ),
               !editName
-                  ? titlebox(nameController.text)
+                  ? titlebox2(nameController.text)
                   : inputBox(nameController, 20),
-              !editID ? titlebox(idController.text) : inputBox(idController, 8),
-              !editGender ? titlebox(genderController) : genderSelectedBox(),
-              !editBirthday ? titlebox(birthdayController) : birthdayButton(35),
+              !editID
+                  ? titlebox2(idController.text)
+                  : inputBox(idController, 8),
+              !editGender ? titlebox2(genderController) : genderSelectedBox(),
+              !editBirthday
+                  ? titlebox2(birthdayController)
+                  : birthdayButton(35),
               !editAdd
-                  ? titlebox(addressController.text)
+                  ? titlebox2(addressController.text)
                   : inputBox(addressController, 8),
               !editPhone
-                  ? titlebox(phoneController.text)
+                  ? titlebox2(phoneController.text)
                   : inputBox(phoneController, 8),
-              titlebox(widget.email),
-              !editPosition ? titlebox(positionController) : selectPosition(),
+              titlebox2(widget.email),
+              !editPosition ? titlebox2(positionController) : selectPosition(),
             ],
           ),
         ),
@@ -440,6 +442,20 @@ class _UserInforPageState extends State<UserInforPage> {
         style: const TextStyle(
           color: Colors.black,
           fontSize: 17,
+          letterSpacing: 2,
+        ),
+      ),
+    );
+  }
+
+  Widget titlebox2(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 22),
+      child: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.black,
+          fontSize: 15,
           letterSpacing: 2,
         ),
       ),

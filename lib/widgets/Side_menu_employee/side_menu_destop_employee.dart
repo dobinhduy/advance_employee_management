@@ -18,13 +18,13 @@ class SideMenuEmployeeDesktop extends StatelessWidget {
       decoration: const BoxDecoration(
           color: Colors.white,
           gradient: LinearGradient(
-            colors: [Colors.indigo, Colors.blue],
+            colors: [Colors.deepPurple, Colors.deepPurpleAccent],
           ),
           boxShadow: [
             BoxShadow(
                 color: Colors.lightBlue, offset: Offset(3, 5), blurRadius: 10)
           ]),
-      width: 250,
+      width: 220,
       child: Column(
         children: [
           const NavBarLogoEmployee(),

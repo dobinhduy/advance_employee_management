@@ -87,6 +87,15 @@ class EmployeeServices {
     return EmployeeModel.fromSnapshot(doc);
   }
 
+  Future<EmployeeModel> getEmployeebyID(String id) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: id)
+        .get();
+    DocumentSnapshot doc = querySnapshot.docs[0];
+    return EmployeeModel.fromSnapshot(doc);
+  }
+
   void addEmployee(
     String id,
     String name,

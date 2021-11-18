@@ -12,7 +12,7 @@ class SideMenuManager extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenTypeLayout(
       breakpoints:
-          const ScreenBreakpoints(desktop: 1460, tablet: 600, watch: 300),
+          const ScreenBreakpoints(desktop: 1400, tablet: 600, watch: 300),
       mobile: const SideMenuMoblie(),
       desktop: const SideMenuManagerDesktop(),
     );

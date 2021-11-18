@@ -31,10 +31,8 @@ class AddEntryDialogState extends State<AddEntryDialog> {
   String managerIDcontroller = "";
   String email = AuthClass().user()!;
   getManagerID() async {
-    managerIDcontroller = await managerServices.getManagerbyID(email);
-    if (!mounted) {
-      setState(() {});
-    }
+    managerIDcontroller = await managerServices.getManagerIDbyEmail(email);
+    setState(() {});
   }
 
   @override
