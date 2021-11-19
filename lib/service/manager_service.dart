@@ -12,7 +12,7 @@ class ManagerServices {
     });
   }
 
-  Future<String> getEmployeeName(String email) async {
+  Future<String> getManagerName(String email) async {
     String name = "";
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)

@@ -5,11 +5,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class NotificationService {
   String collection = "notifications";
 
-  void createNotification(String id, String senderID, String receiverID,
-      String sendDay, bool isread) {
+  void createNotification(String id, String projectname, String senderID,
+      String sendername, String receiverID, String sendDay, bool isread) {
     FirebaseFirestore.instance.collection(collection).add({
       "id": id,
+      "projectname": projectname,
       "senderid": senderID,
+      "sendername": sendername,
       "receiverid": receiverID,
       "sendday": sendDay,
       "isread": isread,

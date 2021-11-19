@@ -55,7 +55,7 @@ class SideMenuEmployeeDesktop extends StatelessWidget {
               active:
                   appProvider.currentPage == DisplayedPage.PROJECTEMPLOYEEPAGE,
               text: "Project",
-              icon: Icons.panorama_photosphere,
+              icon: Icons.book_outlined,
               onTap: () {
                 ChangeNotifierProvider.value(value: TableProvider.init());
                 appProvider
@@ -65,14 +65,15 @@ class SideMenuEmployeeDesktop extends StatelessWidget {
           SileMenuItemDesktop(
               active: appProvider.currentPage == DisplayedPage.NOTIFICATION,
               text: "Notification",
-              icon: Icons.panorama_photosphere,
+              icon: Icons.notification_add,
               onTap: () {
                 ChangeNotifierProvider.value(value: TableProvider.init());
                 appProvider.changeCurrentPage(DisplayedPage.NOTIFICATION);
-                locator<NavigationService>().navigateTo(ProjectPageEmployee);
+                locator<NavigationService>()
+                    .navigateTo(notificationEmployeeRoute);
               }),
           SizedBox(
-            height: 330,
+            height: 280,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(

@@ -21,7 +21,7 @@ class _NavBarLogoManagerState extends State<NavBarLogoManager> {
   }
 
   getName() async {
-    name = await managerServices.getEmployeeName(email);
+    name = await managerServices.getManagerName(email);
     setState(() {});
   }
 

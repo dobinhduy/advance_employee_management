@@ -56,7 +56,6 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
   Widget build(BuildContext context) {
     setisADD();
     getEmployeeProject();
-    TableProvider projectProvider = Provider.of<TableProvider>(context);
 
     // for (ProjectModel item in _projects) {
     //   print(item.members);

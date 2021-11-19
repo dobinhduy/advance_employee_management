@@ -195,7 +195,7 @@ class _ProjectPageState extends State<ProjectPage> {
   void _openAddEntryDialog() {
     Navigator.of(context).push(MaterialPageRoute<void>(
         builder: (BuildContext context) {
-          return AddEntryDialog();
+          return const AddEntryDialog();
         },
         fullscreenDialog: true));
   }

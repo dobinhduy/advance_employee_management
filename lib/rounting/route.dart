@@ -1,4 +1,5 @@
 import 'package:advance_employee_management/Employee__Pages/employee_infor.dart';
+import 'package:advance_employee_management/Employee__Pages/notify_page.dart';
 import 'package:advance_employee_management/Employee__Pages/project_page_employee.dart';
 import 'package:advance_employee_management/Manager_Pages/manager_infor.dart';
 import 'package:advance_employee_management/Manager_Pages/project_page.dart';
@@ -51,6 +52,8 @@ PageRoute generateRoute(RouteSettings settings) {
       return _getPageRoute(const ProjectPage());
     case ProjectPageEmployee:
       return _getPageRoute(const ProjectEmployeePage());
+    case notificationEmployeeRoute:
+      return _getPageRoute(NotificationPage());
     default:
       return _getPageRoute(const SignInPage());
   }

@@ -42,9 +42,11 @@ class AddEntryDialogState extends State<AddEntryDialog> {
   AuthClass authClass = AuthClass();
 
   String managerIDcontroller = "";
+  String managerName = "";
   String email = AuthClass().user()!;
   getManagerID() async {
     managerIDcontroller = await managerServices.getManagerIDbyEmail(email);
+    managerName = await managerServices.getManagerName(email);
     setState(() {});
   }
 
@@ -134,7 +136,9 @@ class AddEntryDialogState extends State<AddEntryDialog> {
                   });
                   notificationService.createNotification(
                       const Uuid().v4(),
+                      projectName.text,
                       managerIDcontroller,
+                      managerName,
                       memberID1.text,
                       formattedDate,
                       false);
