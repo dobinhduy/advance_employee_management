@@ -23,7 +23,6 @@ class TableProvider with ChangeNotifier {
   List<Map<String, dynamic>> employeeSource = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> managerSource = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> projectSource = <Map<String, dynamic>>[];
-  List get _employeeSource => employeeSource;
 
   List<Map<String, dynamic>> selecteds = <Map<String, dynamic>>[];
 
@@ -36,12 +35,6 @@ class TableProvider with ChangeNotifier {
   EmployeeServices employeeServices = EmployeeServices();
   List<EmployeeModel> employees = <EmployeeModel>[];
   final List<DatatableHeader> employeeHeaders = [
-    DatatableHeader(
-        text: "Order",
-        value: "order",
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.center),
     DatatableHeader(
         text: "Employee ID",
         value: "id",
@@ -121,12 +114,6 @@ class TableProvider with ChangeNotifier {
   ];
   final List<DatatableHeader> managerHeaders = [
     DatatableHeader(
-        text: "Order",
-        value: "order",
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.center),
-    DatatableHeader(
         text: "Employee ID",
         value: "id",
         show: true,
@@ -172,7 +159,7 @@ class TableProvider with ChangeNotifier {
         textAlign: TextAlign.center,
         sourceBuilder: (value, row) {
           List list = List.from(value);
-          Map<String, dynamic> listmap = row;
+
           return Padding(
             padding: const EdgeInsets.only(left: 50),
             child: Row(
@@ -206,12 +193,6 @@ class TableProvider with ChangeNotifier {
         }),
   ];
   final List<DatatableHeader> projectHeaders = [
-    DatatableHeader(
-        text: "Order",
-        value: "order",
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.center),
     DatatableHeader(
         text: "Project ID",
         value: "id",
@@ -296,7 +277,6 @@ class TableProvider with ChangeNotifier {
   bool isLoading = true;
   final bool showSelect = true;
   final String selectableKey = "id";
-  String employeeEmail = AuthClass().user()!;
 
   Future loadDataFromFirebase() async {
     managers = await managerServices.getAllManger();
@@ -307,10 +287,9 @@ class TableProvider with ChangeNotifier {
 
   List<Map<String, dynamic>> _getManagerData() {
     List<Map<String, dynamic>> temps = <Map<String, dynamic>>[];
-    int i = 1;
+
     for (ManagerModel manager in managers) {
       temps.add({
-        "order": i,
         "id": manager.id,
         "name": manager.name,
         "gender": manager.gender,
@@ -320,9 +299,8 @@ class TableProvider with ChangeNotifier {
         "phone": manager.phone,
         "photoURL": manager.photourl,
         "position": manager.position,
-        "action": [manager.id, i]
+        "action": [manager.id, null]
       });
-      i++;
     }
 
     return temps;
@@ -330,10 +308,9 @@ class TableProvider with ChangeNotifier {
 
   List<Map<String, dynamic>> _getProjectData() {
     List<Map<String, dynamic>> temps = <Map<String, dynamic>>[];
-    var i = 1;
+
     for (ProjectModel project in projects) {
       temps.add({
-        "order": i,
         "id": project.id,
         "name": project.name,
         "start": project.start,
@@ -343,9 +320,8 @@ class TableProvider with ChangeNotifier {
         "members": project.members,
         "manager": project.manager,
         "description": project.desciption,
-        "action": [project.id, i],
+        "action": [project.id, null],
       });
-      i++;
     }
     return temps;
   }
@@ -353,11 +329,9 @@ class TableProvider with ChangeNotifier {
 
   List<Map<String, dynamic>> _getEmployeeData() {
     List<Map<String, dynamic>> temps = <Map<String, dynamic>>[];
-    var i = 1;
 
     for (EmployeeModel employee in employees) {
       temps.add({
-        "order": i,
         "id": employee.id,
         "name": employee.name,
         "gender": employee.gender,
@@ -367,9 +341,8 @@ class TableProvider with ChangeNotifier {
         "phone": employee.phone,
         "photourl": employee.photourl,
         "position": employee.position,
-        "action": [employee.id, i]
+        "action": [employee.id, null]
       });
-      i++;
     }
 
     return temps;
@@ -379,16 +352,14 @@ class TableProvider with ChangeNotifier {
     isLoading = false;
     notifyListeners();
     await loadDataFromFirebase();
-
     managerSource.addAll(_getManagerData());
     projectSource.addAll(_getProjectData());
-
     employeeSource.addAll(_getEmployeeData());
-
     notifyListeners();
   }
 
   List<ProjectModel> getProjecTEmployee() {
+    String employeeEmail = AuthClass().user()!;
     List<ProjectModel> list = [];
     for (ProjectModel project in projects) {
       for (String member in project.members) {

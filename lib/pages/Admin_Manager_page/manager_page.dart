@@ -74,21 +74,22 @@ class _ManagerPageState extends State<ManagerPage> {
                 ],
                 onTabRow: (data) {
                   print(data);
+                  print(managersProvider.selecteds.isEmpty);
                   Map<String, dynamic> map =
                       Map<String, dynamic>.from(data as Map<String, dynamic>);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => ManagerInPage(
-                                gender: map.values.elementAt(3),
+                                gender: map.values.elementAt(2),
                                 phone: map.values.elementAt(6),
-                                name: map.values.elementAt(2),
-                                email: map.values.elementAt(5),
-                                id: map.values.elementAt(1),
-                                birthday: map.values.elementAt(4),
+                                name: map.values.elementAt(1),
+                                email: map.values.elementAt(4),
+                                id: map.values.elementAt(0),
+                                birthday: map.values.elementAt(3),
                                 address: map.values.elementAt(5),
-                                photoURL: map.values.elementAt(8),
-                                position: map.values.elementAt(9),
+                                photoURL: map.values.elementAt(7),
+                                position: map.values.elementAt(8),
                               )));
                 },
                 onSort: managersProvider.onSort,

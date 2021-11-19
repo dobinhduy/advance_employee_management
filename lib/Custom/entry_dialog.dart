@@ -1,7 +1,17 @@
+import 'package:advance_employee_management/models/employee.dart';
+import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
+import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/manager_service.dart';
+import 'package:advance_employee_management/service/notification_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class AddEntryDialog extends StatefulWidget {
   const AddEntryDialog({Key? key}) : super(key: key);
@@ -27,6 +37,9 @@ class AddEntryDialogState extends State<AddEntryDialog> {
   String endayCon = "";
   ManagerServices managerServices = ManagerServices();
   ProjectService projectService = ProjectService();
+  EmployeeServices employeeServices = EmployeeServices();
+  NotificationService notificationService = NotificationService();
+  AuthClass authClass = AuthClass();
 
   String managerIDcontroller = "";
   String email = AuthClass().user()!;
@@ -35,8 +48,35 @@ class AddEntryDialogState extends State<AddEntryDialog> {
     setState(() {});
   }
 
+  _selectEndDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedEndDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    );
+    if (picked != null && picked != selectedEndDate) {
+      selectedEndDate = picked;
+      setState(() {});
+    }
+  }
+
+  _selectStartDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedStartDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    );
+    if (picked != null && picked != selectedStartDate) {
+      selectedStartDate = picked;
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    TableProvider projectProvider = Provider.of<TableProvider>(context);
     getManagerID();
     return Scaffold(
         appBar: AppBar(
@@ -44,9 +84,25 @@ class AddEntryDialogState extends State<AddEntryDialog> {
           actions: [
             TextButton(
                 onPressed: () {
+                  var now = DateTime.now();
+                  var formatter = DateFormat('yyyy-MM-dd');
+                  String formattedDate = formatter.format(now);
                   List<String> members = <String>[];
-                  members.add(memberID1.text);
-                  members.add(memberID2.text);
+                  if (memberID1.text.isNotEmpty) {
+                    members.add(memberID1.text);
+                  }
+                  if (memberID2.text.isNotEmpty) {
+                    members.add(memberID2.text);
+                  }
+                  if (memberID3.text.isNotEmpty) {
+                    members.add(memberID3.text);
+                  }
+                  if (memberID4.text.isNotEmpty) {
+                    members.add(memberID4.text);
+                  }
+                  if (memberID5.text.isNotEmpty) {
+                    members.add(memberID5.text);
+                  }
                   projectService.createProject(
                       id.text,
                       projectName.text,
@@ -57,6 +113,31 @@ class AddEntryDialogState extends State<AddEntryDialog> {
                       members,
                       "Open",
                       0);
+                  setState(() {
+                    projectProvider.projectSource.add({
+                      "id": id.text,
+                      "name": projectName.text,
+                      "start": "${selectedStartDate.toLocal()}".split(' ')[0],
+                      "end": "${selectedEndDate.toLocal()}".split(' ')[0],
+                      "status": "Open",
+                      "complete": [0, 100],
+                      "members": members,
+                      "manager": managerIDcontroller,
+                      "description": desController.text,
+                      "action": [id.text, null],
+                    });
+                  });
+                  authClass.showSnackBar(context, "Add project success");
+                  SchedulerBinding.instance?.addPostFrameCallback((_) {
+                    Navigator.of(context)
+                        .pushReplacementNamed(ProjectPageRoute);
+                  });
+                  notificationService.createNotification(
+                      const Uuid().v4(),
+                      managerIDcontroller,
+                      memberID1.text,
+                      formattedDate,
+                      false);
                 },
                 child: Text('SAVE',
                     style: Theme.of(context)
@@ -67,7 +148,7 @@ class AddEntryDialogState extends State<AddEntryDialog> {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 50),
-          child: Container(
+          child: SizedBox(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: Row(
@@ -139,15 +220,55 @@ class AddEntryDialogState extends State<AddEntryDialog> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       titlebox("Member 1*"),
-                      textItem("Input member ID", memberID1, false, true),
+                      Row(
+                        children: [
+                          textItem("Input member ID", memberID1, false, true),
+                          const SizedBox(
+                            width: 50,
+                          ),
+                          checkExistButton(memberID1)
+                        ],
+                      ),
                       titlebox("Member 2*"),
-                      textItem("Input member ID", memberID2, false, true),
+                      Row(
+                        children: [
+                          textItem("Input member ID", memberID2, false, true),
+                          const SizedBox(
+                            width: 50,
+                          ),
+                          checkExistButton(memberID2),
+                        ],
+                      ),
                       titlebox("Member 3*"),
-                      textItem("Input member ID", memberID3, false, true),
+                      Row(
+                        children: [
+                          textItem("Input member ID", memberID3, false, true),
+                          const SizedBox(
+                            width: 50,
+                          ),
+                          checkExistButton(memberID3)
+                        ],
+                      ),
                       titlebox("Member 4*"),
-                      textItem("Input member ID", memberID4, false, true),
+                      Row(
+                        children: [
+                          textItem("Input member ID", memberID4, false, true),
+                          const SizedBox(
+                            width: 50,
+                          ),
+                          checkExistButton(memberID4)
+                        ],
+                      ),
                       titlebox("Member 5*"),
-                      textItem("Input member ID", memberID5, false, true),
+                      Row(
+                        children: [
+                          textItem("Input member ID", memberID5, false, true),
+                          const SizedBox(
+                            width: 50,
+                          ),
+                          checkExistButton(memberID5)
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -155,6 +276,42 @@ class AddEntryDialogState extends State<AddEntryDialog> {
             ),
           ),
         ));
+  }
+
+  Widget checkExistButton(TextEditingController textEditingController) {
+    return InkWell(
+      onTap: () async {
+        bool result = await employeeServices
+            .checkExistEmployeebyID(textEditingController.text);
+
+        if (result == true) {
+          EmployeeModel employee = await employeeServices
+              .getEmployeebyID(textEditingController.text);
+          dialog(DialogType.INFO, "Employee exist",
+              "Name: " + employee.name + "\n Email: " + employee.email);
+        } else {
+          dialog(DialogType.ERROR, "Employee is not exist", "");
+        }
+      },
+      child: Container(
+        width: 50,
+        height: 40,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          gradient: const LinearGradient(colors: [
+            Color(0xfffd746c),
+            Color(0xffff9068),
+            Color(0xfffd746c)
+          ]),
+        ),
+        child: const Center(
+          child: Text(
+            "Varify",
+            style: TextStyle(fontSize: 17, color: Colors.white),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget textItem(String text, TextEditingController controller,
@@ -219,34 +376,15 @@ class AddEntryDialogState extends State<AddEntryDialog> {
     );
   }
 
-  _selectStartDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+  AwesomeDialog dialog(DialogType type, String title, String description) {
+    return AwesomeDialog(
       context: context,
-      initialDate: selectedStartDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
-    );
-    if (picked != null && picked != selectedStartDate) {
-      if (!mounted) {}
-      setState(() {
-        selectedStartDate = picked;
-      });
-    }
-  }
-
-  _selectEndDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedEndDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
-    );
-    if (picked != null && picked != selectedEndDate) {
-      if (!mounted) {
-        setState(() {
-          selectedEndDate = picked;
-        });
-      }
-    }
+      width: 600,
+      dialogType: type,
+      animType: AnimType.BOTTOMSLIDE,
+      title: title,
+      desc: description,
+      btnOkOnPress: () {},
+    )..show();
   }
 }

@@ -78,6 +78,16 @@ class EmployeeServices {
     return doc.length == 1;
   }
 
+  Future<bool> checkExistEmployeebyID(String id) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: id)
+        .get();
+    List<DocumentSnapshot> doc = querySnapshot.docs;
+
+    return doc.length == 1;
+  }
+
   Future<EmployeeModel> getEmployeebyEmail(String email) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)

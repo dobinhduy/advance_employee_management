@@ -32,6 +32,15 @@ class SideMenuEmployeeDesktop extends StatelessWidget {
             height: 30,
           ),
           SileMenuItemDesktop(
+              active: appProvider.currentPage == DisplayedPage.DASHBOARD,
+              text: "Dashboard",
+              icon: Icons.home,
+              onTap: () {
+                ChangeNotifierProvider.value(value: TableProvider.init());
+                appProvider.changeCurrentPage(DisplayedPage.DASHBOARD);
+                locator<NavigationService>().navigateTo(MainHomeP);
+              }),
+          SileMenuItemDesktop(
               active:
                   appProvider.currentPage == DisplayedPage.EMPLOYEEINFORMATION,
               text: "Profile",
@@ -53,6 +62,32 @@ class SideMenuEmployeeDesktop extends StatelessWidget {
                     .changeCurrentPage(DisplayedPage.PROJECTEMPLOYEEPAGE);
                 locator<NavigationService>().navigateTo(ProjectPageEmployee);
               }),
+          SileMenuItemDesktop(
+              active: appProvider.currentPage == DisplayedPage.NOTIFICATION,
+              text: "Notification",
+              icon: Icons.panorama_photosphere,
+              onTap: () {
+                ChangeNotifierProvider.value(value: TableProvider.init());
+                appProvider.changeCurrentPage(DisplayedPage.NOTIFICATION);
+                locator<NavigationService>().navigateTo(ProjectPageEmployee);
+              }),
+          SizedBox(
+            height: 330,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 4,
+            ),
+            child: SileMenuItemDesktop(
+                active: appProvider.currentPage == DisplayedPage.LOGOUT,
+                text: "Log out",
+                icon: Icons.logout,
+                onTap: () {
+                  appProvider.changeCurrentPage(DisplayedPage.LOGOUT);
+                  locator<NavigationService>()
+                      .globalNavigateTo(LonginRoute, context);
+                }),
+          ),
         ],
       ),
     );

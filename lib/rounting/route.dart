@@ -9,6 +9,7 @@ import 'package:advance_employee_management/pages/Admin_Manager_page/manager_pag
 import 'package:advance_employee_management/pages/HomePage/home_page.dart';
 
 import 'package:advance_employee_management/pages/authentication/phone_auth.dart';
+import 'package:advance_employee_management/pages/authentication/recover_pass_page.dart';
 import 'package:advance_employee_management/pages/authentication/sign_in_page.dart';
 import 'package:advance_employee_management/pages/authentication/sign_up_page.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
@@ -28,7 +29,8 @@ PageRoute generateRoute(RouteSettings settings) {
       return _getPageRoute(const PhoneAuth());
     case MainHomeP:
       return _getPageRoute(const HomePage());
-
+    case RecoverPassRoute:
+      return _getPageRoute(const RecoverPassword());
     case AdLayOutRoute:
       return _getPageRoute(AdminLayoutRoute());
     case EmployeeLayout:

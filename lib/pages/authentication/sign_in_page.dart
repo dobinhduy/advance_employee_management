@@ -152,10 +152,20 @@ class _SignUpPageState extends State<SignInPage> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text(
-                    "Forget Password?",
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+                children: [
+                  InkWell(
+                    onTap: () {
+                      locator<NavigationService>()
+                          .globalNavigateTo(RecoverPassRoute, context);
+                    },
+                    child: const Text(
+                      "Forget Password ?",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ],
               )
@@ -207,7 +217,6 @@ class _SignUpPageState extends State<SignInPage> {
             locator<NavigationService>()
                 .globalNavigateTo(EmployeeRouteLayout, context);
           } else if (isManager) {
-            print(isManager);
             locator<NavigationService>()
                 .globalNavigateTo(ManagerRouteLayout, context);
           } else {

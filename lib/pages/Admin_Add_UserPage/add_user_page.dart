@@ -72,6 +72,21 @@ class _AddUserPageState extends State<AddUserPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    setState(() {
+      fisrtname.clear();
+      lastname.clear();
+      password.clear();
+      address.clear();
+      id.clear();
+      phone.clear();
+      email.clear();
+      _imageURL = "";
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
@@ -401,13 +416,8 @@ class _AddUserPageState extends State<AddUserPage> {
           if (checkFillAll()) {
             if (validPassword(password.text)) {
               try {
-                await FirebaseAuth.instance
-                    .createUserWithEmailAndPassword(
-                        email: email.text, password: password.text)
-                    .then((value) async {
-                  locator<NavigationService>()
-                      .globalNavigateTo(AdLayOutRoute, context);
-                });
+                await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                    email: email.text, password: password.text);
 
                 if (position == "Employee") {
                   employeeServices.addEmployee(
@@ -434,9 +444,10 @@ class _AddUserPageState extends State<AddUserPage> {
                     "address": address.text,
                     "phone": phone.text,
                     "photoURL": _imageURL,
-                    "position": position
+                    "position": position,
+                    "action": [id.text, null],
                   });
-                  authClass.showSnackBar(context, "Add success");
+                  authClass.showSnackBar(context, "Add employee success");
                   SchedulerBinding.instance?.addPostFrameCallback((_) {
                     Navigator.of(context).pushReplacementNamed(AddUserLayout);
                   });
@@ -465,9 +476,10 @@ class _AddUserPageState extends State<AddUserPage> {
                     "address": address.text,
                     "phone": phone.text,
                     "photoURL": _imageURL,
-                    "position": position
+                    "position": position,
+                    "action": [id.text, null],
                   });
-                  authClass.showSnackBar(context, "Add success");
+                  authClass.showSnackBar(context, "Add manager success");
                   SchedulerBinding.instance?.addPostFrameCallback((_) {
                     Navigator.of(context).pushReplacementNamed(AddUserLayout);
                   });

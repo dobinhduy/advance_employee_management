@@ -16,7 +16,7 @@ enum DisplayedPage {
   NOTIFICATION,
   SETTING,
   ADD,
-
+  LOGOUT,
   PROJECTEMPLOYEEPAGE
 }
 

@@ -59,6 +59,21 @@ class SideMenuManagerDesktop extends StatelessWidget {
                 appProvider.changeCurrentPage(DisplayedPage.MANAGERPROJECT);
                 locator<NavigationService>().navigateTo(ProjectPageRoute);
               }),
+          SizedBox(
+            height: 330,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: SileMenuItemDesktop(
+                active: appProvider.currentPage == DisplayedPage.LOGOUT,
+                text: "Log out",
+                icon: Icons.logout,
+                onTap: () {
+                  appProvider.changeCurrentPage(DisplayedPage.LOGOUT);
+                  locator<NavigationService>()
+                      .globalNavigateTo(LonginRoute, context);
+                }),
+          ),
         ],
       ),
     );
