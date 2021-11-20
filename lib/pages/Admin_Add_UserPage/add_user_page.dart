@@ -32,7 +32,10 @@ class _AddUserPageState extends State<AddUserPage> {
   final TextEditingController address = TextEditingController();
   final TextEditingController phone = TextEditingController();
   final TextEditingController email = TextEditingController();
+
   String position = "";
+  String role = "";
+  String department = "";
 
   final AuthClass authClass = AuthClass();
 
@@ -47,6 +50,8 @@ class _AddUserPageState extends State<AddUserPage> {
   bool female = false;
   String gender = "";
   String dropDownvalue = 'Employee';
+  String dropDownRole = "Software developer";
+  String dropDownDepartment = "IT department";
 
   void deplay() {
     Future.delayed(const Duration(seconds: 2), () {
@@ -89,172 +94,173 @@ class _AddUserPageState extends State<AddUserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
-              color: Colors.deepPurpleAccent,
-            ),
-            height: 70,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              child: Text(
-                "Add New User",
-                style: TextStyle(color: Colors.white, fontSize: 30),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              decoration: const BoxDecoration(
+                color: Colors.deepPurpleAccent,
+              ),
+              height: 70,
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                child: Text(
+                  "Add New User",
+                  style: TextStyle(color: Colors.white, fontSize: 30),
+                ),
               ),
             ),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height - 70,
-            color: Colors.white,
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 5,
-                    height: MediaQuery.of(context).size.height,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width / 5,
-                          height: MediaQuery.of(context).size.height / 1.6,
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 100,
-                              ),
-                              _imageURL != ""
-                                  ? Image.network(
-                                      _imageURL,
-                                      width: 300,
-                                      height: 300,
-                                      fit: BoxFit.fill,
-                                    )
-                                  : Container(),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                            ],
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height - 70,
+              color: Colors.white,
+              padding: const EdgeInsets.only(left: 20),
+              child: Row(
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      titlebox("Frist Name"),
+                      inputBox("First name", fisrtname, false),
+                      titlebox("Gender"),
+                      genderSelectedBox(),
+                      titlebox("Birthday"),
+                      birthdayButton(),
+                      titlebox("ID"),
+                      inputBox("User ID", id, false),
+                      titlebox("Password"),
+                      inputBox("Password", password, false),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 30,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      titlebox("Last Name"),
+                      inputBox("Last name", lastname, false),
+                      titlebox("Address"),
+                      inputBox("Address", address, false),
+                      titlebox("Phone"),
+                      inputBox("Phone", phone, false),
+                      titlebox("Email"),
+                      inputBox("Example: abd@gmail.com", email, false),
+                      const SizedBox(
+                        height: 90,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 30,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      titlebox("Role"),
+                      selectedRole(),
+                      titlebox("Department"),
+                      selectDepartment(),
+                      titlebox("Position"),
+                      selectPosition(),
+                      uploadImageButton(),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width / 5,
+                      height: MediaQuery.of(context).size.height,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 5,
+                            height: MediaQuery.of(context).size.height / 1.6,
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 50,
+                                ),
+                                _imageURL != ""
+                                    ? Image.network(
+                                        _imageURL,
+                                        width: 300,
+                                        height: 300,
+                                        fit: BoxFit.fill,
+                                      )
+                                    : Container(),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width / 5,
-                          height: MediaQuery.of(context).size.height / 5,
-                          child: Column(
-                            children: [
-                              uploadImageButton(),
-                            ],
-                          ),
-                        )
-                      ],
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 5,
+                            height: MediaQuery.of(context).size.height / 5,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    butonCancle(context),
+                                    const SizedBox(
+                                      width: 70,
+                                    ),
+                                    butonAdd(context),
+                                  ],
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  children: [
-                    const SizedBox(
-                      height: 70,
-                    ),
-                    titlebox("Frist Name"),
-                    titlebox("Password"),
-                    titlebox("Birthday"),
-                    titlebox("ID"),
-                    titlebox("Gender"),
-                  ],
-                ),
-                const SizedBox(
-                  width: 30,
-                ),
-                Column(
-                  children: [
-                    const SizedBox(
-                      height: 70,
-                    ),
-                    inputBox(fisrtname),
-                    inputBox(password),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    birthdayButton(),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    inputBox(id),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    genderSelectedBox(),
-                  ],
-                ),
-                Column(
-                  children: [
-                    const SizedBox(
-                      height: 70,
-                    ),
-                    titlebox("Last Name"),
-                    titlebox("Address"),
-                    titlebox("Phone"),
-                    titlebox("Email"),
-                    titlebox("Position"),
-                    const SizedBox(
-                      height: 90,
-                    ),
-                    butonCancle(context),
-                  ],
-                ),
-                Column(
-                  children: [
-                    const SizedBox(
-                      height: 70,
-                    ),
-                    inputBox(lastname),
-                    inputBox(address),
-                    inputBox(phone),
-                    inputBox(email),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    selectPosition(),
-                    const SizedBox(
-                      height: 105,
-                    ),
-                    butonAdd(context),
-                  ],
-                )
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget inputBox(TextEditingController controller) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-      child: Container(
-        height: 30,
-        width: 200,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(0),
-          color: Colors.grey[100],
-        ),
-        child: TextFormField(
+  Widget inputBox(
+      String text, TextEditingController controller, bool obscureText) {
+    return SizedBox(
+      width: 250,
+      height: 40,
+      child: TextFormField(
           controller: controller,
-          maxLines: 1,
-          style: const TextStyle(color: Colors.black, fontSize: 17),
-          decoration: const InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 15),
-            border: InputBorder.none,
-          ),
-        ),
-      ),
+          obscureText: obscureText,
+          style: const TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            hintText: text,
+            labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(width: 1, color: Colors.amber)),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(width: 1, color: Colors.grey)),
+          )),
     );
   }
 
@@ -308,6 +314,67 @@ class _AddUserPageState extends State<AddUserPage> {
     );
   }
 
+  Widget selectDepartment() {
+    return DropdownButton<String>(
+      value: dropDownDepartment,
+      iconSize: 24,
+      elevation: 16,
+      style: const TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String? newValue) {
+        setState(() {
+          dropDownDepartment = newValue!;
+          department = dropDownDepartment;
+        });
+      },
+      items: <String>[
+        'IT department',
+        'Support Department  ',
+        'Maketting Department'
+      ].map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget selectedRole() {
+    return DropdownButton<String>(
+      value: dropDownRole,
+      iconSize: 24,
+      elevation: 16,
+      style: const TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String? newValue) {
+        setState(() {
+          dropDownRole = newValue!;
+          role = dropDownRole;
+        });
+      },
+      items: <String>[
+        'Software developer',
+        'Hardware Technician',
+        'Network Administrator',
+        'Business Analyst',
+        ' IT Project Manager',
+        'Systems Engineering Manager'
+      ].map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
+  }
+
   Widget genderSelectedBox() {
     return Row(
       children: [
@@ -353,17 +420,35 @@ class _AddUserPageState extends State<AddUserPage> {
   Widget birthdayButton() {
     return Row(
       children: [
-        Text(
-          "${selectedDate.toLocal()}".split(' ')[0].replaceAll("-", "/"),
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+        SizedBox(
+          width: 250,
+          height: 40,
+          child: TextFormField(
+              obscureText: false,
+              enabled: true,
+              style: const TextStyle(color: Colors.black),
+              decoration: InputDecoration(
+                hintText: "${selectedDate.toLocal()}"
+                    .split(' ')[0]
+                    .replaceAll("-", "/"),
+                labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide:
+                        const BorderSide(width: 1, color: Colors.amber)),
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(width: 1, color: Colors.grey)),
+              )),
         ),
         const SizedBox(
           width: 20.0,
         ),
-        ElevatedButton(
+        ElevatedButton.icon(
+          icon: const Icon(Icons.date_range),
           onPressed: () => _selectDate(context),
-          child: const Text(
-            'Select date',
+          label: const Text(
+            '',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
         ),
@@ -421,18 +506,19 @@ class _AddUserPageState extends State<AddUserPage> {
 
                 if (position == "Employee") {
                   employeeServices.addEmployee(
-                    id.text,
-                    fisrtname.text + lastname.text,
-                    gender,
-                    "${selectedDate.toLocal()}"
-                        .split(' ')[0]
-                        .replaceAll("-", "/"),
-                    email.text,
-                    address.text,
-                    phone.text,
-                    _imageURL,
-                    "Employee",
-                  );
+                      id.text,
+                      fisrtname.text + lastname.text,
+                      gender,
+                      "${selectedDate.toLocal()}"
+                          .split(' ')[0]
+                          .replaceAll("-", "/"),
+                      email.text,
+                      address.text,
+                      phone.text,
+                      _imageURL,
+                      "Employee",
+                      role,
+                      department);
                   provider.employeeSource.add({
                     "id": id.text,
                     "name": lastname.text + fisrtname.text,
@@ -445,6 +531,8 @@ class _AddUserPageState extends State<AddUserPage> {
                     "phone": phone.text,
                     "photoURL": _imageURL,
                     "position": position,
+                    "role": role,
+                    "department": department,
                     "action": [id.text, null],
                   });
                   authClass.showSnackBar(context, "Add employee success");
@@ -511,7 +599,7 @@ class _AddUserPageState extends State<AddUserPage> {
 
   Widget titlebox(String title) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+      padding: const EdgeInsets.symmetric(vertical: 18),
       child: Text(
         title,
         style: const TextStyle(

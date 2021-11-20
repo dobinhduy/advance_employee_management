@@ -3,6 +3,7 @@
 import 'package:advance_employee_management/pages/Admin_Employee/employee_information_page.dart';
 import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -16,6 +17,7 @@ class EmployeePage extends StatefulWidget {
 }
 
 class _EmployeePageState extends State<EmployeePage> {
+  bool isOK = false;
   @override
   Widget build(BuildContext context) {
     TableProvider employeeProvider = Provider.of<TableProvider>(context);
@@ -44,8 +46,16 @@ class _EmployeePageState extends State<EmployeePage> {
                 selecteds: employeeProvider.selecteds,
                 showSelect: employeeProvider.showSelect,
                 autoHeight: false,
-                title: Container(
-                  width: 900,
+                title: ElevatedButton.icon(
+                  onPressed: () {
+                    dialog(
+                      DialogType.INFO,
+                      "",
+                      "Are your sure",
+                    );
+                  },
+                  icon: const Icon(Icons.delete_forever),
+                  label: const Text("DELETE"),
                 ),
                 actions: [
                   if (employeeProvider.isSearch)
@@ -98,7 +108,7 @@ class _EmployeePageState extends State<EmployeePage> {
                 sortColumn: employeeProvider.sortColumn,
                 isLoading: employeeProvider.isLoading,
                 onSelect: employeeProvider.onSelect,
-                onSelectAll: employeeProvider.onSelectAll,
+                onSelectAll: employeeProvider.onSelectAllEmployee,
                 footers: [
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -144,5 +154,59 @@ class _EmployeePageState extends State<EmployeePage> {
             ),
           ),
         ]));
+  }
+
+  showAlertDialog(BuildContext context, Function function) {
+    // Create button
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: () {
+        function;
+        Navigator.of(context).pop();
+      },
+    );
+    Widget cancelButton = TextButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        print("cancel");
+        Navigator.of(context).pop();
+      },
+    );
+
+    // Create AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Simple Alert"),
+      content: Text("This is an alert message."),
+      actions: [okButton, cancelButton],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  AwesomeDialog dialog(DialogType type, String title, String description) {
+    TableProvider provider = Provider.of<TableProvider>(context, listen: false);
+    return AwesomeDialog(
+      context: context,
+      width: 600,
+      dialogType: type,
+      animType: AnimType.LEFTSLIDE,
+      title: title,
+      desc: description,
+      btnCancelOnPress: () {
+        setState(() {});
+      },
+      btnOkOnPress: () {
+        provider.delectEmployee(provider.selecteds);
+        setState(() {
+          provider.isSelect == false;
+        });
+      },
+    )..show();
   }
 }

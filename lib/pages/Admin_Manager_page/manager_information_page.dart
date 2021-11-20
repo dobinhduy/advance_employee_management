@@ -260,16 +260,17 @@ class _ManagerInPageState extends State<ManagerInPage> {
                         setState(() {
                           managerServices.deleteManager(emailController.text);
                           employeeServices.addEmployee(
-                            idController.text,
-                            nameController.text,
-                            genderController,
-                            birthdayController,
-                            emailController.text,
-                            phoneController.text,
-                            addressController.text,
-                            widget.photoURL,
-                            positionController,
-                          );
+                              idController.text,
+                              nameController.text,
+                              genderController,
+                              birthdayController,
+                              emailController.text,
+                              phoneController.text,
+                              addressController.text,
+                              widget.photoURL,
+                              positionController,
+                              "",
+                              "");
                           provider.employeeSource.add(map);
                           for (Map<String, dynamic> manager
                               in provider.managerSource) {

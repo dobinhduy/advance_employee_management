@@ -50,7 +50,7 @@ class _NotificationPageState extends State<NotificationPage> {
     deplay();
     return timeout
         ? Scaffold(
-            appBar: AppBar(title: Text('Notification')),
+            appBar: AppBar(title: const Text('Notification')),
             body: SingleChildScrollView(
               child: Column(
                 children: [

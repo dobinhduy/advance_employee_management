@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:advance_employee_management/pages/Admin_Manager_page/manager_information_page.dart';
 import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -43,8 +44,16 @@ class _ManagerPageState extends State<ManagerPage> {
                 selecteds: managersProvider.selecteds,
                 showSelect: managersProvider.showSelect,
                 autoHeight: false,
-                title: Container(
-                  width: 900,
+                title: ElevatedButton.icon(
+                  onPressed: () {
+                    dialog(
+                      DialogType.INFO,
+                      "",
+                      "Are your sure",
+                    );
+                  },
+                  icon: const Icon(Icons.delete_forever),
+                  label: const Text("DELETE"),
                 ),
                 actions: [
                   if (managersProvider.isSearch)
@@ -74,7 +83,7 @@ class _ManagerPageState extends State<ManagerPage> {
                 ],
                 onTabRow: (data) {
                   print(data);
-                  print(managersProvider.selecteds.isEmpty);
+
                   Map<String, dynamic> map =
                       Map<String, dynamic>.from(data as Map<String, dynamic>);
                   Navigator.push(
@@ -97,7 +106,7 @@ class _ManagerPageState extends State<ManagerPage> {
                 sortColumn: managersProvider.sortColumn,
                 isLoading: managersProvider.isLoading,
                 onSelect: managersProvider.onSelect,
-                onSelectAll: managersProvider.onSelectAll,
+                onSelectAll: managersProvider.onSelectAllManager,
                 footers: [
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -144,5 +153,26 @@ class _ManagerPageState extends State<ManagerPage> {
             ),
           ),
         ]));
+  }
+
+  AwesomeDialog dialog(DialogType type, String title, String description) {
+    TableProvider provider = Provider.of<TableProvider>(context, listen: false);
+    return AwesomeDialog(
+      context: context,
+      width: 600,
+      dialogType: type,
+      animType: AnimType.LEFTSLIDE,
+      title: title,
+      desc: description,
+      btnCancelOnPress: () {
+        setState(() {});
+      },
+      btnOkOnPress: () {
+        provider.delectProject(provider.selecteds);
+        setState(() {
+          provider.isSelect == false;
+        });
+      },
+    )..show();
   }
 }

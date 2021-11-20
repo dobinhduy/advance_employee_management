@@ -15,7 +15,7 @@ class SildeMenuAdminDesktop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppProvider appProvider = Provider.of<AppProvider>(context);
-    AuthClass authClass = AuthClass();
+
     return Container(
       decoration: const BoxDecoration(
           color: Colors.white,
@@ -59,6 +59,14 @@ class SildeMenuAdminDesktop extends StatelessWidget {
                 locator<NavigationService>().navigateTo(ManagerLayout);
               }),
           SileMenuItemDesktop(
+              active: appProvider.currentPage == DisplayedPage.DEPARTMENT,
+              text: "Department",
+              icon: Icons.home_filled,
+              onTap: () {
+                appProvider.changeCurrentPage(DisplayedPage.DEPARTMENT);
+                locator<NavigationService>().navigateTo(DepartmentLayout);
+              }),
+          SileMenuItemDesktop(
               active: appProvider.currentPage == DisplayedPage.ADD,
               text: "Add",
               icon: Icons.add_box_outlined,
@@ -68,7 +76,7 @@ class SildeMenuAdminDesktop extends StatelessWidget {
                 locator<NavigationService>().navigateTo(AddUserLayout);
               }),
           SizedBox(
-            height: 330,
+            height: 270,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),

@@ -11,6 +11,7 @@ const String AdLayOutRoute = "AdminLayOutRoute";
 const String EmployeeLayout = "EmployeeLayout";
 const String ManagerLayout = "ManagerLayout";
 const String AddUserLayout = "AddUserLayout";
+const String DepartmentLayout = "DepartmentLayout";
 
 //Employee Route
 const String EmployeeRouteLayout = "EmployeeRouteLayout";

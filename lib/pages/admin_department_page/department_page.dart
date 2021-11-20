@@ -4,26 +4,27 @@ import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:responsive_table/responsive_table.dart';
 
-class ProjectPage extends StatefulWidget {
-  const ProjectPage({Key? key}) : super(key: key);
+class DepartmentPage extends StatefulWidget {
+  const DepartmentPage({Key? key}) : super(key: key);
 
   @override
-  _ProjectPageState createState() => _ProjectPageState();
+  _DepartmentPageState createState() => _DepartmentPageState();
 }
 
-class _ProjectPageState extends State<ProjectPage> {
+class _DepartmentPageState extends State<DepartmentPage> {
   @override
   Widget build(BuildContext context) {
-    TableProvider projectProvider = Provider.of<TableProvider>(context);
+    TableProvider departmentProvider = Provider.of<TableProvider>(context);
     return SingleChildScrollView(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
           const PageHeader(
-            text: 'Project Table',
+            text: 'Department Table',
           ),
           Container(
             margin: const EdgeInsets.all(5),
@@ -36,12 +37,12 @@ class _ProjectPageState extends State<ProjectPage> {
               shadowColor: Colors.black,
               clipBehavior: Clip.none,
               child: ResponsiveDatatable(
-                headers: projectProvider.projectHeaders,
-                source: projectProvider.projectSource,
-                selecteds: projectProvider.selecteds,
-                showSelect: projectProvider.showSelect,
+                headers: departmentProvider.departmentHeaders,
+                source: departmentProvider.departmentSource,
+                selecteds: departmentProvider.selecteds,
+                showSelect: departmentProvider.showSelect,
                 autoHeight: false,
-                title: !projectProvider.isSearch
+                title: !departmentProvider.isSearch
                     ? Row(
                         children: [
                           ElevatedButton.icon(
@@ -51,7 +52,7 @@ class _ProjectPageState extends State<ProjectPage> {
                               icon: const Icon(
                                 Icons.delete,
                               ),
-                              label: const Text("ADD PROJECT")),
+                              label: const Text("ADD DEPARTMENT")),
                           const SizedBox(
                             width: 30,
                           ),
@@ -73,7 +74,7 @@ class _ProjectPageState extends State<ProjectPage> {
                       )
                     : null,
                 actions: [
-                  if (projectProvider.isSearch)
+                  if (departmentProvider.isSearch)
                     Expanded(
                         child: TextField(
                       decoration: InputDecoration(
@@ -81,19 +82,19 @@ class _ProjectPageState extends State<ProjectPage> {
                               icon: const Icon(Icons.cancel),
                               onPressed: () {
                                 setState(() {
-                                  projectProvider.isSearch = false;
+                                  departmentProvider.isSearch = false;
                                 });
                               }),
                           suffixIcon: IconButton(
                               icon: const Icon(Icons.search),
                               onPressed: () {})),
                     )),
-                  if (!projectProvider.isSearch)
+                  if (!departmentProvider.isSearch)
                     IconButton(
                         icon: const Icon(Icons.search),
                         onPressed: () {
                           setState(() {
-                            projectProvider.isSearch = true;
+                            departmentProvider.isSearch = true;
                           });
                         })
                 ],
@@ -117,24 +118,24 @@ class _ProjectPageState extends State<ProjectPage> {
                   //               position: map.values.elementAt(8),
                   //             )));
                 },
-                onSort: projectProvider.onSort,
-                sortAscending: projectProvider.sortAscending,
-                sortColumn: projectProvider.sortColumn,
-                isLoading: projectProvider.isLoading,
-                onSelect: projectProvider.onSelect,
-                onSelectAll: projectProvider.onSelectAllProject,
+                onSort: departmentProvider.onSort,
+                sortAscending: departmentProvider.sortAscending,
+                sortColumn: departmentProvider.sortColumn,
+                isLoading: departmentProvider.isLoading,
+                onSelect: departmentProvider.onSelect,
+                onSelectAll: departmentProvider.onSelectAllDepartment,
                 footers: [
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: const Text("Rows per page:"),
                   ),
                   // ignore: unnecessary_null_comparison
-                  if (projectProvider.perPages != null)
+                  if (departmentProvider.perPages != null)
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: DropdownButton(
-                          value: projectProvider.currentPerPage,
-                          items: projectProvider.perPages
+                          value: departmentProvider.currentPerPage,
+                          items: departmentProvider.perPages
                               .map((e) => DropdownMenuItem(
                                     child: Text("$e"),
                                     value: e,
@@ -142,25 +143,25 @@ class _ProjectPageState extends State<ProjectPage> {
                               .toList(),
                           onChanged: (value) {
                             int? num = value as int?;
-                            projectProvider.onChange(num!);
+                            departmentProvider.onChange(num!);
                           }),
                     ),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Text(
-                        "${projectProvider.currentPage} - ${projectProvider.currentPerPage} of ${projectProvider.total}"),
+                        "${departmentProvider.currentPage} - ${departmentProvider.currentPerPage} of ${departmentProvider.total}"),
                   ),
                   IconButton(
                     icon: const Icon(
                       Icons.arrow_back_ios,
                       size: 16,
                     ),
-                    onPressed: projectProvider.previous,
+                    onPressed: departmentProvider.previous,
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                   ),
                   IconButton(
                     icon: const Icon(Icons.arrow_forward_ios, size: 16),
-                    onPressed: projectProvider.next,
+                    onPressed: departmentProvider.next,
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                   )
                 ],
@@ -168,38 +169,6 @@ class _ProjectPageState extends State<ProjectPage> {
             ),
           ),
         ]));
-    // return SizedBox(
-    //   height: 120,
-    //   child: Row(
-    //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    //     children: [
-    //       CardItem(
-    //         icon: Icons.monetization_on_outlined,
-    //         title: "Revenue",
-    //         subtitle: "Revenue this month",
-    //         value: "\$ 4,323",
-    //         color1: Colors.green.shade700,
-    //         color2: Colors.green,
-    //       ),
-    //       CardItem(
-    //         icon: Icons.shopping_basket_outlined,
-    //         title: "Products",
-    //         subtitle: "Total products on store",
-    //         value: "231",
-    //         color1: Colors.lightBlueAccent,
-    //         color2: Colors.blue,
-    //       ),
-    //       CardItem(
-    //         icon: Icons.delivery_dining,
-    //         title: "Orders",
-    //         subtitle: "Total orders for this month",
-    //         value: "33",
-    //         color1: Colors.redAccent,
-    //         color2: Colors.red,
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 
   void _openAddEntryDialog() {
@@ -223,7 +192,7 @@ class _ProjectPageState extends State<ProjectPage> {
         setState(() {});
       },
       btnOkOnPress: () {
-        provider.delectProject(provider.selecteds);
+        provider.delectDepartment(provider.selecteds);
         setState(() {
           provider.isSelect == false;
         });

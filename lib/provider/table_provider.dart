@@ -1,6 +1,7 @@
 import 'dart:js';
 
 import 'package:advance_employee_management/locator.dart';
+import 'package:advance_employee_management/models/department.dart';
 import 'package:advance_employee_management/models/employee.dart';
 import 'package:advance_employee_management/models/manager.dart';
 import 'package:advance_employee_management/models/project.dart';
@@ -8,6 +9,7 @@ import 'package:advance_employee_management/pages/Admin_Employee/employee_inform
 // ignore: unused_import
 import 'package:advance_employee_management/provider/app_provider.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
+import 'package:advance_employee_management/service/department_service.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/manager_service.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
@@ -23,6 +25,7 @@ class TableProvider with ChangeNotifier {
   List<Map<String, dynamic>> employeeSource = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> managerSource = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> projectSource = <Map<String, dynamic>>[];
+  List<Map<String, dynamic>> departmentSource = <Map<String, dynamic>>[];
 
   List<Map<String, dynamic>> selecteds = <Map<String, dynamic>>[];
 
@@ -34,6 +37,9 @@ class TableProvider with ChangeNotifier {
 
   EmployeeServices employeeServices = EmployeeServices();
   List<EmployeeModel> employees = <EmployeeModel>[];
+
+  DepartmentService departmentService = DepartmentService();
+  List<DepartmentModel> departments = <DepartmentModel>[];
   final List<DatatableHeader> employeeHeaders = [
     DatatableHeader(
         text: "Employee ID",
@@ -265,6 +271,53 @@ class TableProvider with ChangeNotifier {
           );
         }),
   ];
+  final List<DatatableHeader> departmentHeaders = [
+    DatatableHeader(
+        text: "Department ID",
+        value: "id",
+        show: true,
+        sortable: true,
+        textAlign: TextAlign.center),
+    DatatableHeader(
+        text: "Department Name",
+        value: "name",
+        show: true,
+        sortable: true,
+        textAlign: TextAlign.center),
+    DatatableHeader(
+        text: "Email",
+        value: "email",
+        flex: 2,
+        show: true,
+        sortable: true,
+        textAlign: TextAlign.center),
+    DatatableHeader(
+        text: "Phone",
+        value: "phone",
+        show: true,
+        sortable: true,
+        textAlign: TextAlign.center),
+    DatatableHeader(
+        text: "Action",
+        value: "action",
+        show: true,
+        sortable: true,
+        textAlign: TextAlign.center,
+        sourceBuilder: (value, row) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 50),
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.remove_red_eye_sharp),
+                  color: Colors.grey,
+                )
+              ],
+            ),
+          );
+        }),
+  ];
 
   final List<int> perPages = [5, 10, 15, 100];
   final int total = 100;
@@ -282,6 +335,7 @@ class TableProvider with ChangeNotifier {
     managers = await managerServices.getAllManger();
     projects = await projectService.getAllProject();
     employees = await employeeServices.getAllEmployee();
+    departments = await departmentService.getAllDepartment();
     notifyListeners();
   }
 
@@ -300,6 +354,23 @@ class TableProvider with ChangeNotifier {
         "photoURL": manager.photourl,
         "position": manager.position,
         "action": [manager.id, null]
+      });
+    }
+
+    return temps;
+  }
+
+  List<Map<String, dynamic>> _getDepartment() {
+    List<Map<String, dynamic>> temps = <Map<String, dynamic>>[];
+
+    for (DepartmentModel department in departments) {
+      temps.add({
+        "id": department.id,
+        "name": department.name,
+        "phone": department.phone,
+        "email": department.email,
+        "projectid": department.projectid,
+        "action": [department.id, null]
       });
     }
 
@@ -325,7 +396,6 @@ class TableProvider with ChangeNotifier {
     }
     return temps;
   }
-  // "\$${project.complete}}"
 
   List<Map<String, dynamic>> _getEmployeeData() {
     List<Map<String, dynamic>> temps = <Map<String, dynamic>>[];
@@ -341,6 +411,8 @@ class TableProvider with ChangeNotifier {
         "phone": employee.phone,
         "photourl": employee.photourl,
         "position": employee.position,
+        "role": employee.role,
+        "department": employee.department,
         "action": [employee.id, null]
       });
     }
@@ -355,6 +427,7 @@ class TableProvider with ChangeNotifier {
     managerSource.addAll(_getManagerData());
     projectSource.addAll(_getProjectData());
     employeeSource.addAll(_getEmployeeData());
+    departmentSource.addAll(_getDepartment());
     notifyListeners();
   }
 
@@ -386,7 +459,64 @@ class TableProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  onSelectAll(bool value) {
+  onSelectAllEmployee(bool value) {
+    if (value) {
+      selecteds = employeeSource.map((entry) => entry).toList().cast();
+      if (selecteds.isNotEmpty) {
+        isSelect = true;
+      } else {
+        isSelect = false;
+      }
+    } else {
+      selecteds.clear();
+      if (selecteds.isNotEmpty) {
+        isSelect = true;
+      } else {
+        isSelect = false;
+      }
+    }
+    notifyListeners();
+  }
+
+  onSelectAllProject(bool value) {
+    if (value) {
+      selecteds = projectSource.map((entry) => entry).toList().cast();
+      if (selecteds.isNotEmpty) {
+        isSelect = true;
+      } else {
+        isSelect = false;
+      }
+    } else {
+      selecteds.clear();
+      if (selecteds.isNotEmpty) {
+        isSelect = true;
+      } else {
+        isSelect = false;
+      }
+    }
+    notifyListeners();
+  }
+
+  onSelectAllDepartment(bool value) {
+    if (value) {
+      selecteds = departmentSource.map((entry) => entry).toList().cast();
+      if (selecteds.isNotEmpty) {
+        isSelect = true;
+      } else {
+        isSelect = false;
+      }
+    } else {
+      selecteds.clear();
+      if (selecteds.isNotEmpty) {
+        isSelect = true;
+      } else {
+        isSelect = false;
+      }
+    }
+    notifyListeners();
+  }
+
+  onSelectAllManager(bool value) {
     if (value) {
       selecteds = employeeSource.map((entry) => entry).toList().cast();
       if (selecteds.isNotEmpty) {
@@ -423,6 +553,38 @@ class TableProvider with ChangeNotifier {
         isSelect = false;
       }
     }
+    notifyListeners();
+  }
+
+  delectEmployee(List<Map<String, dynamic>> list) {
+    for (Map<String, dynamic> item in list) {
+      employeeSource.remove(item);
+    }
+    isSelect == false;
+    notifyListeners();
+  }
+
+  delectProject(List<Map<String, dynamic>> list) {
+    for (Map<String, dynamic> item in list) {
+      projectSource.remove(item);
+    }
+    isSelect == false;
+    notifyListeners();
+  }
+
+  delectDepartment(List<Map<String, dynamic>> list) {
+    for (Map<String, dynamic> item in list) {
+      departmentSource.remove(item);
+    }
+    isSelect == false;
+    notifyListeners();
+  }
+
+  delectManager(List<Map<String, dynamic>> list) {
+    for (Map<String, dynamic> item in list) {
+      managerSource.remove(item);
+    }
+    isSelect == false;
     notifyListeners();
   }
 
