@@ -1,4 +1,4 @@
-import 'package:advance_employee_management/Custom/entry_dialog.dart';
+import 'package:advance_employee_management/Manager_Pages/add_project_page.dart';
 import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -205,7 +205,7 @@ class _ProjectPageState extends State<ProjectPage> {
   void _openAddEntryDialog() {
     Navigator.of(context).push(MaterialPageRoute<void>(
         builder: (BuildContext context) {
-          return const AddEntryDialog();
+          return const AddProjectPage();
         },
         fullscreenDialog: true));
   }

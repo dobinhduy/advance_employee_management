@@ -1,11 +1,15 @@
-import 'package:advance_employee_management/Custom/entry_dialog.dart';
+import 'package:advance_employee_management/Manager_Pages/add_project_page.dart';
 import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
+
 import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:advance_employee_management/service/auth_services.dart';
+import 'package:advance_employee_management/service/department_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:responsive_table/responsive_table.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class DepartmentPage extends StatefulWidget {
   const DepartmentPage({Key? key}) : super(key: key);
@@ -15,6 +19,15 @@ class DepartmentPage extends StatefulWidget {
 }
 
 class _DepartmentPageState extends State<DepartmentPage> {
+  final TextEditingController id = TextEditingController();
+  final TextEditingController phone = TextEditingController();
+  final TextEditingController email = TextEditingController();
+  final TextEditingController name = TextEditingController();
+  DepartmentService departmentService = DepartmentService();
+  final AuthClass authClass = AuthClass();
+
+  String establishday = "";
+
   @override
   Widget build(BuildContext context) {
     TableProvider departmentProvider = Provider.of<TableProvider>(context);
@@ -46,8 +59,9 @@ class _DepartmentPageState extends State<DepartmentPage> {
                     ? Row(
                         children: [
                           ElevatedButton.icon(
-                              onPressed: () {
-                                _openAddEntryDialog();
+                              onPressed: () async {
+                                _openPopup(context, departmentProvider, id,
+                                    name, phone, email);
                               },
                               icon: const Icon(
                                 Icons.delete,
@@ -171,16 +185,7 @@ class _DepartmentPageState extends State<DepartmentPage> {
         ]));
   }
 
-  void _openAddEntryDialog() {
-    Navigator.of(context).push(MaterialPageRoute<void>(
-        builder: (BuildContext context) {
-          return const AddEntryDialog();
-        },
-        fullscreenDialog: true));
-  }
-
   AwesomeDialog dialog(DialogType type, String title, String description) {
-    TableProvider provider = Provider.of<TableProvider>(context, listen: false);
     return AwesomeDialog(
       context: context,
       width: 600,
@@ -188,15 +193,129 @@ class _DepartmentPageState extends State<DepartmentPage> {
       animType: AnimType.LEFTSLIDE,
       title: title,
       desc: description,
-      btnCancelOnPress: () {
-        setState(() {});
-      },
-      btnOkOnPress: () {
-        provider.delectDepartment(provider.selecteds);
-        setState(() {
-          provider.isSelect == false;
-        });
-      },
+      btnOkOnPress: () {},
     )..show();
+  }
+
+  _openPopup(
+      context,
+      TableProvider provider,
+      TextEditingController id,
+      TextEditingController name,
+      TextEditingController phone,
+      TextEditingController email) {
+    DepartmentService departmentService = DepartmentService();
+
+    DateTime startday = DateTime.now();
+    List<String> list = <String>[];
+    Alert(
+        context: context,
+        title: "Add Department",
+        content: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Column(
+                children: <Widget>[
+                  SizedBox(
+                    width: 300,
+                    child: TextField(
+                      controller: id,
+                      decoration: const InputDecoration(
+                        icon: Icon(
+                          Icons.vpn_key_rounded,
+                        ),
+                        labelText: 'Department ID',
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 300,
+                    child: TextField(
+                      controller: name,
+                      obscureText: false,
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.local_fire_department),
+                        labelText: 'Department Name',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  SizedBox(
+                    width: 300,
+                    child: TextField(
+                      controller: phone,
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.phone),
+                        labelText: 'Phone Number',
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 300,
+                    child: TextField(
+                      controller: email,
+                      obscureText: false,
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.email_outlined),
+                        labelText: 'Email',
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+        buttons: [
+          DialogButton(
+            onPressed: () async {
+              bool checkID =
+                  await departmentService.checkExistDepartment(id.text);
+              if (checkFillAll()) {
+                if (!checkID) {
+                  departmentService.addDepartment(
+                      id.text,
+                      name.text,
+                      email.text,
+                      phone.text,
+                      list,
+                      "${startday.toLocal()}".split(' ')[0]);
+                  provider.departmentSource.add({
+                    "id": id.text,
+                    "name": name.text,
+                    "email": email.text,
+                    "phone": phone.text,
+                    "createday": "${startday.toLocal()}".split(' ')[0],
+                  });
+                  setState(() {});
+                  dialog(DialogType.SUCCES, "Add success", "");
+                } else {
+                  dialog(DialogType.INFO, "Id is allready exist", "");
+                }
+              } else {
+                dialog(DialogType.INFO_REVERSED, "Missing some information",
+                    "Please fill all the require information");
+              }
+            },
+            child: const Text(
+              "Create",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+          )
+        ]).show();
+  }
+
+  bool checkFillAll() {
+    if (phone.text.isEmpty ||
+        id.text.isEmpty ||
+        email.text.isEmpty ||
+        name.text.isEmpty) {
+      return false;
+    }
+    return true;
   }
 }

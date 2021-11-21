@@ -1,4 +1,5 @@
 import 'package:advance_employee_management/locator.dart';
+import 'package:advance_employee_management/pages/authentication/sign_in_page.dart';
 import 'package:advance_employee_management/provider/app_provider.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
@@ -74,13 +75,16 @@ class SideMenuManagerDesktop extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: SileMenuItemDesktop(
-                active: appProvider.currentPage == DisplayedPage.LOGOUT,
+                active: appProvider.currentPage == DisplayedPage.DASHBOARD,
                 text: "Log out",
                 icon: Icons.logout,
                 onTap: () {
-                  appProvider.changeCurrentPage(DisplayedPage.LOGOUT);
-                  locator<NavigationService>()
-                      .globalNavigateTo(LonginRoute, context);
+                  appProvider.changeCurrentPage(DisplayedPage.DASHBOARD);
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (builder) => const SignInPage()),
+                      (route) => false);
                 }),
           ),
         ],

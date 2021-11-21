@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class CardItem extends StatelessWidget {
-  CardItem(
-      {required this.projectname,
+  const CardItem(
+      {Key? key,
+      required this.projectname,
       required this.projectid,
       required this.color1,
       required this.color2,
       required this.icon,
       required this.startday,
       required this.manager,
-      required this.endday});
+      required this.endday})
+      : super(key: key);
   final String projectname;
   final String projectid;
   final String manager;

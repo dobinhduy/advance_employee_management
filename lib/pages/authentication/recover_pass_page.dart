@@ -1,7 +1,4 @@
-import 'package:advance_employee_management/locator.dart';
-import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
-import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

@@ -298,6 +298,12 @@ class TableProvider with ChangeNotifier {
         sortable: true,
         textAlign: TextAlign.center),
     DatatableHeader(
+        text: "Create Day",
+        value: "createday",
+        show: true,
+        sortable: true,
+        textAlign: TextAlign.center),
+    DatatableHeader(
         text: "Action",
         value: "action",
         show: true,
@@ -369,6 +375,7 @@ class TableProvider with ChangeNotifier {
         "name": department.name,
         "phone": department.phone,
         "email": department.email,
+        "createday": department.createday,
         "projectid": department.projectid,
         "action": [department.id, null]
       });

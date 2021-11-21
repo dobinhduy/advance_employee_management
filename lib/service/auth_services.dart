@@ -39,8 +39,7 @@ class AuthClass {
           accessToken: googleSignInAuthentication.accessToken,
         );
         try {
-          UserCredential userCredential =
-              await auth.signInWithCredential(credential);
+          await auth.signInWithCredential(credential);
 
           locator<NavigationService>().globalNavigateTo(AdLayOutRoute, context);
         } catch (e) {
@@ -147,7 +146,4 @@ class AuthClass {
     );
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
-
-  //Query user
-
 }
