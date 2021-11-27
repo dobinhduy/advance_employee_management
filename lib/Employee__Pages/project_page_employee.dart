@@ -18,7 +18,7 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
   ProjectService projectService = ProjectService();
   EmployeeServices employeeServices = EmployeeServices();
   List<ProjectModel> _projects = <ProjectModel>[];
-  List<ProjectModel> _employeeProject = <ProjectModel>[];
+  final List<ProjectModel> _employeeProject = <ProjectModel>[];
 
   String memid = "";
   bool isADD = false;
@@ -62,13 +62,8 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
   @override
   Widget build(BuildContext context) {
     setisADD();
-    int i = 0;
-    if (i == 0) {
-      getEmployeeProject();
-      setState(() {
-        i++;
-      });
-    }
+
+    getEmployeeProject();
 
     return Scaffold(
       body: SingleChildScrollView(

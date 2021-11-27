@@ -14,6 +14,7 @@ class EmployeeModel {
   static const ROLE = "role";
   static const DEPARTMENT = "department";
   static const PHOTOURL = "photourl";
+  static const SUPERVISORID = "supervisorid";
 
   late String _id;
   late String _name;
@@ -26,6 +27,7 @@ class EmployeeModel {
   late String _photourl;
   late String _role;
   late String _department;
+  late String _supervisorid;
   EmployeeModel.fromSnapshot(DocumentSnapshot snapshot) {
     _name = (snapshot.data() as dynamic)[NAME];
     _email = (snapshot.data() as dynamic)[EMAIL];
@@ -38,6 +40,7 @@ class EmployeeModel {
     _role = (snapshot.data() as dynamic)[ROLE];
     _department = (snapshot.data() as dynamic)[DEPARTMENT];
     _photourl = (snapshot.data() as dynamic)[PHOTOURL];
+    _supervisorid = (snapshot.data() as dynamic)[SUPERVISORID];
   }
   String get address => _address;
   String get birthday => _birthday;
@@ -50,4 +53,5 @@ class EmployeeModel {
   String get position => _position;
   String get role => _role;
   String get department => _department;
+  String get supervisorid => _supervisorid;
 }

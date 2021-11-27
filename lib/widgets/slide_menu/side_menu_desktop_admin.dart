@@ -51,14 +51,6 @@ class SildeMenuAdminDesktop extends StatelessWidget {
                 locator<NavigationService>().navigateTo(EmployeeLayout);
               }),
           SileMenuItemDesktop(
-              active: appProvider.currentPage == DisplayedPage.MANAGERS,
-              text: "Manager",
-              icon: Icons.manage_accounts,
-              onTap: () {
-                appProvider.changeCurrentPage(DisplayedPage.MANAGERS);
-                locator<NavigationService>().navigateTo(ManagerLayout);
-              }),
-          SileMenuItemDesktop(
               active: appProvider.currentPage == DisplayedPage.DEPARTMENT,
               text: "Department",
               icon: Icons.home_filled,

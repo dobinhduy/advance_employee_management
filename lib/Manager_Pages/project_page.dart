@@ -6,7 +6,7 @@ import 'package:advance_employee_management/service/project_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_table/responsive_table.dart';
+import 'package:responsive_table/ResponsiveDatatable.dart';
 
 class ProjectPage extends StatefulWidget {
   const ProjectPage({Key? key}) : super(key: key);

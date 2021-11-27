@@ -1,10 +1,11 @@
 // ignore_for_file: unrelated_type_equality_checks
 
-import 'package:advance_employee_management/models/manager.dart';
+import 'package:advance_employee_management/models/employee.dart';
 import 'package:advance_employee_management/pages/Admin_Employee/employee_information_page.dart';
 import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
+import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/manager_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
@@ -21,12 +22,19 @@ class EmployeeOfManagerPage extends StatefulWidget {
 
 class _EmployeeOfManagerPageState extends State<EmployeeOfManagerPage> {
   bool isOK = false;
-
   bool loading = true;
   String email = AuthClass().user()!;
+  EmployeeServices employeeServices = EmployeeServices();
+  List<EmployeeModel> employeeOfManager = <EmployeeModel>[];
+  String id = "";
 
-  ManagerServices managerServices = ManagerServices();
-  ManagerModel? managerInfor;
+  List<Map<String, dynamic>> employeeOfManagerSource = <Map<String, dynamic>>[];
+  @override
+  void initState() {
+    super.initState();
+    isLoading();
+    loadEmployeeOfManager();
+  }
 
   isLoading() {
     Future.delayed(const Duration(seconds: 1), () {
@@ -36,21 +44,38 @@ class _EmployeeOfManagerPageState extends State<EmployeeOfManagerPage> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    isLoading();
+  loadEmployeeOfManager() async {
+    id = await employeeServices.getEmployeeIDbyEmail(email);
+    employeeOfManager = await employeeServices.getAllEmployeeOfManager(id);
+    employeeOfManagerSource.addAll(_getEmployeeOfDataManager());
+    setState(() {});
   }
 
-  getManager() async {
-    managerInfor = await managerServices.getManagerByEmail(AuthClass().user()!);
-    setState(() {});
+  List<Map<String, dynamic>> _getEmployeeOfDataManager() {
+    List<Map<String, dynamic>> temps = <Map<String, dynamic>>[];
+
+    for (EmployeeModel employee in employeeOfManager) {
+      temps.add({
+        "id": employee.id,
+        "name": employee.name,
+        "gender": employee.gender,
+        "birthday": employee.birthday,
+        "email": employee.email,
+        "address": employee.address,
+        "phone": employee.phone,
+        "photourl": employee.photourl,
+        "position": employee.position,
+        "role": employee.role,
+        "department": employee.department,
+        "action": [employee.id, null]
+      });
+    }
+
+    return temps;
   }
 
   @override
   Widget build(BuildContext context) {
-    getManager();
-
     TableProvider employeeProvider = Provider.of<TableProvider>(context);
 
     return loading == false
@@ -74,7 +99,7 @@ class _EmployeeOfManagerPageState extends State<EmployeeOfManagerPage> {
                     clipBehavior: Clip.none,
                     child: ResponsiveDatatable(
                       headers: employeeProvider.employeeHeaders,
-                      source: employeeProvider.employeeSource,
+                      source: employeeOfManagerSource,
                       selecteds: employeeProvider.selecteds,
                       showSelect: employeeProvider.showSelect,
                       autoHeight: false,

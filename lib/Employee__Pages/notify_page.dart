@@ -16,7 +16,7 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage> {
   NotificationService notificationService = NotificationService();
   EmployeeServices employeeServices = EmployeeServices();
-  ManagerServices managerServices = ManagerServices();
+
   String useremail = AuthClass().user()!;
   List<NotificationModel>? notifies;
   String userID = "";

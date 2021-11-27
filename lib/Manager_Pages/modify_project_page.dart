@@ -240,16 +240,17 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                             const SizedBox(
                               width: 40,
                             ),
-                            isEditComplete != true
+                            isEditComplete == true
                                 ? Container(
-                                    padding: const EdgeInsets.only(bottom: 10),
+                                    padding: const EdgeInsets.only(
+                                        bottom: 12, left: 10),
                                     width: 30,
                                     height: 40,
                                     child: TextField(
                                         controller: complete,
                                         decoration: const InputDecoration(
-                                          contentPadding: EdgeInsets.symmetric(
-                                              horizontal: 3, vertical: 3),
+                                          contentPadding:
+                                              EdgeInsets.only(bottom: 5),
                                           hintStyle: TextStyle(
                                             color: Colors.grey,
                                             fontSize: 17,
@@ -299,32 +300,41 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                       padding: const EdgeInsets.only(left: 10),
                                       child: Row(
                                         children: [
-                                          TextButton.icon(
-                                              onPressed: () {},
-                                              icon:
-                                                  const Icon(Icons.assessment),
-                                              label: const Text("Assign Task")),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 10, bottom: 10),
+                                            child: TextButton.icon(
+                                                onPressed: () {},
+                                                icon: const Icon(
+                                                    Icons.assessment),
+                                                label:
+                                                    const Text("Assign Task")),
+                                          ),
                                           const SizedBox(
                                             width: 10,
                                           ),
                                           const SizedBox(
                                             height: 10,
                                           ),
-                                          TextButton.icon(
-                                              onPressed: () {
-                                                setState(() {
-                                                  ProjectService
-                                                      projectService =
-                                                      ProjectService();
-                                                  projectService.removeMember(
-                                                      members[i], proID.text);
-                                                  members.remove(members[i]);
-                                                  memberName
-                                                      .remove(memberName[i]);
-                                                });
-                                              },
-                                              icon: const Icon(Icons.delete),
-                                              label: const Text("Delete")),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 10, bottom: 10),
+                                            child: TextButton.icon(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    ProjectService
+                                                        projectService =
+                                                        ProjectService();
+                                                    projectService.removeMember(
+                                                        members[i], proID.text);
+                                                    members.remove(members[i]);
+                                                    memberName
+                                                        .remove(memberName[i]);
+                                                  });
+                                                },
+                                                icon: const Icon(Icons.delete),
+                                                label: const Text("Delete")),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -334,8 +344,8 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                           ),
                         ]),
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             TextButton.icon(
                                 onPressed: () {
@@ -452,38 +462,42 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                     });
                                     projectService.updateProject(
                                         proID.text, map);
-                                    for (Map<String, dynamic> project
-                                        in projectProvider.projectSource) {
-                                      if (project.values.elementAt(0) ==
-                                          proID) {
-                                        project.update(
-                                            "id", (value) => proID.text);
-                                        project.update(
-                                            "name", (value) => proName.text);
-                                        project.update(
-                                            "start", (value) => start.text);
-                                        project.update(
-                                            "end", (value) => end.text);
-                                        project.update(
-                                            "status", (value) => status);
-                                        project.update(
-                                            "complete",
-                                            (value) => [
-                                                  int.parse(complete.text),
-                                                  100
-                                                ]);
-                                        project.update(
-                                            "members", (value) => members);
-                                        project.update(
-                                            "manager", (value) => managerID);
-                                        project.update("department",
-                                            (value) => departmentName);
-                                        project.update("description",
-                                            (value) => description.text);
-                                        project.update("action",
-                                            (value) => [proID.text, null]);
+                                    setState(() {
+                                      for (Map<String, dynamic> project
+                                          in projectProvider.projectSource) {
+                                        if (project.values.elementAt(0) ==
+                                            proID.text) {
+                                          project.update(
+                                              "id", (value) => proID.text);
+                                          project.update(
+                                              "name", (value) => proName.text);
+                                          project.update(
+                                              "start", (value) => start.text);
+                                          project.update(
+                                              "end", (value) => end.text);
+                                          project.update(
+                                              "status", (value) => status);
+                                          project.update(
+                                              "complete",
+                                              (value) => [
+                                                    int.parse(complete.text),
+                                                    100
+                                                  ]);
+                                          project.update(
+                                              "members", (value) => members);
+                                          project.update(
+                                              "manager", (value) => managerID);
+                                          project.update("department",
+                                              (value) => departmentName);
+                                          project.update("description",
+                                              (value) => description.text);
+                                          project.update("action",
+                                              (value) => [proID.text, null]);
+                                        }
                                       }
-                                    }
+                                    });
+                                    dialog(
+                                        DialogType.INFO, "", "Update Success");
                                   },
                                   icon: const Icon(Icons.update),
                                   label: const Text("Update")),

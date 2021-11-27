@@ -88,6 +88,16 @@ class EmployeeServices {
     return doc.length == 1;
   }
 
+  Future<bool> checkhasEmployee(String id) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("supervisorid", isEqualTo: id)
+        .get();
+    List<DocumentSnapshot> doc = querySnapshot.docs;
+
+    return doc.isNotEmpty;
+  }
+
   Future<bool> checkExistEmployeebyID(String id) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)
@@ -128,6 +138,7 @@ class EmployeeServices {
     String position,
     String role,
     String department,
+    String supervisorid,
   ) {
     FirebaseFirestore.instance.collection(collection).add({
       "id": id,
@@ -141,6 +152,7 @@ class EmployeeServices {
       "photourl": photourl,
       "role": role,
       "department": department,
+      "supervisorid": supervisorid,
     });
   }
 
@@ -153,11 +165,25 @@ class EmployeeServices {
 
         return users;
       });
-  Future<List<EmployeeModel>> getAllEmployeeOfManager(
-          String department) async =>
+
+  Future<List<EmployeeModel>> getAllEmployeeOfSupervisor(
+          String employeeID, String supervisorid) =>
       FirebaseFirestore.instance
           .collection(collection)
-          .where("department", isEqualTo: department)
+          .where("supervisorid", isEqualTo: employeeID)
+          .get()
+          .then((value) {
+        List<EmployeeModel> employees = [];
+        for (DocumentSnapshot employee in value.docs) {
+          employees.add(EmployeeModel.fromSnapshot(employee));
+        }
+        return employees;
+      });
+
+  Future<List<EmployeeModel>> getAllEmployeeOfManager(String id) async =>
+      FirebaseFirestore.instance
+          .collection(collection)
+          .where("supervisorid", isEqualTo: id)
           .get()
           .then((result) {
         List<EmployeeModel> users = [];

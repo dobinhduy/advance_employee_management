@@ -3,7 +3,6 @@ import 'dart:js';
 import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/models/department.dart';
 import 'package:advance_employee_management/models/employee.dart';
-import 'package:advance_employee_management/models/manager.dart';
 import 'package:advance_employee_management/models/project.dart';
 import 'package:advance_employee_management/pages/Admin_Employee/employee_information_page.dart';
 // ignore: unused_import
@@ -22,24 +21,18 @@ import 'package:responsive_table/DatatableHeader.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class TableProvider with ChangeNotifier {
-  int i = 0;
   List<Map<String, dynamic>> employeeSource = <Map<String, dynamic>>[];
-  List<Map<String, dynamic>> managerSource = <Map<String, dynamic>>[];
+
   List<Map<String, dynamic>> projectSource = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> departmentSource = <Map<String, dynamic>>[];
-  List<Map<String, dynamic>> employeeOfManagerSource = <Map<String, dynamic>>[];
 
   List<Map<String, dynamic>> selecteds = <Map<String, dynamic>>[];
-
-  ManagerServices managerServices = ManagerServices();
-  List<ManagerModel> managers = <ManagerModel>[];
 
   ProjectService projectService = ProjectService();
   List<ProjectModel> projects = <ProjectModel>[];
 
   EmployeeServices employeeServices = EmployeeServices();
   List<EmployeeModel> employees = <EmployeeModel>[];
-  List<EmployeeModel> employeeOfManager = <EmployeeModel>[];
 
   DepartmentService departmentService = DepartmentService();
   List<DepartmentModel> departments = <DepartmentModel>[];
@@ -124,88 +117,7 @@ class TableProvider with ChangeNotifier {
           );
         }),
   ];
-  final List<DatatableHeader> managerHeaders = [
-    DatatableHeader(
-        text: "Employee ID",
-        value: "id",
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.center),
-    DatatableHeader(
-        text: "Name",
-        value: "name",
-        show: true,
-        flex: 1,
-        sortable: true,
-        textAlign: TextAlign.center),
-    DatatableHeader(
-        text: "Gender",
-        value: "gender",
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.center),
-    DatatableHeader(
-        text: "Birthday",
-        value: "birthday",
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.center),
-    DatatableHeader(
-        text: "Address",
-        value: "address",
-        flex: 2,
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.center),
-    DatatableHeader(
-        text: "Phone",
-        value: "phone",
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.center),
-    DatatableHeader(
-        text: "Action",
-        value: "action",
-        show: true,
-        sortable: true,
-        textAlign: TextAlign.center,
-        sourceBuilder: (value, row) {
-          List list = List.from(value);
 
-          return Padding(
-            padding: const EdgeInsets.only(left: 50),
-            child: Row(
-              children: [
-                IconButton(
-                  tooltip: "View",
-                  onPressed: () async {
-                    ManagerModel managerModel =
-                        await ManagerServices().getManagerbyID(list.first);
-                    locator<NavigationService>()
-                        .navigatorKey
-                        .currentState
-                        ?.push(MaterialPageRoute(
-                            builder: (context) => UserInforPage(
-                                  name: managerModel.name,
-                                  email: managerModel.email,
-                                  id: managerModel.id,
-                                  photoURL: managerModel.photourl,
-                                  birthday: managerModel.birthday,
-                                  address: managerModel.address,
-                                  gender: managerModel.gender,
-                                  phone: managerModel.phone,
-                                  position: managerModel.position,
-                                  department: managerModel.department,
-                                )));
-                  },
-                  icon: const Icon(Icons.remove_red_eye_sharp),
-                  color: Colors.grey,
-                )
-              ],
-            ),
-          );
-        }),
-  ];
   final List<DatatableHeader> projectHeaders = [
     DatatableHeader(
         text: "Project ID",
@@ -352,42 +264,10 @@ class TableProvider with ChangeNotifier {
   final String selectableKey = "id";
 
   Future loadDataFromFirebase() async {
-    managers = await managerServices.getAllManger();
     projects = await projectService.getAllProject();
     employees = await employeeServices.getAllEmployee();
     departments = await departmentService.getAllDepartment();
     notifyListeners();
-  }
-
-  Future loadEmployeeOfManager(String deparmentName) async {
-    employeeOfManager =
-        await employeeServices.getAllEmployeeOfManager(deparmentName);
-
-    employeeOfManagerSource.addAll(_getEmployeeOfManagerData());
-
-    notifyListeners();
-  }
-
-  List<Map<String, dynamic>> _getManagerData() {
-    List<Map<String, dynamic>> temps = <Map<String, dynamic>>[];
-
-    for (ManagerModel manager in managers) {
-      temps.add({
-        "id": manager.id,
-        "name": manager.name,
-        "gender": manager.gender,
-        "birthday": manager.birthday,
-        "email": manager.email,
-        "address": manager.address,
-        "phone": manager.phone,
-        "photoURL": manager.photourl,
-        "position": manager.position,
-        "action": [manager.id, null],
-        "department": manager.department,
-      });
-    }
-
-    return temps;
   }
 
   List<Map<String, dynamic>> _getDepartment() {
@@ -452,34 +332,11 @@ class TableProvider with ChangeNotifier {
     return temps;
   }
 
-  List<Map<String, dynamic>> _getEmployeeOfManagerData() {
-    List<Map<String, dynamic>> temps = <Map<String, dynamic>>[];
-
-    for (EmployeeModel employee in employeeOfManager) {
-      temps.add({
-        "id": employee.id,
-        "name": employee.name,
-        "gender": employee.gender,
-        "birthday": employee.birthday,
-        "email": employee.email,
-        "address": employee.address,
-        "phone": employee.phone,
-        "photourl": employee.photourl,
-        "position": employee.position,
-        "role": employee.role,
-        "department": employee.department,
-        "action": [employee.id, null]
-      });
-    }
-
-    return temps;
-  }
-
   _initData() async {
     isLoading = false;
     notifyListeners();
     await loadDataFromFirebase();
-    managerSource.addAll(_getManagerData());
+
     projectSource.addAll(_getProjectData());
     employeeSource.addAll(_getEmployeeData());
     departmentSource.addAll(_getDepartment());
@@ -636,14 +493,6 @@ class TableProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  delectManager(List<Map<String, dynamic>> list) {
-    for (Map<String, dynamic> item in list) {
-      managerSource.remove(item);
-    }
-    isSelect == false;
-    notifyListeners();
-  }
-
   onChange(int value) {
     currentPerPage = value;
     notifyListeners();
@@ -662,15 +511,15 @@ class TableProvider with ChangeNotifier {
   TableProvider.init() {
     _initData();
   }
-  _getEmployeeSer(String department) async {
-    await loadEmployeeOfManager(department);
+  // _getEmployeeSer(String department) async {
+  //   await loadEmployeeOfManager(department);
 
-    notifyListeners();
-  }
+  //   notifyListeners();
+  // }
 
-  TableProvider.getEmployeeSer(String department) {
-    _getEmployeeSer(department);
+  // TableProvider.getEmployeeSer(String department) {
+  //   _getEmployeeSer(department);
 
-    notifyListeners();
-  }
+  //   notifyListeners();
+  // }
 }

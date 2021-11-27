@@ -22,18 +22,26 @@ class _SignUpPageState extends State<SignInPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   EmployeeServices employeeServices = EmployeeServices();
-  ManagerServices managerServices = ManagerServices();
 
   bool circular = false;
   AuthClass authClass = AuthClass();
-  bool isEmployee = false;
-  bool isManager = false;
+  String position = "";
+  String employeeID = "";
   checkisEmployee(String email) async {
-    isEmployee = await employeeServices.checkExistEmployee(email);
+    bool isEmployee = await employeeServices.checkExistEmployee(email);
+    if (isEmployee) {
+      position = "Employee";
+    }
+    setState(() {});
   }
 
-  checkisManager(String email) async {
-    isManager = await managerServices.checkExisManager(email);
+  checkisHasEmployee(String email) async {
+    employeeID = await employeeServices.getEmployeeIDbyEmail(email);
+    bool isManager = await employeeServices.checkhasEmployee(employeeID);
+    if (isManager) {
+      position = "Manager";
+    }
+    setState(() {});
   }
 
   @override
@@ -230,30 +238,24 @@ class _SignUpPageState extends State<SignInPage> {
     return InkWell(
       onTap: () async {
         checkisEmployee(_emailController.text);
-        checkisManager(_emailController.text);
+        checkisHasEmployee(_emailController.text);
+
         setState(() {
           circular = true;
         });
         try {
-          // await firebaseAuth.signInWithEmailAndPassword(
-          //     email: "ititwe18033@gmail.com", password: "Dobinhduy@123");
-          // await firebaseAuth.signInWithEmailAndPassword(
-          //     email: "dtkimoanh510@gmail.com", password: "Dobinhduy@123");
           await firebaseAuth.signInWithEmailAndPassword(
               email: _emailController.text, password: _passwordController.text);
           setState(() {
             circular = true;
           });
-          // locator<NavigationService>()
-          //     .globalNavigateTo(ManagerRouteLayout, context);
-          // locator<NavigationService>()
-          //     .globalNavigateTo(EmployeeRouteLayout, context);
-          if (isEmployee) {
-            locator<NavigationService>()
-                .globalNavigateTo(EmployeeRouteLayout, context);
-          } else if (isManager) {
+
+          if (position == "Manager") {
             locator<NavigationService>()
                 .globalNavigateTo(ManagerRouteLayout, context);
+          } else if (position == "Employee") {
+            locator<NavigationService>()
+                .globalNavigateTo(EmployeeRouteLayout, context);
           } else {
             locator<NavigationService>()
                 .globalNavigateTo(AdLayOutRoute, context);

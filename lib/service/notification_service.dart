@@ -36,7 +36,6 @@ class NotificationService {
       FirebaseFirestore.instance
           .collection(collection)
           .where("receiverid", isEqualTo: employeeid)
-          .orderBy("sendday")
           .get()
           .then((result) {
         List<NotificationModel> notifies = [];

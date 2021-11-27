@@ -46,13 +46,12 @@ class _UserInforPageState extends State<UserInforPage> {
   late TextEditingController phoneController;
   late String birthdayController;
   late String genderController;
-  late String positionController;
+
   late String photoURLController;
   late String department;
 
   String _imageURL = "";
   String dropDownvalue = 'Employee';
-  List<String> listPosition = ['Employee', 'Manager'];
 
   DateTime selectedDate = DateTime.now();
 
@@ -68,10 +67,10 @@ class _UserInforPageState extends State<UserInforPage> {
   bool editID = false;
   bool editPhone = false;
   bool editBirthday = false;
-  bool editPosition = false;
+
   bool editDepartment = false;
   EmployeeServices employeeServices = EmployeeServices();
-  ManagerServices managerServices = ManagerServices();
+
   AuthClass authClass = AuthClass();
 
   @override
@@ -84,7 +83,7 @@ class _UserInforPageState extends State<UserInforPage> {
     addressController = TextEditingController(text: widget.address);
     genderController = widget.gender;
     birthdayController = widget.birthday;
-    positionController = widget.position;
+
     photoURLController = widget.photoURL;
     department = widget.department;
 
@@ -128,7 +127,7 @@ class _UserInforPageState extends State<UserInforPage> {
       genderController = genderController;
       birthdayController = birthdayController;
       genderController = genderController;
-      positionController = positionController;
+
       phoneController = phoneController;
       photoURLController = photoURLController;
     });
@@ -145,252 +144,195 @@ class _UserInforPageState extends State<UserInforPage> {
         backgroundColor: Colors.blueAccent,
         title: const Text("Employee Information"),
       ),
-      body: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <
-          Widget>[
-        const SizedBox(
-          width: 20,
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width / 4.4,
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 140,
-              ),
-              _imageURL != ""
-                  ? Image.network(_imageURL,
-                      width: 300, height: 300, fit: BoxFit.fill)
-                  : const CircularProgressIndicator()
-            ],
-          ),
-        ),
-        const SizedBox(
-          width: 100,
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: 100,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 100,
-              ),
-              titlebox("Name"),
-              titlebox("ID"),
-              titlebox("Gender"),
-              titlebox("Birthday"),
-              titlebox("Address"),
-              titlebox("Phone"),
-              titlebox("Email"),
-              titlebox("Position"),
-            ],
-          ),
-        ),
-        const SizedBox(
-          width: 90,
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width / 5,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 100,
-              ),
-              !editName
-                  ? titlebox2(nameController.text)
-                  : inputBox(nameController, 20),
-              !editID
-                  ? titlebox2(idController.text)
-                  : inputBox(idController, 8),
-              !editGender ? titlebox2(genderController) : genderSelectedBox(),
-              !editBirthday
-                  ? titlebox2(birthdayController)
-                  : birthdayButton(35),
-              !editAdd
-                  ? titlebox2(addressController.text)
-                  : inputBox(addressController, 8),
-              !editPhone
-                  ? titlebox2(phoneController.text)
-                  : inputBox(phoneController, 8),
-              titlebox2(widget.email),
-              !editPosition ? titlebox2(positionController) : selectPosition(),
-            ],
-          ),
-        ),
-        Column(
-          children: [
+      body: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
             const SizedBox(
-              height: 50,
+              width: 20,
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height / 5,
-              width: MediaQuery.of(context).size.width / 5,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width / 4.4,
               child: Column(
                 children: [
-                  IconButton(
-                      onPressed: () {
-                        setState(() {
-                          editInfo = !editInfo;
-                          editAdd = !editAdd;
-                          editBirthday = !editBirthday;
-                          editEmail = !editEmail;
-                          editGender = !editGender;
-                          editID = !editID;
-                          editName = !editName;
-                          editPhone = !editPhone;
-                          editPosition = !editPosition;
-                        });
-                      },
-                      icon: Icon(Icons.edit,
-                          color: editInfo ? Colors.blue : Colors.white,
-                          size: 28)),
+                  const SizedBox(
+                    height: 140,
+                  ),
+                  _imageURL != ""
+                      ? Image.network(_imageURL,
+                          width: 300, height: 300, fit: BoxFit.fill)
+                      : const CircularProgressIndicator()
                 ],
               ),
             ),
             const SizedBox(
-              height: 350,
+              width: 100,
             ),
-            editInfo
-                ? InkWell(
-                    onTap: () async {
-                      //Update controller
-                      updateEmployee();
-                      Map<String, dynamic> map = <String, dynamic>{};
-                      map.addAll({
-                        "id": idController.text,
-                        "name": nameController.text,
-                        "gender": genderController,
-                        "birthday": birthdayController,
-                        "email": emailController.text,
-                        "address": addressController.text,
-                        "phone": phoneController.text,
-                        "photoURL": photoURLController,
-                        "position": positionController,
-                      });
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: 100,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 100,
+                  ),
+                  titlebox("Name"),
+                  titlebox("ID"),
+                  titlebox("Gender"),
+                  titlebox("Birthday"),
+                  titlebox("Address"),
+                  titlebox("Phone"),
+                  titlebox("Email"),
+                  titlebox("Position"),
+                ],
+              ),
+            ),
+            const SizedBox(
+              width: 90,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width / 5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 100,
+                  ),
+                  !editName
+                      ? titlebox2(nameController.text)
+                      : inputBox(nameController, 20),
+                  !editID
+                      ? titlebox2(idController.text)
+                      : inputBox(idController, 8),
+                  !editGender
+                      ? titlebox2(genderController)
+                      : genderSelectedBox(),
+                  !editBirthday
+                      ? titlebox2(birthdayController)
+                      : birthdayButton(35),
+                  !editAdd
+                      ? titlebox2(addressController.text)
+                      : inputBox(addressController, 8),
+                  !editPhone
+                      ? titlebox2(phoneController.text)
+                      : inputBox(phoneController, 8),
+                  titlebox2(widget.email),
+                ],
+              ),
+            ),
+            Column(
+              children: [
+                const SizedBox(
+                  height: 50,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 5,
+                  width: MediaQuery.of(context).size.width / 5,
+                  child: Column(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              editInfo = !editInfo;
+                              editAdd = !editAdd;
+                              editBirthday = !editBirthday;
+                              editEmail = !editEmail;
+                              editGender = !editGender;
+                              editID = !editID;
+                              editName = !editName;
+                              editPhone = !editPhone;
+                            });
+                          },
+                          icon: Icon(Icons.edit,
+                              color: editInfo ? Colors.blue : Colors.white,
+                              size: 28)),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 350,
+                ),
+                editInfo
+                    ? InkWell(
+                        onTap: () async {
+                          //Update controller
+                          updateEmployee();
+                          Map<String, dynamic> map = <String, dynamic>{};
+                          map.addAll({
+                            "id": idController.text,
+                            "name": nameController.text,
+                            "gender": genderController,
+                            "birthday": birthdayController,
+                            "email": emailController.text,
+                            "address": addressController.text,
+                            "phone": phoneController.text,
+                            "photoURL": photoURLController,
+                          });
 
-                      if (positionController == "Manager") {
-                        //Delete employee
+                          setState(() {
+                            employeeServices.updateEmployee(widget.email, map);
+                            for (Map<String, dynamic> employee
+                                in provider.employeeSource) {
+                              if (employee.values.elementAt(4) ==
+                                  emailController.text) {
+                                employee.update(
+                                  "name",
+                                  (value) => nameController.text,
+                                );
+                                employee.update(
+                                  "id",
+                                  (value) => idController.text,
+                                );
+                                employee.update(
+                                  "address",
+                                  (value) => addressController.text,
+                                );
+                                employee.update(
+                                  "email",
+                                  (value) => emailController.text,
+                                );
+                                employee.update(
+                                  "phone",
+                                  (value) => phoneController.text,
+                                );
+                                employee.update(
+                                  "gender",
+                                  (value) => genderController,
+                                );
 
-                        setState(() {
-                          provider.managerSource.add(map);
-                          employeeServices.deleteEmployee(emailController.text);
-                          managerServices.addManager(
-                              idController.text,
-                              nameController.text,
-                              genderController,
-                              birthdayController,
-                              emailController.text,
-                              addressController.text,
-                              phoneController.text,
-                              widget.photoURL,
-                              positionController,
-                              department);
-
-                          for (Map<String, dynamic> employee
-                              in provider.employeeSource) {
-                            if (employee.values.elementAt(4) ==
-                                emailController.text) {
-                              provider.employeeSource.remove(employee);
+                                employee.update(
+                                  "birthday",
+                                  (value) => birthdayController,
+                                );
+                                employee.update(
+                                    "department", (value) => department);
+                              }
                             }
-                          }
-                        });
-                      } else {
-                        setState(() {
-                          employeeServices.updateEmployee(widget.email, map);
-                          for (Map<String, dynamic> employee
-                              in provider.employeeSource) {
-                            if (employee.values.elementAt(4) ==
-                                emailController.text) {
-                              employee.update(
-                                "name",
-                                (value) => nameController.text,
-                              );
-                              employee.update(
-                                "id",
-                                (value) => idController.text,
-                              );
-                              employee.update(
-                                "address",
-                                (value) => addressController.text,
-                              );
-                              employee.update(
-                                "email",
-                                (value) => emailController.text,
-                              );
-                              employee.update(
-                                "phone",
-                                (value) => phoneController.text,
-                              );
-                              employee.update(
-                                "gender",
-                                (value) => genderController,
-                              );
-                              employee.update(
-                                "position",
-                                (value) => positionController,
-                              );
-                              employee.update(
-                                "birthday",
-                                (value) => birthdayController,
-                              );
-                              employee.update(
-                                  "department", (value) => department);
-                            }
-                          }
-                        });
-                      }
+                          });
 
-                      authClass.showSnackBar(context, "Add success");
-                      SchedulerBinding.instance?.addPostFrameCallback((_) {
-                        Navigator.of(context)
-                            .pushReplacementNamed(EmployeeLayout);
-                      });
-                    },
-                    child: Container(
-                      height: 40,
-                      width: 75,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.blueAccent),
-                      child: Center(
-                        child: Text(editInfo ? "Update" : "Ok"),
-                      ),
-                    ),
-                  )
-                : Container(),
-          ],
-        )
-      ]),
-    );
-  }
-
-  Widget selectPosition() {
-    return DropdownButton<String>(
-      value: dropDownvalue,
-      iconSize: 24,
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (String? newValue) {
-        setState(() {
-          dropDownvalue = newValue!;
-          positionController = dropDownvalue;
-        });
-      },
-      items: <String>['Employee', 'Manager']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
+                          authClass.showSnackBar(context, "Add success");
+                          SchedulerBinding.instance?.addPostFrameCallback((_) {
+                            Navigator.of(context)
+                                .pushReplacementNamed(EmployeeLayout);
+                          });
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 75,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.blueAccent),
+                          child: Center(
+                            child: Text(editInfo ? "Update" : "Ok"),
+                          ),
+                        ),
+                      )
+                    : Container(),
+              ],
+            )
+          ]),
     );
   }
 

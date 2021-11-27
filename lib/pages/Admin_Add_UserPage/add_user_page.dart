@@ -3,7 +3,6 @@ import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
-import 'package:advance_employee_management/service/manager_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -29,8 +28,8 @@ class _AddUserPageState extends State<AddUserPage> {
   final TextEditingController address = TextEditingController();
   final TextEditingController phone = TextEditingController();
   final TextEditingController email = TextEditingController();
+  final TextEditingController supervisorid = TextEditingController();
 
-  String position = "";
   String role = "";
   String department = "";
 
@@ -39,7 +38,7 @@ class _AddUserPageState extends State<AddUserPage> {
   DateTime selectedDate = DateTime.now();
 
   final EmployeeServices employeeServices = EmployeeServices();
-  final ManagerServices managerServices = ManagerServices();
+
   String _imageURL = "";
   bool timeup = false;
 
@@ -153,6 +152,8 @@ class _AddUserPageState extends State<AddUserPage> {
                       inputBox("Phone", phone, false),
                       titlebox("Email"),
                       inputBox("Example: abd@gmail.com", email, false),
+                      titlebox("Supervisorid"),
+                      inputBox("manager id", supervisorid, false),
                       const SizedBox(
                         height: 90,
                       ),
@@ -169,11 +170,9 @@ class _AddUserPageState extends State<AddUserPage> {
                         height: 20,
                       ),
                       titlebox("Role"),
-                      position != "Manager" ? selectedRole() : unselectedRole(),
+                      selectedRole(),
                       titlebox("Department"),
                       selectDepartment(),
-                      titlebox("Position"),
-                      selectPosition(),
                       SizedBox(height: 30),
                       uploadImageButton(),
                     ],
@@ -284,32 +283,6 @@ class _AddUserPageState extends State<AddUserPage> {
           }
         },
         child: const Text("Upload image"));
-  }
-
-  Widget selectPosition() {
-    return DropdownButton<String>(
-      value: dropDownvalue,
-      iconSize: 24,
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (String? newValue) {
-        setState(() {
-          dropDownvalue = newValue!;
-          position = dropDownvalue;
-        });
-      },
-      items: <String>['Employee', 'Manager']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-    );
   }
 
   Widget selectDepartment() {
@@ -526,7 +499,7 @@ class _AddUserPageState extends State<AddUserPage> {
                 await FirebaseAuth.instance.createUserWithEmailAndPassword(
                     email: email.text, password: password.text);
 
-                if (position == "Employee") {
+                if (1 == 1) {
                   employeeServices.addEmployee(
                       id.text,
                       fisrtname.text + lastname.text,
@@ -540,7 +513,8 @@ class _AddUserPageState extends State<AddUserPage> {
                       _imageURL,
                       "Employee",
                       role,
-                      department);
+                      department,
+                      supervisorid.text);
                   provider.employeeSource.add({
                     "id": id.text,
                     "name": lastname.text + fisrtname.text,
@@ -552,46 +526,11 @@ class _AddUserPageState extends State<AddUserPage> {
                     "address": address.text,
                     "phone": phone.text,
                     "photoURL": _imageURL,
-                    "position": position,
                     "role": role,
                     "department": department,
                     "action": [id.text, null],
                   });
                   authClass.showSnackBar(context, "Add employee success");
-                  SchedulerBinding.instance?.addPostFrameCallback((_) {
-                    Navigator.of(context).pushReplacementNamed(AddUserLayout);
-                  });
-                } else {
-                  managerServices.addManager(
-                    id.text,
-                    fisrtname.text + lastname.text,
-                    gender,
-                    "${selectedDate.toLocal()}"
-                        .split(' ')[0]
-                        .replaceAll("-", "/"),
-                    email.text,
-                    address.text,
-                    phone.text,
-                    _imageURL,
-                    "Manager",
-                    department,
-                  );
-                  provider.managerSource.add({
-                    "id": id.text,
-                    "name": lastname.text + fisrtname.text,
-                    "gender": gender,
-                    "birthday": "${selectedDate.toLocal()}"
-                        .split(' ')[0]
-                        .replaceAll("-", "/"),
-                    "email": email.text,
-                    "address": address.text,
-                    "phone": phone.text,
-                    "photoURL": _imageURL,
-                    "position": position,
-                    "action": [id.text, null],
-                    "department": department,
-                  });
-                  authClass.showSnackBar(context, "Add manager success");
                   SchedulerBinding.instance?.addPostFrameCallback((_) {
                     Navigator.of(context).pushReplacementNamed(AddUserLayout);
                   });

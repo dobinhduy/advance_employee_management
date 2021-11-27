@@ -1,5 +1,5 @@
 import 'package:advance_employee_management/locator.dart';
-import 'package:advance_employee_management/pages/authentication/sign_up_page.dart';
+
 import 'package:advance_employee_management/provider/app_provider.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route.dart';
@@ -28,7 +28,6 @@ void main() async {
 
 // ignore: must_be_immutable
 class MyApp extends StatelessWidget {
-  Widget currentPage = const SignUpPage();
   AuthClass authClass = AuthClass();
 
   MyApp({Key? key}) : super(key: key);

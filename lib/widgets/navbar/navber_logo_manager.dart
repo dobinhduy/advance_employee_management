@@ -1,4 +1,5 @@
 import 'package:advance_employee_management/service/auth_services.dart';
+import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/manager_service.dart';
 import 'package:flutter/material.dart';
 
@@ -10,18 +11,18 @@ class NavBarLogoManager extends StatefulWidget {
 }
 
 class _NavBarLogoManagerState extends State<NavBarLogoManager> {
-  ManagerServices managerServices = ManagerServices();
+  EmployeeServices employeeServices = EmployeeServices();
 
   String email = AuthClass().user()!;
   String name = "";
   String photoURL = "";
   getPhotoURl() async {
-    photoURL = await managerServices.getphotoURL(email);
+    photoURL = await employeeServices.getphotoURL(email);
     setState(() {}); //????????
   }
 
   getName() async {
-    name = await managerServices.getManagerName(email);
+    name = await employeeServices.getEmployeeName(email);
     setState(() {});
   }
 
