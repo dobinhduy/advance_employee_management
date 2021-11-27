@@ -15,7 +15,7 @@ class NotificationModel {
   late String _senderid;
   late String _sendername;
   late String _receiverid;
-  late String _sendday;
+  late int _sendday;
   late bool _isread;
   late String _projectname;
 
@@ -32,7 +32,7 @@ class NotificationModel {
   String get senderid => _senderid;
   String get sendername => _sendername;
   String get receiverID => _receiverid;
-  String get sendday => _sendday;
+  int get sendday => _sendday;
   bool get isread => _isread;
   String get projectname => _projectname;
 }

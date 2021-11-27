@@ -17,6 +17,18 @@ class DepartmentService {
     });
   }
 
+  void removeProject(String departmentName, String projectid) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("name", isEqualTo: departmentName)
+        .get();
+    QueryDocumentSnapshot doc = querySnapshot.docs[0];
+    DocumentReference docref = doc.reference;
+    docref.update({
+      'projectid': FieldValue.arrayRemove([projectid])
+    });
+  }
+
   Future<bool> checkExistDepartment(String id) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)
@@ -25,6 +37,29 @@ class DepartmentService {
     List<DocumentSnapshot> doc = querySnapshot.docs;
 
     return doc.length == 1;
+  }
+
+  void addProjectID(String departmentName, String projectid) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("name", isEqualTo: departmentName)
+        .get();
+    QueryDocumentSnapshot doc = querySnapshot.docs[0];
+    DocumentReference docref = doc.reference;
+    docref.update({
+      'projectid': FieldValue.arrayUnion([projectid])
+    });
+  }
+
+  void updateProject(String id, Map<String, dynamic> map) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: id)
+        .get();
+    QueryDocumentSnapshot doc = querySnapshot.docs[0];
+    DocumentReference docref = doc.reference;
+
+    await docref.update(map);
   }
 
   Future<List<String>> getAllDepartmentName() async =>

@@ -36,15 +36,19 @@ class _NavBarLogoManagerState extends State<NavBarLogoManager> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            height: 70,
-            width: 70,
-            child: photoURL != ""
-                ? CircleAvatar(
-                    radius: 30,
-                    backgroundImage: NetworkImage(photoURL),
-                  )
-                : Container(),
-          ),
+              height: 70,
+              width: 70,
+              child: photoURL != ""
+                  ? CircleAvatar(
+                      radius: 30,
+                      backgroundImage: NetworkImage(photoURL),
+                    )
+                  : CircleAvatar(
+                      radius: 30,
+                      child: Image.asset(
+                        "images/userimage.png",
+                      ),
+                    )),
           const SizedBox(
             height: 8,
           ),

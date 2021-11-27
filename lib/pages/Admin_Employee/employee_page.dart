@@ -3,6 +3,7 @@
 import 'package:advance_employee_management/pages/Admin_Employee/employee_information_page.dart';
 import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -101,6 +102,7 @@ class _EmployeePageState extends State<EmployeePage> {
                                 address: map.values.elementAt(5),
                                 photoURL: map.values.elementAt(7),
                                 position: map.values.elementAt(8),
+                                department: map.values.elementAt(10),
                               )));
                 },
                 onSort: employeeProvider.onSort,
@@ -202,8 +204,13 @@ class _EmployeePageState extends State<EmployeePage> {
         setState(() {});
       },
       btnOkOnPress: () {
-        provider.delectEmployee(provider.selecteds);
+        EmployeeServices employeeServices = EmployeeServices();
+        for (var employee in provider.selecteds) {
+          employeeServices.deleteEmployee(employee["email"]);
+        }
+
         setState(() {
+          provider.delectEmployee(provider.selecteds);
           provider.isSelect == false;
         });
       },

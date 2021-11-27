@@ -12,6 +12,7 @@ class ProjectService {
       String endDay,
       String description,
       List<String> listEmployee,
+      String department,
       String status,
       int complete) {
     FirebaseFirestore.instance.collection(collection).add({
@@ -22,6 +23,7 @@ class ProjectService {
       "end": endDay,
       "status": status,
       "members": listEmployee,
+      "department": department,
       "description": description,
       "complete": complete,
     });
@@ -38,6 +40,52 @@ class ProjectService {
     await docref.update(<String, dynamic>{
       "status": status,
     });
+  }
+
+  void updateProject(String id, Map<String, dynamic> map) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: id)
+        .get();
+    QueryDocumentSnapshot doc = querySnapshot.docs[0];
+    DocumentReference docref = doc.reference;
+
+    await docref.update(map);
+  }
+
+  void addMember(String memberID, String projectid) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: projectid)
+        .get();
+    QueryDocumentSnapshot doc = querySnapshot.docs[0];
+    DocumentReference docref = doc.reference;
+    docref.update({
+      'members': FieldValue.arrayUnion([memberID])
+    });
+  }
+
+  void removeMember(String memberID, String projectid) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: projectid)
+        .get();
+    QueryDocumentSnapshot doc = querySnapshot.docs[0];
+    DocumentReference docref = doc.reference;
+    docref.update({
+      'members': FieldValue.arrayRemove([memberID])
+    });
+  }
+
+  void deleteProject(String id) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: id)
+        .get();
+    QueryDocumentSnapshot doc = querySnapshot.docs[0];
+    DocumentReference docref = doc.reference;
+
+    await docref.delete();
   }
 
   Future<List<ProjectModel>> getProjectByID(String id) async =>

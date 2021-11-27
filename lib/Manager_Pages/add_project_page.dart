@@ -46,6 +46,7 @@ class AddProjectPageState extends State<AddProjectPage> {
   String managerIDcontroller = "";
   String managerName = "";
   String? dropdownDeName;
+  String departmentName = "";
   getManagerID() async {
     String email = AuthClass().user()!;
     managerIDcontroller = await managerServices.getManagerIDbyEmail(email);
@@ -68,6 +69,7 @@ class AddProjectPageState extends State<AddProjectPage> {
     if (picked != null && picked != selectedEndDate) {
       selectedEndDate = picked;
     }
+
     setState(() {});
   }
 
@@ -109,6 +111,19 @@ class AddProjectPageState extends State<AddProjectPage> {
                     members.add(memberID3.text);
                   }
 
+                  // if (checkIsExistEmployee(memberID1)) {
+                  //   if (checkIsExistEmployee(memberID2)) {
+                  //     if (checkIsExistEmployee(memberID3)) {
+
+                  //     } else {
+                  //       dialog(DialogType.INFO, "", "Employee 3 is not exist");
+                  //     }
+                  //   } else {
+                  //     dialog(DialogType.INFO, "", "Employee 2 is not exist");
+                  //   }
+                  // } else {
+                  //   dialog(DialogType.INFO, "", "Employee 1 is not exist");
+                  // }
                   projectService.createProject(
                       id.text,
                       projectName.text,
@@ -117,6 +132,7 @@ class AddProjectPageState extends State<AddProjectPage> {
                       "${selectedEndDate.toLocal()}".split(' ')[0],
                       desController.text,
                       members,
+                      departmentName,
                       "Open",
                       0);
                   setState(() {
@@ -128,11 +144,13 @@ class AddProjectPageState extends State<AddProjectPage> {
                       "status": "Open",
                       "complete": [0, 100],
                       "members": members,
+                      "department": departmentName,
                       "manager": managerIDcontroller,
                       "description": desController.text,
                       "action": [id.text, null],
                     });
                   });
+                  departmentService.addProjectID(departmentName, id.text);
                   authClass.showSnackBar(context, "Add project success");
                   SchedulerBinding.instance?.addPostFrameCallback((_) {
                     Navigator.of(context)
@@ -144,7 +162,7 @@ class AddProjectPageState extends State<AddProjectPage> {
                       managerIDcontroller,
                       managerName,
                       memberID1.text,
-                      formattedDate,
+                      DateTime.now().millisecondsSinceEpoch,
                       false);
                 },
                 child: Text('SAVE',
@@ -154,142 +172,129 @@ class AddProjectPageState extends State<AddProjectPage> {
                         ?.copyWith(color: Colors.white))),
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 100),
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        titlebox("Project Title*"),
-                        textItem("Project Name", projectName, false, true),
-                        titlebox("Project ID*"),
-                        textItem("Project ID", id, false, true),
-                        titlebox("Start Day*"),
-                        Row(
-                          children: [
-                            textItem(
-                                "${selectedStartDate.toLocal()}".split(' ')[0],
-                                startday,
-                                false,
-                                false),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            ElevatedButton.icon(
-                              onPressed: () => _selectStartDate(context),
-                              icon: const Icon(
-                                Icons.calendar_view_month_outlined,
-                                color: Colors.white,
-                                size: 20.0,
-                              ),
-                              label: const Text(
-                                '',
-                              ),
-                            ),
-                          ],
-                        ),
-                        titlebox("End Day*"),
-                        Row(
-                          children: [
-                            textItem(
-                                "${selectedEndDate.toLocal()}".split(' ')[0],
-                                endday,
-                                false,
-                                false),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            ElevatedButton.icon(
-                              onPressed: () => _selectEndDate(context),
-                              icon: const Icon(
-                                Icons.calendar_view_week,
-                                color: Colors.white,
-                                size: 20.0,
-                              ),
-                              label: const Text(
-                                '',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 100),
-                      child: Column(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 100),
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          titlebox("Department"),
-                          selectDepartment(),
-                          titlebox("Member 1*"),
+                          titlebox("Project Title*"),
+                          textItem("Project Name", projectName, false, true),
+                          titlebox("Project ID*"),
+                          textItem("Project ID", id, false, true),
+                          titlebox("Start Day*"),
                           Row(
                             children: [
                               textItem(
-                                  "Input member ID", memberID1, false, true),
+                                  "${selectedStartDate.toLocal()}"
+                                      .split(' ')[0],
+                                  startday,
+                                  false,
+                                  false),
                               const SizedBox(
-                                width: 50,
+                                width: 20,
                               ),
-                              checkExistButton(memberID1)
+                              IconButton(
+                                  onPressed: () => _selectStartDate(context),
+                                  icon:
+                                      const Icon(Icons.calendar_today_outlined))
                             ],
                           ),
-                          titlebox("Member 2*"),
+                          titlebox("End Day*"),
                           Row(
                             children: [
                               textItem(
-                                  "Input member ID", memberID2, false, true),
+                                  "${selectedEndDate.toLocal()}".split(' ')[0],
+                                  endday,
+                                  false,
+                                  false),
                               const SizedBox(
-                                width: 50,
+                                width: 20,
                               ),
-                              checkExistButton(memberID2),
-                            ],
-                          ),
-                          titlebox("Member 3*"),
-                          Row(
-                            children: [
-                              textItem(
-                                  "Input member ID", memberID3, false, true),
-                              const SizedBox(
-                                width: 50,
-                              ),
-                              checkExistButton(memberID3)
+                              IconButton(
+                                  onPressed: () => _selectEndDate(context),
+                                  icon:
+                                      const Icon(Icons.calendar_today_outlined))
                             ],
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        titlebox("Description*"),
-                        description(desController),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        const SizedBox(
-                          width: 100,
-                        )
-                      ],
-                    ),
-                  ],
-                )
-              ],
+                      Padding(
+                        padding: const EdgeInsets.only(left: 100),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            titlebox("Department"),
+                            selectDepartment(),
+                            titlebox("Member 1*"),
+                            Row(
+                              children: [
+                                textItem(
+                                    "Input member ID", memberID1, false, true),
+                                const SizedBox(
+                                  width: 50,
+                                ),
+                                checkExistButton(memberID1)
+                              ],
+                            ),
+                            titlebox("Member 2*"),
+                            Row(
+                              children: [
+                                textItem(
+                                    "Input member ID", memberID2, false, true),
+                                const SizedBox(
+                                  width: 50,
+                                ),
+                                checkExistButton(memberID2),
+                              ],
+                            ),
+                            titlebox("Member 3*"),
+                            Row(
+                              children: [
+                                textItem(
+                                    "Input member ID", memberID3, false, true),
+                                const SizedBox(
+                                  width: 50,
+                                ),
+                                checkExistButton(memberID3)
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          titlebox("Description*"),
+                          const SizedBox(height: 10),
+                          description(desController),
+                        ],
+                      ),
+                      Column(
+                        children: const [
+                          SizedBox(
+                            width: 100,
+                          )
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ));
@@ -311,9 +316,10 @@ class AddProjectPageState extends State<AddProjectPage> {
         onChanged: (String? newValue) {
           setState(() {
             dropdownDeName = newValue!;
+            departmentName = dropdownDeName!;
           });
         },
-        icon: Icon(Icons.arrow_back, color: Colors.white),
+        icon: const Icon(Icons.arrow_back, color: Colors.white),
         items: listDepartment.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
@@ -322,6 +328,12 @@ class AddProjectPageState extends State<AddProjectPage> {
         }).toList(),
       ),
     );
+  }
+
+  checkIsExistEmployee(TextEditingController controller) async {
+    bool result =
+        await employeeServices.checkExistEmployeebyID(controller.text);
+    return result;
   }
 
   Widget checkExistButton(TextEditingController textEditingController) {
@@ -343,17 +355,13 @@ class AddProjectPageState extends State<AddProjectPage> {
         width: 50,
         height: 40,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          gradient: const LinearGradient(colors: [
-            Color(0xfffd746c),
-            Color(0xffff9068),
-            Color(0xfffd746c)
-          ]),
+          borderRadius: BorderRadius.circular(0),
+          color: Colors.blueAccent,
         ),
         child: const Center(
           child: Text(
             "Varify",
-            style: TextStyle(fontSize: 17, color: Colors.white),
+            style: TextStyle(fontSize: 15, color: Colors.white),
           ),
         ),
       ),
@@ -385,26 +393,21 @@ class AddProjectPageState extends State<AddProjectPage> {
 
   Widget description(TextEditingController desciption) {
     return Container(
-      height: 200,
-      width: MediaQuery.of(context).size.width / 2,
-      decoration: BoxDecoration(
-        color: Colors.white12,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: TextFormField(
+      height: 300,
+      width: 400,
+      child: TextField(
         controller: desciption,
-        maxLines: null,
+        maxLines: 7,
         style: const TextStyle(color: Colors.grey, fontSize: 17),
-        decoration: InputDecoration(
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(0),
-              borderSide: const BorderSide(width: 1, color: Colors.blue)),
+        decoration: const InputDecoration(
           hintText: "Description",
-          hintStyle: const TextStyle(
+          fillColor: Color(0xFFFFEBEE),
+          hintStyle: TextStyle(
             color: Colors.grey,
             fontSize: 17,
           ),
-          contentPadding: const EdgeInsets.only(left: 20, right: 20),
+          filled: true,
+          contentPadding: EdgeInsets.only(left: 20, right: 20),
         ),
       ),
     );

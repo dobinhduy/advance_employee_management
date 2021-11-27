@@ -1,13 +1,11 @@
 // ignore: file_names
 
-import 'package:advance_employee_management/pages/Admin_Manager_page/manager_information_page.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/manager_service.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:flutter/material.dart';
-
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 import '../../locator.dart';
@@ -72,11 +70,11 @@ class _SignUpPageState extends State<SignInPage> {
               const SizedBox(
                 height: 40,
               ),
-              textItem("Email", _emailController, false),
+              usernameBox("Email", _emailController, false),
               const SizedBox(
                 height: 15,
               ),
-              textItem("Password", _passwordController, false),
+              passwordBox("Password", _passwordController, false),
               const SizedBox(
                 height: 15,
               ),
@@ -176,7 +174,7 @@ class _SignUpPageState extends State<SignInPage> {
     );
   }
 
-  Widget textItem(
+  Widget usernameBox(
       String text, TextEditingController controller, bool obscureText) {
     return SizedBox(
       width: MediaQuery.of(context).size.width / 4.5,
@@ -186,6 +184,36 @@ class _SignUpPageState extends State<SignInPage> {
           obscureText: obscureText,
           style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
+            prefixIcon: const Icon(
+              Icons.people,
+              color: Colors.black,
+            ),
+            labelText: text,
+            labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(width: 1, color: Colors.amber)),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(width: 1, color: Colors.grey)),
+          )),
+    );
+  }
+
+  Widget passwordBox(
+      String text, TextEditingController controller, bool obscureText) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width / 4.5,
+      height: 50,
+      child: TextFormField(
+          controller: controller,
+          obscureText: obscureText,
+          style: const TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            prefixIcon: const Icon(
+              Icons.vpn_key,
+              color: Colors.black,
+            ),
             labelText: text,
             labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
             focusedBorder: OutlineInputBorder(
@@ -207,13 +235,20 @@ class _SignUpPageState extends State<SignInPage> {
           circular = true;
         });
         try {
+          // await firebaseAuth.signInWithEmailAndPassword(
+          //     email: "ititwe18033@gmail.com", password: "Dobinhduy@123");
+          // await firebaseAuth.signInWithEmailAndPassword(
+          //     email: "dtkimoanh510@gmail.com", password: "Dobinhduy@123");
           await firebaseAuth.signInWithEmailAndPassword(
               email: _emailController.text, password: _passwordController.text);
           setState(() {
             circular = true;
           });
+          // locator<NavigationService>()
+          //     .globalNavigateTo(ManagerRouteLayout, context);
+          // locator<NavigationService>()
+          //     .globalNavigateTo(EmployeeRouteLayout, context);
           if (isEmployee) {
-            print(isEmployee);
             locator<NavigationService>()
                 .globalNavigateTo(EmployeeRouteLayout, context);
           } else if (isManager) {

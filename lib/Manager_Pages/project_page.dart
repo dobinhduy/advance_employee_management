@@ -1,6 +1,8 @@
 import 'package:advance_employee_management/Manager_Pages/add_project_page.dart';
+import 'package:advance_employee_management/Manager_Pages/modify_project_page.dart';
 import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:advance_employee_management/service/project_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -100,22 +102,23 @@ class _ProjectPageState extends State<ProjectPage> {
                 onTabRow: (data) {
                   print(data);
 
-                  // Map<String, dynamic> map =
-                  //     Map<String, dynamic>.from(data as Map<String, dynamic>);
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => UserInforPage(
-                  //               id: map.values.elementAt(0),
-                  //               name: map.values.elementAt(1),
-                  //               gender: map.values.elementAt(2),
-                  //               birthday: map.values.elementAt(3),
-                  //               email: map.values.elementAt(4),
-                  //               address: map.values.elementAt(5),
-                  //               phone: map.values.elementAt(6),
-                  //               photoURL: map.values.elementAt(7),
-                  //               position: map.values.elementAt(8),
-                  //             )));
+                  Map<String, dynamic> map =
+                      Map<String, dynamic>.from(data as Map<String, dynamic>);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ModifyProjectPage(
+                                projectid: map.values.elementAt(0),
+                                projectName: map.values.elementAt(1),
+                                startDay: map.values.elementAt(2),
+                                endDay: map.values.elementAt(3),
+                                status: map.values.elementAt(4),
+                                complete: map.values.elementAt(5),
+                                member: map.values.elementAt(6),
+                                managerid: map.values.elementAt(7),
+                                department: map.values.elementAt(8),
+                                description: map.values.elementAt(9),
+                              )));
                 },
                 onSort: projectProvider.onSort,
                 sortAscending: projectProvider.sortAscending,
@@ -223,8 +226,13 @@ class _ProjectPageState extends State<ProjectPage> {
         setState(() {});
       },
       btnOkOnPress: () {
-        provider.delectProject(provider.selecteds);
+        ProjectService projectService = ProjectService();
+        for (var employee in provider.selecteds) {
+          projectService.deleteProject(employee["email"]);
+        }
+
         setState(() {
+          provider.delectProject(provider.selecteds);
           provider.isSelect == false;
         });
       },

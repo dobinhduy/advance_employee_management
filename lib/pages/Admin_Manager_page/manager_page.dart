@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:advance_employee_management/pages/Admin_Manager_page/manager_information_page.dart';
 import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:advance_employee_management/service/manager_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -168,8 +169,13 @@ class _ManagerPageState extends State<ManagerPage> {
         setState(() {});
       },
       btnOkOnPress: () {
-        provider.delectProject(provider.selecteds);
+        ManagerServices employeeServices = ManagerServices();
+        for (var employee in provider.selecteds) {
+          employeeServices.deleteManager(employee["email"]);
+        }
+
         setState(() {
+          provider.delectManager(provider.selecteds);
           provider.isSelect == false;
         });
       },

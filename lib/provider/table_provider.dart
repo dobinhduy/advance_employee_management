@@ -22,10 +22,12 @@ import 'package:responsive_table/DatatableHeader.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class TableProvider with ChangeNotifier {
+  int i = 0;
   List<Map<String, dynamic>> employeeSource = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> managerSource = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> projectSource = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> departmentSource = <Map<String, dynamic>>[];
+  List<Map<String, dynamic>> employeeOfManagerSource = <Map<String, dynamic>>[];
 
   List<Map<String, dynamic>> selecteds = <Map<String, dynamic>>[];
 
@@ -37,9 +39,11 @@ class TableProvider with ChangeNotifier {
 
   EmployeeServices employeeServices = EmployeeServices();
   List<EmployeeModel> employees = <EmployeeModel>[];
+  List<EmployeeModel> employeeOfManager = <EmployeeModel>[];
 
   DepartmentService departmentService = DepartmentService();
   List<DepartmentModel> departments = <DepartmentModel>[];
+
   final List<DatatableHeader> employeeHeaders = [
     DatatableHeader(
         text: "Employee ID",
@@ -100,15 +104,17 @@ class TableProvider with ChangeNotifier {
                         .currentState
                         ?.push(MaterialPageRoute(
                             builder: (context) => UserInforPage(
-                                name: employeeModel.name,
-                                email: employeeModel.email,
-                                id: employeeModel.id,
-                                photoURL: employeeModel.photourl,
-                                birthday: employeeModel.birthday,
-                                address: employeeModel.address,
-                                gender: employeeModel.gender,
-                                phone: employeeModel.phone,
-                                position: employeeModel.position)));
+                                  name: employeeModel.name,
+                                  email: employeeModel.email,
+                                  id: employeeModel.id,
+                                  photoURL: employeeModel.photourl,
+                                  birthday: employeeModel.birthday,
+                                  address: employeeModel.address,
+                                  gender: employeeModel.gender,
+                                  phone: employeeModel.phone,
+                                  position: employeeModel.position,
+                                  department: employeeModel.department,
+                                )));
                   },
                   icon: const Icon(Icons.remove_red_eye_sharp),
                   color: Colors.grey,
@@ -180,15 +186,17 @@ class TableProvider with ChangeNotifier {
                         .currentState
                         ?.push(MaterialPageRoute(
                             builder: (context) => UserInforPage(
-                                name: managerModel.name,
-                                email: managerModel.email,
-                                id: managerModel.id,
-                                photoURL: managerModel.photourl,
-                                birthday: managerModel.birthday,
-                                address: managerModel.address,
-                                gender: managerModel.gender,
-                                phone: managerModel.phone,
-                                position: managerModel.position)));
+                                  name: managerModel.name,
+                                  email: managerModel.email,
+                                  id: managerModel.id,
+                                  photoURL: managerModel.photourl,
+                                  birthday: managerModel.birthday,
+                                  address: managerModel.address,
+                                  gender: managerModel.gender,
+                                  phone: managerModel.phone,
+                                  position: managerModel.position,
+                                  department: managerModel.department,
+                                )));
                   },
                   icon: const Icon(Icons.remove_red_eye_sharp),
                   color: Colors.grey,
@@ -226,6 +234,12 @@ class TableProvider with ChangeNotifier {
     DatatableHeader(
         text: "Status",
         value: "status",
+        show: true,
+        sortable: true,
+        textAlign: TextAlign.center),
+    DatatableHeader(
+        text: "Department",
+        value: "department",
         show: true,
         sortable: true,
         textAlign: TextAlign.center),
@@ -345,6 +359,15 @@ class TableProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future loadEmployeeOfManager(String deparmentName) async {
+    employeeOfManager =
+        await employeeServices.getAllEmployeeOfManager(deparmentName);
+
+    employeeOfManagerSource.addAll(_getEmployeeOfManagerData());
+
+    notifyListeners();
+  }
+
   List<Map<String, dynamic>> _getManagerData() {
     List<Map<String, dynamic>> temps = <Map<String, dynamic>>[];
 
@@ -359,7 +382,8 @@ class TableProvider with ChangeNotifier {
         "phone": manager.phone,
         "photoURL": manager.photourl,
         "position": manager.position,
-        "action": [manager.id, null]
+        "action": [manager.id, null],
+        "department": manager.department,
       });
     }
 
@@ -397,6 +421,7 @@ class TableProvider with ChangeNotifier {
         "complete": [project.complete, 100],
         "members": project.members,
         "manager": project.manager,
+        "department": project.department,
         "description": project.desciption,
         "action": [project.id, null],
       });
@@ -427,6 +452,29 @@ class TableProvider with ChangeNotifier {
     return temps;
   }
 
+  List<Map<String, dynamic>> _getEmployeeOfManagerData() {
+    List<Map<String, dynamic>> temps = <Map<String, dynamic>>[];
+
+    for (EmployeeModel employee in employeeOfManager) {
+      temps.add({
+        "id": employee.id,
+        "name": employee.name,
+        "gender": employee.gender,
+        "birthday": employee.birthday,
+        "email": employee.email,
+        "address": employee.address,
+        "phone": employee.phone,
+        "photourl": employee.photourl,
+        "position": employee.position,
+        "role": employee.role,
+        "department": employee.department,
+        "action": [employee.id, null]
+      });
+    }
+
+    return temps;
+  }
+
   _initData() async {
     isLoading = false;
     notifyListeners();
@@ -435,6 +483,7 @@ class TableProvider with ChangeNotifier {
     projectSource.addAll(_getProjectData());
     employeeSource.addAll(_getEmployeeData());
     departmentSource.addAll(_getDepartment());
+
     notifyListeners();
   }
 
@@ -612,5 +661,16 @@ class TableProvider with ChangeNotifier {
 
   TableProvider.init() {
     _initData();
+  }
+  _getEmployeeSer(String department) async {
+    await loadEmployeeOfManager(department);
+
+    notifyListeners();
+  }
+
+  TableProvider.getEmployeeSer(String department) {
+    _getEmployeeSer(department);
+
+    notifyListeners();
   }
 }

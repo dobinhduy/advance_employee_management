@@ -81,11 +81,11 @@ class SideMenuEmployeeDesktop extends StatelessWidget {
               horizontal: 4,
             ),
             child: SileMenuItemDesktop(
-                active: appProvider.currentPage == DisplayedPage.DASHBOARD,
+                active: appProvider.currentPage == DisplayedPage.LOGOUT,
                 text: "Log out",
                 icon: Icons.logout,
                 onTap: () {
-                  appProvider.changeCurrentPage(DisplayedPage.DASHBOARD);
+                  appProvider.changeCurrentPage(DisplayedPage.LOGOUT);
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(

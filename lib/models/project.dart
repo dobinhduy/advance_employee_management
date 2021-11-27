@@ -11,6 +11,7 @@ class ProjectModel {
   static const MEMBER = "members";
   static const DESCRIPTION = "description";
   static const COMPLETE = "complete";
+  static const DEPARTMENT = "department";
 
   late String _id;
   late String _name;
@@ -21,7 +22,7 @@ class ProjectModel {
   late String _status;
   late int _complete;
   late String _description;
-
+  late String _department;
   String get id => _id;
   String get name => _name;
   String get manager => _manager;
@@ -31,7 +32,7 @@ class ProjectModel {
   String get status => _status;
   int get complete => _complete;
   String get desciption => _description;
-
+  String get department => _department;
   ProjectModel.fromSnapshot(DocumentSnapshot snapshot) {
     _id = (snapshot.data() as dynamic)[PROJECTID];
     _name = (snapshot.data() as dynamic)[NAME];
@@ -42,5 +43,6 @@ class ProjectModel {
     _member = (snapshot.data() as dynamic)[MEMBER];
     _description = (snapshot.data() as dynamic)[DESCRIPTION];
     _complete = (snapshot.data() as dynamic)[COMPLETE];
+    _department = (snapshot.data() as dynamic)[DEPARTMENT];
   }
 }

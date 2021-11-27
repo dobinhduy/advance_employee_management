@@ -13,6 +13,7 @@ class _NavBarLogoEmployeeState extends State<NavBarLogoEmployee> {
   EmployeeServices employeeServices = EmployeeServices();
 
   String email = AuthClass().user()!;
+
   String photoURL = "";
   String name = "";
   getPhotoURl() async {
@@ -36,15 +37,19 @@ class _NavBarLogoEmployeeState extends State<NavBarLogoEmployee> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            height: 70,
-            width: 70,
-            child: photoURL != ""
-                ? CircleAvatar(
-                    radius: 30,
-                    backgroundImage: NetworkImage(photoURL),
-                  )
-                : Container(),
-          ),
+              height: 70,
+              width: 70,
+              child: photoURL != ""
+                  ? CircleAvatar(
+                      radius: 30,
+                      backgroundImage: NetworkImage(photoURL),
+                    )
+                  : CircleAvatar(
+                      radius: 30,
+                      child: Image.asset(
+                        "images/userimage.png",
+                      ),
+                    )),
           SizedBox(
             height: 8,
           ),

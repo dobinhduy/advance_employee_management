@@ -4,6 +4,7 @@ import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/manager_service.dart';
 import 'package:advance_employee_management/service/notification_service.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -78,12 +79,16 @@ class _NotificationPageState extends State<NotificationPage> {
                                         titlebox("Message: "),
                                         titlebox("You was add to " +
                                             notify.projectname +
-                                            "project"),
+                                            " project"),
                                       ],
                                     ),
                                     Row(
                                       children: [
-                                        titlebox("Send at: " + notify.sendday),
+                                        titlebox("Send at: " +
+                                            DateFormat("dd/MM/yyyy,HH:mm")
+                                                .format(DateTime
+                                                    .fromMillisecondsSinceEpoch(
+                                                        notify.sendday))),
                                         const SizedBox(
                                           width: 100,
                                         ),
@@ -123,7 +128,11 @@ class _NotificationPageState extends State<NotificationPage> {
                                     ),
                                     Row(
                                       children: [
-                                        titlebox("Send at: " + notify.sendday),
+                                        titlebox("Send at: " +
+                                            DateFormat("dd/MM/yyyy,HH:mm")
+                                                .format(DateTime
+                                                    .fromMillisecondsSinceEpoch(
+                                                        notify.sendday))),
                                         const SizedBox(
                                           width: 100,
                                         ),

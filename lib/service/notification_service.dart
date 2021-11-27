@@ -6,7 +6,7 @@ class NotificationService {
   String collection = "notifications";
 
   void createNotification(String id, String projectname, String senderID,
-      String sendername, String receiverID, String sendDay, bool isread) {
+      String sendername, String receiverID, int sendDay, bool isread) {
     FirebaseFirestore.instance.collection(collection).add({
       "id": id,
       "projectname": projectname,
@@ -36,6 +36,7 @@ class NotificationService {
       FirebaseFirestore.instance
           .collection(collection)
           .where("receiverid", isEqualTo: employeeid)
+          .orderBy("sendday")
           .get()
           .then((result) {
         List<NotificationModel> notifies = [];

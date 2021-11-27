@@ -30,4 +30,5 @@ class DepartmentModel {
     _projectid = (snapshot.data() as dynamic)[PROJECTID];
     _createday = (snapshot.data() as dynamic)[CREATEDAY];
   }
+
 }

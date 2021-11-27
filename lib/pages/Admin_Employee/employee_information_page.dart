@@ -20,7 +20,8 @@ class UserInforPage extends StatefulWidget {
       required this.address,
       required this.gender,
       required this.phone,
-      required this.position})
+      required this.position,
+      required this.department})
       : super(key: key);
   final String name;
   final String email;
@@ -31,6 +32,7 @@ class UserInforPage extends StatefulWidget {
   final String gender;
   final String phone;
   final String position;
+  final String department;
 
   @override
   State<UserInforPage> createState() => _UserInforPageState();
@@ -46,6 +48,7 @@ class _UserInforPageState extends State<UserInforPage> {
   late String genderController;
   late String positionController;
   late String photoURLController;
+  late String department;
 
   String _imageURL = "";
   String dropDownvalue = 'Employee';
@@ -66,6 +69,7 @@ class _UserInforPageState extends State<UserInforPage> {
   bool editPhone = false;
   bool editBirthday = false;
   bool editPosition = false;
+  bool editDepartment = false;
   EmployeeServices employeeServices = EmployeeServices();
   ManagerServices managerServices = ManagerServices();
   AuthClass authClass = AuthClass();
@@ -82,6 +86,7 @@ class _UserInforPageState extends State<UserInforPage> {
     birthdayController = widget.birthday;
     positionController = widget.position;
     photoURLController = widget.photoURL;
+    department = widget.department;
 
     if (genderController == "Male") {
       male = true;
@@ -274,16 +279,16 @@ class _UserInforPageState extends State<UserInforPage> {
                           provider.managerSource.add(map);
                           employeeServices.deleteEmployee(emailController.text);
                           managerServices.addManager(
-                            idController.text,
-                            nameController.text,
-                            genderController,
-                            birthdayController,
-                            emailController.text,
-                            phoneController.text,
-                            addressController.text,
-                            widget.photoURL,
-                            positionController,
-                          );
+                              idController.text,
+                              nameController.text,
+                              genderController,
+                              birthdayController,
+                              emailController.text,
+                              addressController.text,
+                              phoneController.text,
+                              widget.photoURL,
+                              positionController,
+                              department);
 
                           for (Map<String, dynamic> employee
                               in provider.employeeSource) {
@@ -332,6 +337,8 @@ class _UserInforPageState extends State<UserInforPage> {
                                 "birthday",
                                 (value) => birthdayController,
                               );
+                              employee.update(
+                                  "department", (value) => department);
                             }
                           }
                         });

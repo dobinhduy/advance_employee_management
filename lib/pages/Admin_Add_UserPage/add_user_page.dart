@@ -1,12 +1,9 @@
 import 'dart:typed_data';
-import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/manager_service.dart';
-import 'package:advance_employee_management/service/navigation_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -116,7 +113,7 @@ class _AddUserPageState extends State<AddUserPage> {
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height - 70,
               color: Colors.white,
-              padding: const EdgeInsets.only(left: 20),
+              padding: const EdgeInsets.only(left: 40),
               child: Row(
                 children: <Widget>[
                   Column(
@@ -139,7 +136,7 @@ class _AddUserPageState extends State<AddUserPage> {
                     ],
                   ),
                   const SizedBox(
-                    width: 30,
+                    width: 20,
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -162,7 +159,7 @@ class _AddUserPageState extends State<AddUserPage> {
                     ],
                   ),
                   const SizedBox(
-                    width: 30,
+                    width: 60,
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -172,11 +169,12 @@ class _AddUserPageState extends State<AddUserPage> {
                         height: 20,
                       ),
                       titlebox("Role"),
-                      selectedRole(),
+                      position != "Manager" ? selectedRole() : unselectedRole(),
                       titlebox("Department"),
                       selectDepartment(),
                       titlebox("Position"),
                       selectPosition(),
+                      SizedBox(height: 30),
                       uploadImageButton(),
                     ],
                   ),
@@ -198,7 +196,7 @@ class _AddUserPageState extends State<AddUserPage> {
                                 _imageURL != ""
                                     ? Image.network(
                                         _imageURL,
-                                        width: 300,
+                                        width: 250,
                                         height: 300,
                                         fit: BoxFit.fill,
                                       )
@@ -216,8 +214,8 @@ class _AddUserPageState extends State<AddUserPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     butonCancle(context),
                                     const SizedBox(
@@ -375,6 +373,33 @@ class _AddUserPageState extends State<AddUserPage> {
     );
   }
 
+  Widget unselectedRole() {
+    return DropdownButton<String>(
+      value: dropDownRole,
+      iconSize: 24,
+      elevation: 16,
+      style: const TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: null,
+      items: <String>[
+        'Software developer',
+        'Hardware Technician',
+        'Network Administrator',
+        'Business Analyst',
+        ' IT Project Manager',
+        'Systems Engineering Manager'
+      ].map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
+  }
+
   Widget genderSelectedBox() {
     return Row(
       children: [
@@ -444,14 +469,11 @@ class _AddUserPageState extends State<AddUserPage> {
         const SizedBox(
           width: 20.0,
         ),
-        ElevatedButton.icon(
-          icon: const Icon(Icons.date_range),
-          onPressed: () => _selectDate(context),
-          label: const Text(
-            '',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-        ),
+        IconButton(
+            onPressed: () {
+              _selectDate(context);
+            },
+            icon: const Icon(Icons.calendar_today))
       ],
     );
   }
@@ -552,6 +574,7 @@ class _AddUserPageState extends State<AddUserPage> {
                     phone.text,
                     _imageURL,
                     "Manager",
+                    department,
                   );
                   provider.managerSource.add({
                     "id": id.text,
@@ -566,6 +589,7 @@ class _AddUserPageState extends State<AddUserPage> {
                     "photoURL": _imageURL,
                     "position": position,
                     "action": [id.text, null],
+                    "department": department,
                   });
                   authClass.showSnackBar(context, "Add manager success");
                   SchedulerBinding.instance?.addPostFrameCallback((_) {

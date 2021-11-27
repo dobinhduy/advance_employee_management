@@ -5,7 +5,6 @@ import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ProjectEmployeePage extends StatefulWidget {
   const ProjectEmployeePage({Key? key}) : super(key: key);
@@ -20,12 +19,15 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
   EmployeeServices employeeServices = EmployeeServices();
   List<ProjectModel> _projects = <ProjectModel>[];
   List<ProjectModel> _employeeProject = <ProjectModel>[];
+
+  String memid = "";
   bool isADD = false;
   int i = 0;
 
   @override
   void initState() {
     super.initState();
+    getMemberID(employeeEmail);
 
     getALLProject();
     getEmployeeProject();
@@ -36,10 +38,15 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
     setState(() {});
   }
 
+  getMemberID(String email) async {
+    memid = await employeeServices.getEmployeeIDbyEmail(email);
+    setState(() {});
+  }
+
   getEmployeeProject() {
     for (ProjectModel project in _projects) {
       for (String member in project.members) {
-        if (member == employeeEmail) {
+        if (member == memid) {
           _employeeProject.add(project);
         }
       }
@@ -55,36 +62,45 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
   @override
   Widget build(BuildContext context) {
     setisADD();
-    getEmployeeProject();
+    int i = 0;
+    if (i == 0) {
+      getEmployeeProject();
+      setState(() {
+        i++;
+      });
+    }
 
-    // for (ProjectModel item in _projects) {
-    //   print(item.members);
-    // }
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 30),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          titlebox("Open Project"),
-          isADD == true
-              ? Row(
-                  children: [
-                    for (ProjectModel project in _employeeProject)
-                      CardItem(
-                          projectname: project.name,
-                          projectid: project.id,
-                          color1: Colors.white,
-                          color2: Colors.pinkAccent,
-                          icon: Icons.book,
-                          startday: project.start,
-                          manager: project.manager,
-                          endday: project.end)
-                  ],
-                )
-              : Container()
-        ],
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 30),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              titlebox("Open Project"),
+              Container(
+                  height: 3500,
+                  width: MediaQuery.of(context).size.width,
+                  child: isADD == true
+                      ? Wrap(
+                          children: [
+                            for (var project in _employeeProject)
+                              CardItem(
+                                  projectname: project.name,
+                                  projectid: project.id,
+                                  color1: Colors.white,
+                                  color2: Colors.pinkAccent,
+                                  icon: Icons.book,
+                                  startday: project.start,
+                                  manager: project.manager,
+                                  endday: project.end)
+                          ],
+                        )
+                      : Container()),
+            ],
+          ),
+        ),
       ),
     );
   }

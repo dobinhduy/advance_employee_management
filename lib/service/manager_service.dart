@@ -95,6 +95,7 @@ class ManagerServices {
     String phone,
     String photourl,
     String position,
+    String departmentName,
   ) {
     FirebaseFirestore.instance.collection(collection).add({
       "id": id,
@@ -106,6 +107,7 @@ class ManagerServices {
       "position": position,
       "gender": gender,
       "photourl": photourl,
+      "department": departmentName,
     });
   }
 

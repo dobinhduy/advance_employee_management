@@ -23,3 +23,4 @@ const String notificationEmployeeRoute = "notificationEmployeeRoute";
 const String ManagerRouteLayout = "ManagerRouteLayout";
 const String ManagerInformationRoute = "ManagerInformationRoute";
 const String ProjectPageRoute = "ProjectPageRoute";
+const String EmployeeOfManagerPageRoute = "EmployeeOfManagerPageRoute";

@@ -1,8 +1,11 @@
 import 'package:advance_employee_management/locator.dart';
+import 'package:advance_employee_management/models/manager.dart';
 import 'package:advance_employee_management/pages/authentication/sign_in_page.dart';
 import 'package:advance_employee_management/provider/app_provider.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
+import 'package:advance_employee_management/service/auth_services.dart';
+import 'package:advance_employee_management/service/manager_service.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:advance_employee_management/widgets/navbar/navbar_logo_manager.dart';
 import 'package:advance_employee_management/widgets/slide_menu/side_menu_items.dart';
@@ -58,7 +61,8 @@ class SideMenuManagerDesktop extends StatelessWidget {
               onTap: () {
                 ChangeNotifierProvider.value(value: TableProvider.init());
                 appProvider.changeCurrentPage(DisplayedPage.EMPLOYEES);
-                locator<NavigationService>().navigateTo(EmployeeLayout);
+                locator<NavigationService>()
+                    .navigateTo(EmployeeOfManagerPageRoute);
               }),
           SileMenuItemDesktop(
               active: appProvider.currentPage == DisplayedPage.MANAGERPROJECT,
@@ -75,11 +79,11 @@ class SideMenuManagerDesktop extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: SileMenuItemDesktop(
-                active: appProvider.currentPage == DisplayedPage.DASHBOARD,
+                active: appProvider.currentPage == DisplayedPage.LOGOUT,
                 text: "Log out",
                 icon: Icons.logout,
                 onTap: () {
-                  appProvider.changeCurrentPage(DisplayedPage.DASHBOARD);
+                  appProvider.changeCurrentPage(DisplayedPage.LOGOUT);
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(

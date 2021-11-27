@@ -75,17 +75,17 @@ class SildeMenuAdminDesktop extends StatelessWidget {
 
                 locator<NavigationService>().navigateTo(AddUserLayout);
               }),
-          SizedBox(
+          const SizedBox(
             height: 270,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: SileMenuItemDesktop(
-                active: appProvider.currentPage == DisplayedPage.DASHBOARD,
+                active: appProvider.currentPage == DisplayedPage.LOGOUT,
                 text: "Log out",
                 icon: Icons.logout,
                 onTap: () {
-                  appProvider.changeCurrentPage(DisplayedPage.DASHBOARD);
+                  appProvider.changeCurrentPage(DisplayedPage.LOGOUT);
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
