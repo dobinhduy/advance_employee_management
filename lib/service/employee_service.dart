@@ -108,6 +108,17 @@ class EmployeeServices {
     return doc.length == 1;
   }
 
+  Future<String> getSupervisorID(String id) async {
+    String supervisorID = "";
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: id)
+        .get();
+    DocumentSnapshot doc = querySnapshot.docs[0];
+    supervisorID = (doc.data() as dynamic)['supervisorid'];
+    return supervisorID;
+  }
+
   Future<EmployeeModel> getEmployeebyEmail(String email) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)

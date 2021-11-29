@@ -10,6 +10,7 @@ class NotificationModel {
   static const RECEIVERID = "receiverid";
   static const SENDDATE = "sendday";
   static const ISREAD = "isread";
+  static const TYPE = "type";
 
   late String _id;
   late String _senderid;
@@ -18,6 +19,7 @@ class NotificationModel {
   late int _sendday;
   late bool _isread;
   late String _projectname;
+  late String _type;
 
   NotificationModel.fromSnapshot(DocumentSnapshot snapshot) {
     _id = (snapshot.data() as dynamic)[ID];
@@ -27,6 +29,7 @@ class NotificationModel {
     _sendday = (snapshot.data() as dynamic)[SENDDATE];
     _isread = (snapshot.data() as dynamic)[ISREAD];
     _projectname = (snapshot.data() as dynamic)[PROJECTNAME];
+    _type = (snapshot.data() as dynamic)[TYPE];
   }
   String get id => _id;
   String get senderid => _senderid;
@@ -35,4 +38,5 @@ class NotificationModel {
   int get sendday => _sendday;
   bool get isread => _isread;
   String get projectname => _projectname;
+  String get type => _type;
 }

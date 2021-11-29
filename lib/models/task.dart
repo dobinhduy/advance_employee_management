@@ -15,18 +15,18 @@ class TaskModel {
   late String _memberid;
   late int _assignday;
   late String _status;
-  late int _deadline;
+  late String _deadline;
   late String _description;
   String get id => _id;
   String get projectid => _projectid;
   String get memberid => _memberid;
   int get assignday => _assignday;
   String get status => _status;
-  int get deadline => _deadline;
+  String get deadline => _deadline;
   String get description => _description;
   TaskModel.fromSnapshot(DocumentSnapshot snapshot) {
     _id = (snapshot.data() as dynamic)[ID];
-    _projectid = (snapshot.data() as dynamic)[ID];
+    _projectid = (snapshot.data() as dynamic)[PROJECTID];
     _status = (snapshot.data() as dynamic)[STATUS];
     _memberid = (snapshot.data() as dynamic)[MEMBERID];
     _assignday = (snapshot.data() as dynamic)[ASSIGNDAY];

@@ -1,6 +1,7 @@
 // ignore: file_names
 
 import 'package:advance_employee_management/rounting/route_names.dart';
+import 'package:advance_employee_management/service/adminService.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/manager_service.dart';
@@ -27,22 +28,14 @@ class _SignUpPageState extends State<SignInPage> {
   AuthClass authClass = AuthClass();
   String position = "";
   String employeeID = "";
-  checkisEmployee(String email) async {
-    bool isEmployee = await employeeServices.checkExistEmployee(email);
-    if (isEmployee) {
-      position = "Employee";
-    }
-    setState(() {});
-  }
-
-  checkisHasEmployee(String email) async {
-    employeeID = await employeeServices.getEmployeeIDbyEmail(email);
-    bool isManager = await employeeServices.checkhasEmployee(employeeID);
-    if (isManager) {
-      position = "Manager";
-    }
-    setState(() {});
-  }
+  // checkisEmployee(String email) async {
+  //   bool isEmployee = await employeeServices.checkExistEmployee(email);
+  //   if (isEmployee) {
+  //     setState(() {
+  //       position = "Employee";
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -237,12 +230,16 @@ class _SignUpPageState extends State<SignInPage> {
   Widget loginButton() {
     return InkWell(
       onTap: () async {
-        checkisEmployee(_emailController.text);
-        checkisHasEmployee(_emailController.text);
-
         setState(() {
           circular = true;
         });
+        AdminService adminService = AdminService();
+        bool isAdmin = await adminService.getPosition(_emailController.text);
+
+        employeeID =
+            await employeeServices.getEmployeeIDbyEmail(_emailController.text);
+        bool isManager = await employeeServices.checkhasEmployee(employeeID);
+
         try {
           await firebaseAuth.signInWithEmailAndPassword(
               email: _emailController.text, password: _passwordController.text);
@@ -250,15 +247,15 @@ class _SignUpPageState extends State<SignInPage> {
             circular = true;
           });
 
-          if (position == "Manager") {
-            locator<NavigationService>()
-                .globalNavigateTo(ManagerRouteLayout, context);
-          } else if (position == "Employee") {
-            locator<NavigationService>()
-                .globalNavigateTo(EmployeeRouteLayout, context);
-          } else {
+          if (isAdmin) {
             locator<NavigationService>()
                 .globalNavigateTo(AdLayOutRoute, context);
+          } else if (isManager) {
+            locator<NavigationService>()
+                .globalNavigateTo(ManagerRouteLayout, context);
+          } else {
+            locator<NavigationService>()
+                .globalNavigateTo(EmployeeRouteLayout, context);
           }
         } catch (e) {
           final snackbar = SnackBar(content: Text(e.toString()));

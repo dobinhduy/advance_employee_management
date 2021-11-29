@@ -511,15 +511,4 @@ class TableProvider with ChangeNotifier {
   TableProvider.init() {
     _initData();
   }
-  // _getEmployeeSer(String department) async {
-  //   await loadEmployeeOfManager(department);
-
-  //   notifyListeners();
-  // }
-
-  // TableProvider.getEmployeeSer(String department) {
-  //   _getEmployeeSer(department);
-
-  //   notifyListeners();
-  // }
 }

@@ -1,4 +1,5 @@
 import 'package:advance_employee_management/Custom/carditem_custom.dart';
+import 'package:advance_employee_management/Employee__Pages/view_project.dart';
 import 'package:advance_employee_management/models/project.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
@@ -82,6 +83,7 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
                           children: [
                             for (var project in _employeeProject)
                               CardItem(
+                                  project: project,
                                   projectname: project.name,
                                   projectid: project.id,
                                   color1: Colors.white,

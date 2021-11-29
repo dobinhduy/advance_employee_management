@@ -18,14 +18,15 @@ class _NotificationPageState extends State<NotificationPage> {
   EmployeeServices employeeServices = EmployeeServices();
 
   String useremail = AuthClass().user()!;
-  List<NotificationModel>? notifies;
+  List<NotificationModel>? notifiesAddProject;
+  List<NotificationModel>? notifiesAssignTask;
   String userID = "";
   bool timeout = false;
   @override
   void initState() {
     super.initState();
     getUserID();
-    getNotify();
+    getNotifyAddProject();
   }
 
   getUserID() async {
@@ -33,8 +34,15 @@ class _NotificationPageState extends State<NotificationPage> {
     setState(() {});
   }
 
-  getNotify() async {
-    notifies = await notificationService.getNotificationbyemployeeID(userID);
+  getNotifyAddProject() async {
+    notifiesAddProject =
+        await notificationService.getNotificationAddProject(userID);
+    setState(() {});
+  }
+
+  getNotifyAssignTask() async {
+    notifiesAssignTask =
+        await notificationService.getNotificationAssignTask(userID);
     setState(() {});
   }
 
@@ -47,7 +55,8 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     getUserID();
-    getNotify();
+    getNotifyAddProject();
+    getNotifyAssignTask();
     deplay();
     return timeout
         ? Scaffold(
@@ -55,7 +64,7 @@ class _NotificationPageState extends State<NotificationPage> {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  for (NotificationModel notify in notifies!)
+                  for (NotificationModel notify in notifiesAddProject!)
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 20),
@@ -124,6 +133,90 @@ class _NotificationPageState extends State<NotificationPage> {
                                         titlebox("You was add to " +
                                             notify.projectname +
                                             "project"),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        titlebox("Send at: " +
+                                            DateFormat("dd/MM/yyyy,HH:mm")
+                                                .format(DateTime
+                                                    .fromMillisecondsSinceEpoch(
+                                                        notify.sendday))),
+                                        const SizedBox(
+                                          width: 100,
+                                        ),
+                                        ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                textStyle: const TextStyle(
+                                                    fontSize: 18)),
+                                            onPressed: () {},
+                                            child: const Text('Read More'))
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                    ),
+                  for (NotificationModel notify in notifiesAssignTask!)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 20),
+                      child: notify.isread == false
+                          ? Container(
+                              color: Colors.amber[50],
+                              width: 400,
+                              height: 80,
+                              child: InkWell(
+                                onTap: () {},
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        titlebox("Message: "),
+                                        titlebox(
+                                            "You was assign as new task in" +
+                                                notify.projectname +
+                                                " project"),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        titlebox("Send at: " +
+                                            DateFormat("dd/MM/yyyy,HH:mm")
+                                                .format(DateTime
+                                                    .fromMillisecondsSinceEpoch(
+                                                        notify.sendday))),
+                                        const SizedBox(
+                                          width: 100,
+                                        ),
+                                        ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                textStyle: const TextStyle(
+                                                    fontSize: 18)),
+                                            onPressed: () {},
+                                            child: const Text('Read More'))
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
+                          : Container(
+                              color: Colors.white,
+                              width: 400,
+                              height: 80,
+                              child: InkWell(
+                                onTap: () {},
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        titlebox("Message: "),
+                                        titlebox(
+                                            "You was assign a new task in " +
+                                                notify.projectname +
+                                                "project"),
                                       ],
                                     ),
                                     Row(

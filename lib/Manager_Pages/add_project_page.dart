@@ -47,12 +47,12 @@ class AddProjectPageState extends State<AddProjectPage> {
   String managerName = "";
   String? dropdownDeName;
   String departmentName = "";
-  // getManagerID() async {
-  //   String email = AuthClass().user()!;
-  //   managerIDcontroller = await managerServices.getManagerIDbyEmail(email);
-  //   managerName = await managerServices.getManagerName(email);
-  //   setState(() {});
-  // }
+  getManagerID() async {
+    String email = AuthClass().user()!;
+    managerIDcontroller = await employeeServices.getEmployeeIDbyEmail(email);
+    managerName = await employeeServices.getEmployeeName(email);
+    setState(() {});
+  }
 
   getAllDepartmentName() async {
     listDepartment = await departmentService.getAllDepartmentName();
@@ -89,7 +89,7 @@ class AddProjectPageState extends State<AddProjectPage> {
   @override
   Widget build(BuildContext context) {
     TableProvider projectProvider = Provider.of<TableProvider>(context);
-    // getManagerID();
+    getManagerID();
     getAllDepartmentName();
     return Scaffold(
         appBar: AppBar(
@@ -163,7 +163,8 @@ class AddProjectPageState extends State<AddProjectPage> {
                       managerName,
                       memberID1.text,
                       DateTime.now().millisecondsSinceEpoch,
-                      false);
+                      false,
+                      "ADDPROJECT");
                 },
                 child: Text('SAVE',
                     style: Theme.of(context)

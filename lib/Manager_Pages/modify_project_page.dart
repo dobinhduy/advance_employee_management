@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/department_service.dart';
@@ -6,9 +8,12 @@ import 'package:advance_employee_management/service/notification_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:uuid/uuid.dart';
+
+import 'assign_task.dart';
 
 class ModifyProjectPage extends StatefulWidget {
   const ModifyProjectPage({
@@ -40,7 +45,12 @@ class ModifyProjectPage extends StatefulWidget {
 }
 
 class _ModifyProjectPageState extends State<ModifyProjectPage> {
+  String name = "";
+  bool button = false;
+  DateTime when = DateTime.now();
   DepartmentService departmentService = DepartmentService();
+  TextEditingController percented = TextEditingController();
+  TextEditingController taskDescription = TextEditingController();
 
   late TextEditingController proName;
   late TextEditingController proID;
@@ -54,6 +64,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
   bool isFinish = false;
   DateTime selectedStartDate = DateTime.now();
   DateTime selectedEndDate = DateTime.now();
+
   List<dynamic> members = [];
   List<dynamic> memberName = [];
 
@@ -83,6 +94,19 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
       end.text = "${selectedEndDate.toLocal()}".split(' ')[0];
     }
     setState(() {});
+  }
+
+  Future<void> _dialogCall(
+      BuildContext context, String memberid, String projectid) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AssignTask(
+            projectName: proName.text,
+            memberid: memberid,
+            projectid: projectid,
+          );
+        });
   }
 
   _selectStartDate(BuildContext context) async {
@@ -304,7 +328,10 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                             padding: const EdgeInsets.only(
                                                 top: 10, bottom: 10),
                                             child: TextButton.icon(
-                                                onPressed: () {},
+                                                onPressed: () async {
+                                                  await _dialogCall(context,
+                                                      members[i], proID.text);
+                                                },
                                                 icon: const Icon(
                                                     Icons.assessment),
                                                 label:
@@ -612,9 +639,8 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
               EmployeeServices employeeServices = EmployeeServices();
               ProjectService projectService = ProjectService();
               NotificationService notificationService = NotificationService();
-              bool isExist =
-                  await employeeServices.checkExistEmployeebyID(id.text);
-              if (isExist) {
+              String supID = await employeeServices.getSupervisorID(id.text);
+              if (supID == managerID) {
                 String employeeName =
                     await employeeServices.getEmployeeNamebyID(id.text);
 
@@ -630,7 +656,8 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                     managerName,
                     id.text,
                     now.millisecondsSinceEpoch,
-                    false);
+                    false,
+                    "ADDPROJECT");
                 AuthClass().showSnackBar(context, "Add success");
               } else {
                 AuthClass().showSnackBar(context, "Employee is not exist");

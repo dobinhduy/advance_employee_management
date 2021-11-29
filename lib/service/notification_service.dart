@@ -5,8 +5,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class NotificationService {
   String collection = "notifications";
 
-  void createNotification(String id, String projectname, String senderID,
-      String sendername, String receiverID, int sendDay, bool isread) {
+  void createNotification(
+      String id,
+      String projectname,
+      String senderID,
+      String sendername,
+      String receiverID,
+      int sendDay,
+      bool isread,
+      String type) {
     FirebaseFirestore.instance.collection(collection).add({
       "id": id,
       "projectname": projectname,
@@ -15,6 +22,21 @@ class NotificationService {
       "receiverid": receiverID,
       "sendday": sendDay,
       "isread": isread,
+      "type": type
+    });
+  }
+
+  void createNewTask(String id, String projectname, String receiverID,
+      int sendDay, bool isread, int percent, String description, String type) {
+    FirebaseFirestore.instance.collection(collection).add({
+      "id": id,
+      "projectname": projectname,
+      "receiverid": receiverID,
+      "sendday": sendDay,
+      "isread": isread,
+      "description": description,
+      "percent": percent,
+      "type": type
     });
   }
 
@@ -31,11 +53,28 @@ class NotificationService {
     });
   }
 
-  Future<List<NotificationModel>> getNotificationbyemployeeID(
+  Future<List<NotificationModel>> getNotificationAssignTask(
           String employeeid) async =>
       FirebaseFirestore.instance
           .collection(collection)
           .where("receiverid", isEqualTo: employeeid)
+          .where("type", isEqualTo: "ASSIGNTASK")
+          .orderBy("sendday")
+          .get()
+          .then((result) {
+        List<NotificationModel> notifies = [];
+        for (DocumentSnapshot notify in result.docs) {
+          notifies.add(NotificationModel.fromSnapshot(notify));
+        }
+        return notifies;
+      });
+  Future<List<NotificationModel>> getNotificationAddProject(
+          String employeeid) async =>
+      FirebaseFirestore.instance
+          .collection(collection)
+          .where("receiverid", isEqualTo: employeeid)
+          .where("type", isEqualTo: "ADDPROJECT")
+          .orderBy("sendday")
           .get()
           .then((result) {
         List<NotificationModel> notifies = [];

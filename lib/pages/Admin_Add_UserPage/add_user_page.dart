@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
+import 'package:advance_employee_management/service/department_service.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,8 +37,12 @@ class _AddUserPageState extends State<AddUserPage> {
   final AuthClass authClass = AuthClass();
 
   DateTime selectedDate = DateTime.now();
+  List<String> listDepartment = [];
+  String departmentName = "";
+  String? dropdownDeName;
 
   final EmployeeServices employeeServices = EmployeeServices();
+  DepartmentService departmentService = DepartmentService();
 
   String _imageURL = "";
   bool timeup = false;
@@ -45,14 +50,18 @@ class _AddUserPageState extends State<AddUserPage> {
   bool male = false;
   bool female = false;
   String gender = "";
-  String dropDownvalue = 'Employee';
+
   String dropDownRole = "Software developer";
-  String dropDownDepartment = "IT department";
 
   void deplay() {
     Future.delayed(const Duration(seconds: 2), () {
       timeup = true;
     });
+  }
+
+  getAllDepartmentName() async {
+    listDepartment = await departmentService.getAllDepartmentName();
+    setState(() {});
   }
 
   _selectDate(BuildContext context) async {
@@ -89,6 +98,7 @@ class _AddUserPageState extends State<AddUserPage> {
 
   @override
   Widget build(BuildContext context) {
+    getAllDepartmentName();
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -152,8 +162,8 @@ class _AddUserPageState extends State<AddUserPage> {
                       inputBox("Phone", phone, false),
                       titlebox("Email"),
                       inputBox("Example: abd@gmail.com", email, false),
-                      titlebox("Supervisorid"),
-                      inputBox("manager id", supervisorid, false),
+                      titlebox("Supervisor Id"),
+                      inputBox("Manager id", supervisorid, false),
                       const SizedBox(
                         height: 90,
                       ),
@@ -173,7 +183,7 @@ class _AddUserPageState extends State<AddUserPage> {
                       selectedRole(),
                       titlebox("Department"),
                       selectDepartment(),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                       uploadImageButton(),
                     ],
                   ),
@@ -287,7 +297,7 @@ class _AddUserPageState extends State<AddUserPage> {
 
   Widget selectDepartment() {
     return DropdownButton<String>(
-      value: dropDownDepartment,
+      value: dropdownDeName,
       iconSize: 24,
       elevation: 16,
       style: const TextStyle(color: Colors.deepPurple),
@@ -297,15 +307,11 @@ class _AddUserPageState extends State<AddUserPage> {
       ),
       onChanged: (String? newValue) {
         setState(() {
-          dropDownDepartment = newValue!;
-          department = dropDownDepartment;
+          dropdownDeName = newValue!;
+          departmentName = dropdownDeName!;
         });
       },
-      items: <String>[
-        'IT department',
-        'Support Department  ',
-        'Maketting Department'
-      ].map<DropdownMenuItem<String>>((String value) {
+      items: listDepartment.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Text(value),

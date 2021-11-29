@@ -23,8 +23,6 @@ enum DisplayedPage {
 
 class AppProvider with ChangeNotifier {
   late DisplayedPage currentPage;
-  EmployeeServices employeeServices = EmployeeServices();
-  DepartmentService departmentService = DepartmentService();
 
   AppProvider.init() {
     changeCurrentPage(DisplayedPage.HOME);

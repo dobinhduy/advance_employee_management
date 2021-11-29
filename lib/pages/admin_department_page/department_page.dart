@@ -277,28 +277,29 @@ class _DepartmentPageState extends State<DepartmentPage> {
                   await departmentService.checkExistDepartment(id.text);
               if (checkFillAll()) {
                 if (!checkID) {
-                  departmentService.addDepartment(
-                      id.text,
-                      name.text,
-                      email.text,
-                      phone.text,
-                      list,
-                      "${startday.toLocal()}".split(' ')[0]);
-                  provider.departmentSource.add({
-                    "id": id.text,
-                    "name": name.text,
-                    "email": email.text,
-                    "phone": phone.text,
-                    "createday": "${startday.toLocal()}".split(' ')[0],
+                  setState(() {
+                    departmentService.addDepartment(
+                        id.text,
+                        name.text,
+                        email.text,
+                        phone.text,
+                        list,
+                        "${startday.toLocal()}".split(' ')[0]);
+                    provider.departmentSource.add({
+                      "id": id.text,
+                      "name": name.text,
+                      "email": email.text,
+                      "phone": phone.text,
+                      "createday": "${startday.toLocal()}".split(' ')[0],
+                    });
                   });
-                  setState(() {});
                   dialog(DialogType.SUCCES, "Add success", "");
                 } else {
-                  dialog(DialogType.INFO, "Id is allready exist", "");
+                  AuthClass().showSnackBar(context, "Id is allready exist");
                 }
               } else {
-                dialog(DialogType.INFO_REVERSED, "Missing some information",
-                    "Please fill all the require information");
+                AuthClass().showSnackBar(
+                    context, "Please fill all the require information");
               }
             },
             child: const Text(

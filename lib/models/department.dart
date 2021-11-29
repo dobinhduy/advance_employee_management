@@ -8,7 +8,7 @@ class DepartmentModel {
   static const PHONE = "phone";
   static const EMAIL = "email";
   static const PROJECTID = "projectid";
-  static const CREATEDAY = "establishday";
+  static const CREATEDAY = "createday";
 
   late String _id;
   late String _name;
@@ -30,5 +30,4 @@ class DepartmentModel {
     _projectid = (snapshot.data() as dynamic)[PROJECTID];
     _createday = (snapshot.data() as dynamic)[CREATEDAY];
   }
-
 }

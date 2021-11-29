@@ -184,7 +184,6 @@ class _UserInforPageState extends State<UserInforPage> {
                   titlebox("Address"),
                   titlebox("Phone"),
                   titlebox("Email"),
-                  titlebox("Position"),
                 ],
               ),
             ),
