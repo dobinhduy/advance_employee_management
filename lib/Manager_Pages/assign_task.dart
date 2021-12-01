@@ -6,15 +6,15 @@ import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 class AssignTask extends StatefulWidget {
-  AssignTask(
+  const AssignTask(
       {Key? key,
       required this.projectName,
       required this.projectid,
       required this.memberid})
       : super(key: key);
-  String projectName;
-  String projectid;
-  String memberid;
+  final String projectName;
+  final String projectid;
+  final String memberid;
 
   @override
   _AssignTaskState createState() => _AssignTaskState();
@@ -30,16 +30,15 @@ class _AssignTaskState extends State<AssignTask> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.memberid);
-    print(widget.projectid);
     return AlertDialog(
+      insetPadding: const EdgeInsets.symmetric(vertical: 150),
       title: const Text("Assign Task"),
       content: SizedBox(
         width: 500,
-        height: 800,
+        height: 600,
         child: Column(
           children: <Widget>[
-            Container(
+            SizedBox(
               height: 200,
               width: 400,
               child: TextField(
@@ -111,7 +110,8 @@ class _AssignTaskState extends State<AssignTask> {
                   widget.memberid,
                   description,
                   DateTime.now().millisecondsSinceEpoch,
-                  "Uncomplete");
+                  "Uncomplete",
+                  int.parse(percent));
               notificationService.createNewTask(
                   const Uuid().v4(),
                   widget.projectName,

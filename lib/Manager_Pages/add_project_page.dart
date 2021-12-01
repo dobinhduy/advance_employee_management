@@ -4,13 +4,11 @@ import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/department_service.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
-import 'package:advance_employee_management/service/manager_service.dart';
 import 'package:advance_employee_management/service/notification_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -97,9 +95,6 @@ class AddProjectPageState extends State<AddProjectPage> {
           actions: [
             TextButton(
                 onPressed: () {
-                  var now = DateTime.now();
-                  var formatter = DateFormat('yyyy-MM-dd');
-                  String formattedDate = formatter.format(now);
                   List<String> members = <String>[];
                   if (memberID1.text.isNotEmpty) {
                     members.add(memberID1.text);
@@ -302,7 +297,7 @@ class AddProjectPageState extends State<AddProjectPage> {
   }
 
   Widget selectDepartment() {
-    return Container(
+    return SizedBox(
       width: 400,
       child: DropdownButton<String>(
         value: dropdownDeName,
@@ -393,7 +388,7 @@ class AddProjectPageState extends State<AddProjectPage> {
   }
 
   Widget description(TextEditingController desciption) {
-    return Container(
+    return SizedBox(
       height: 300,
       width: 400,
       child: TextField(

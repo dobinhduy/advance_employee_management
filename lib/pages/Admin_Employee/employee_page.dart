@@ -161,24 +161,23 @@ class _EmployeePageState extends State<EmployeePage> {
   showAlertDialog(BuildContext context, Function function) {
     // Create button
     Widget okButton = TextButton(
-      child: Text("OK"),
+      child: const Text("OK"),
       onPressed: () {
         function;
         Navigator.of(context).pop();
       },
     );
     Widget cancelButton = TextButton(
-      child: Text("Cancel"),
+      child: const Text("Cancel"),
       onPressed: () {
-        print("cancel");
         Navigator.of(context).pop();
       },
     );
 
     // Create AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Simple Alert"),
-      content: Text("This is an alert message."),
+      title: const Text("Simple Alert"),
+      content: const Text("This is an alert message."),
       actions: [okButton, cancelButton],
     );
 

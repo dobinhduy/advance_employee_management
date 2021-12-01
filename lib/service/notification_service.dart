@@ -1,5 +1,4 @@
 import 'package:advance_employee_management/models/notification.dart';
-import 'package:advance_employee_management/models/project.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NotificationService {
@@ -49,8 +48,18 @@ class NotificationService {
     DocumentReference docref = doc.reference;
 
     await docref.update(<String, dynamic>{
-      "isreead": status,
+      "isread": status,
     });
+  }
+
+  void deleteNotification(String notificationid) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: notificationid)
+        .get();
+    QueryDocumentSnapshot doc = querySnapshot.docs[0];
+    DocumentReference docref = doc.reference;
+    await docref.delete();
   }
 
   Future<List<NotificationModel>> getNotificationAssignTask(
@@ -60,6 +69,7 @@ class NotificationService {
           .where("receiverid", isEqualTo: employeeid)
           .where("type", isEqualTo: "ASSIGNTASK")
           .orderBy("sendday")
+          .limitToLast(2)
           .get()
           .then((result) {
         List<NotificationModel> notifies = [];

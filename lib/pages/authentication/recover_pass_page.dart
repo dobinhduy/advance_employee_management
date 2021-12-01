@@ -34,11 +34,11 @@ class _RecoverPasswordState extends State<RecoverPassword> {
                       color: Colors.black,
                       fontWeight: FontWeight.bold),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 70,
                 ),
                 textItem("Input your email", email, false),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 senButton(),

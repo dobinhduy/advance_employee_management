@@ -1,7 +1,5 @@
 import 'package:advance_employee_management/Custom/carditem_custom.dart';
-import 'package:advance_employee_management/Employee__Pages/view_project.dart';
 import 'package:advance_employee_management/models/project.dart';
-import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
@@ -75,7 +73,7 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               titlebox("Open Project"),
-              Container(
+              SizedBox(
                   height: 3500,
                   width: MediaQuery.of(context).size.width,
                   child: isADD == true

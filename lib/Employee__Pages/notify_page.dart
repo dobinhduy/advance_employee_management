@@ -1,7 +1,6 @@
 import 'package:advance_employee_management/models/notification.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
-import 'package:advance_employee_management/service/manager_service.dart';
 import 'package:advance_employee_management/service/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -62,187 +61,29 @@ class _NotificationPageState extends State<NotificationPage> {
         ? Scaffold(
             appBar: AppBar(title: const Text('Notification')),
             body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  for (NotificationModel notify in notifiesAddProject!)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      child: notify.isread == false
-                          ? Container(
-                              color: Colors.amber[50],
-                              width: 400,
-                              height: 80,
-                              child: InkWell(
-                                onTap: () {},
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        titlebox("Send by: "),
-                                        titlebox(notify.sendername)
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        titlebox("Message: "),
-                                        titlebox("You was add to " +
-                                            notify.projectname +
-                                            " project"),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        titlebox("Send at: " +
-                                            DateFormat("dd/MM/yyyy,HH:mm")
-                                                .format(DateTime
-                                                    .fromMillisecondsSinceEpoch(
-                                                        notify.sendday))),
-                                        const SizedBox(
-                                          width: 100,
-                                        ),
-                                        ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                textStyle: const TextStyle(
-                                                    fontSize: 18)),
-                                            onPressed: () {},
-                                            child: const Text('Read More'))
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            )
-                          : Container(
-                              color: Colors.white,
-                              width: 400,
-                              height: 80,
-                              child: InkWell(
-                                onTap: () {},
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        titlebox("Send by: "),
-                                        titlebox(notify.sendername)
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        titlebox("Message: "),
-                                        titlebox("You was add to " +
-                                            notify.projectname +
-                                            "project"),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        titlebox("Send at: " +
-                                            DateFormat("dd/MM/yyyy,HH:mm")
-                                                .format(DateTime
-                                                    .fromMillisecondsSinceEpoch(
-                                                        notify.sendday))),
-                                        const SizedBox(
-                                          width: 100,
-                                        ),
-                                        ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                textStyle: const TextStyle(
-                                                    fontSize: 18)),
-                                            onPressed: () {},
-                                            child: const Text('Read More'))
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                    ),
-                  for (NotificationModel notify in notifiesAssignTask!)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      child: notify.isread == false
-                          ? Container(
-                              color: Colors.amber[50],
-                              width: 400,
-                              height: 80,
-                              child: InkWell(
-                                onTap: () {},
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        titlebox("Message: "),
-                                        titlebox(
-                                            "You was assign as new task in" +
-                                                notify.projectname +
-                                                " project"),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        titlebox("Send at: " +
-                                            DateFormat("dd/MM/yyyy,HH:mm")
-                                                .format(DateTime
-                                                    .fromMillisecondsSinceEpoch(
-                                                        notify.sendday))),
-                                        const SizedBox(
-                                          width: 100,
-                                        ),
-                                        ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                textStyle: const TextStyle(
-                                                    fontSize: 18)),
-                                            onPressed: () {},
-                                            child: const Text('Read More'))
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            )
-                          : Container(
-                              color: Colors.white,
-                              width: 400,
-                              height: 80,
-                              child: InkWell(
-                                onTap: () {},
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        titlebox("Message: "),
-                                        titlebox(
-                                            "You was assign a new task in " +
-                                                notify.projectname +
-                                                "project"),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        titlebox("Send at: " +
-                                            DateFormat("dd/MM/yyyy,HH:mm")
-                                                .format(DateTime
-                                                    .fromMillisecondsSinceEpoch(
-                                                        notify.sendday))),
-                                        const SizedBox(
-                                          width: 100,
-                                        ),
-                                        ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                textStyle: const TextStyle(
-                                                    fontSize: 18)),
-                                            onPressed: () {},
-                                            child: const Text('Read More'))
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                    )
-                ],
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (NotificationModel notify in notifiesAddProject!)
+                      Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          child: notify.isread == false
+                              ? notifyAddpro(notify, Colors.amberAccent)
+                              : notifyAddpro(notify, Colors.white)),
+                    const Text("Assign Task"),
+                    const SizedBox(height: 30),
+                    for (NotificationModel notify in notifiesAssignTask!)
+                      Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          child: notify.isread == false
+                              ? notifyAssignTask(notify, Colors.amberAccent)
+                              : notifyAssignTask(notify, Colors.white))
+                  ],
+                ),
               ),
             ),
           )
@@ -269,6 +110,158 @@ class _NotificationPageState extends State<NotificationPage> {
             letterSpacing: 0.5,
             fontWeight: FontWeight.bold),
       ),
+    );
+  }
+
+  Widget notifyAssignTask(NotificationModel notify, Color color) {
+    Color textColor = color;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(width: 1),
+            color: textColor,
+          ),
+          width: 550,
+          height: 100,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  titlebox("Message: "),
+                  titlebox("You was assign a new task in project" +
+                      notify.projectname),
+                ],
+              ),
+              Row(
+                children: [
+                  titlebox("Send at: " +
+                      DateFormat("dd/MM/yyyy,HH:mm").format(
+                          DateTime.fromMillisecondsSinceEpoch(notify.sendday))),
+                  const SizedBox(
+                    width: 100,
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.redAccent,
+                          textStyle: const TextStyle(fontSize: 18)),
+                      onPressed: () {
+                        notificationService.updateStatus(notify.id, true);
+                        setState(() {
+                          notificationService.deleteNotification(notify.id);
+                        });
+                      },
+                      child: const Text('Delete')),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          textStyle: const TextStyle(fontSize: 18)),
+                      onPressed: () {
+                        setState(() {
+                          notificationService.updateStatus(notify.id, true);
+                        });
+                      },
+                      child: notify.isread == false
+                          ? const Text('Mark as read')
+                          : const Text("Mark as unread")),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget notifyAddpro(NotificationModel notify, Color color) {
+    Color textColor = color;
+    NotificationService notificationService = NotificationService();
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(width: 1),
+            color: textColor,
+          ),
+          width: 550,
+          height: 100,
+          child: Column(
+            children: [
+              Row(
+                children: [titlebox("Send by: "), titlebox(notify.sendername)],
+              ),
+              Row(
+                children: [
+                  titlebox("Message: "),
+                  titlebox("You was add to new project " + notify.projectname),
+                ],
+              ),
+              Row(
+                children: [
+                  titlebox("Send at: " +
+                      DateFormat("dd/MM/yyyy,HH:mm").format(
+                          DateTime.fromMillisecondsSinceEpoch(notify.sendday))),
+                  const SizedBox(
+                    width: 100,
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.redAccent,
+                          textStyle: const TextStyle(fontSize: 18)),
+                      onPressed: () {
+                        setState(() {
+                          notificationService.deleteNotification(notify.id);
+                        });
+                      },
+                      child: const Text('Delete')),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          textStyle: const TextStyle(fontSize: 18)),
+                      onPressed: () {
+                        notificationService.updateStatus(
+                            notify.id, !notify.isread);
+                        setState(() {});
+                      },
+                      child: notify.isread == false
+                          ? const Text('Mark as read')
+                          : const Text("Mark as unread")),
+                  const SizedBox(
+                    width: 20,
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

@@ -1,17 +1,12 @@
-import 'dart:html';
-
+import 'package:advance_employee_management/Manager_Pages/add_member.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/department_service.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
-import 'package:advance_employee_management/service/notification_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:uuid/uuid.dart';
 
 import 'assign_task.dart';
 
@@ -106,6 +101,20 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
             memberid: memberid,
             projectid: projectid,
           );
+        });
+  }
+
+  Future<void> _dialogAddMember(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AddMember(
+              managerID: widget.managerid,
+              proID: proID.text,
+              proName: proName.text,
+              members: members,
+              memberName: memberName,
+              managerName: managerName);
         });
   }
 
@@ -376,7 +385,9 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                           children: [
                             TextButton.icon(
                                 onPressed: () {
-                                  _openPopup(context);
+                                  setState(() {
+                                    _dialogAddMember(context);
+                                  });
                                 },
                                 icon: const Icon(Icons.add),
                                 label: const Text("Add member"))
@@ -589,86 +600,6 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
         ),
       ),
     );
-  }
-
-  _openPopup(context) {
-    TextEditingController id = TextEditingController();
-    String message = "";
-
-    Alert(
-        context: context,
-        title: "Add Member",
-        content: StatefulBuilder(
-          builder: (BuildContext context, setState) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  Column(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 300,
-                        child: TextField(
-                          controller: id,
-                          decoration: const InputDecoration(
-                            icon: Icon(
-                              Icons.vpn_key_rounded,
-                            ),
-                            labelText: 'Member ID',
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text("" + message,
-                          style: const TextStyle(
-                            color: Colors.red,
-                          )),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-        buttons: [
-          DialogButton(
-            onPressed: () async {
-              DateTime now = DateTime.now();
-              EmployeeServices employeeServices = EmployeeServices();
-              ProjectService projectService = ProjectService();
-              NotificationService notificationService = NotificationService();
-              String supID = await employeeServices.getSupervisorID(id.text);
-              if (supID == managerID) {
-                String employeeName =
-                    await employeeServices.getEmployeeNamebyID(id.text);
-
-                setState(() {
-                  projectService.addMember(id.text, proID.text);
-                  members.add(id.text);
-                  memberName.add(employeeName);
-                });
-                notificationService.createNotification(
-                    const Uuid().v4(),
-                    proName.text,
-                    managerID,
-                    managerName,
-                    id.text,
-                    now.millisecondsSinceEpoch,
-                    false,
-                    "ADDPROJECT");
-                AuthClass().showSnackBar(context, "Add success");
-              } else {
-                AuthClass().showSnackBar(context, "Employee is not exist");
-              }
-            },
-            child: const Text(
-              "Add",
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-          )
-        ]).show();
   }
 
   Widget statusButton() {

@@ -6,7 +6,6 @@ import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
-import 'package:advance_employee_management/service/manager_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -141,8 +140,6 @@ class _EmployeeOfManagerPageState extends State<EmployeeOfManagerPage> {
                               })
                       ],
                       onTabRow: (data) {
-                        print(data);
-
                         Map<String, dynamic> map = Map<String, dynamic>.from(
                             data as Map<String, dynamic>);
                         Navigator.push(
@@ -229,17 +226,16 @@ class _EmployeeOfManagerPageState extends State<EmployeeOfManagerPage> {
       },
     );
     Widget cancelButton = TextButton(
-      child: Text("Cancel"),
+      child: const Text("Cancel"),
       onPressed: () {
-        print("cancel");
         Navigator.of(context).pop();
       },
     );
 
     // Create AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Simple Alert"),
-      content: Text("This is an alert message."),
+      title: const Text("Simple Alert"),
+      content: const Text("This is an alert message."),
       actions: [okButton, cancelButton],
     );
 

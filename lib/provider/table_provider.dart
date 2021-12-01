@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/models/department.dart';
 import 'package:advance_employee_management/models/employee.dart';
@@ -10,15 +8,12 @@ import 'package:advance_employee_management/provider/app_provider.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/department_service.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
-import 'package:advance_employee_management/service/manager_service.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:responsive_table/DatatableHeader.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class TableProvider with ChangeNotifier {
   List<Map<String, dynamic>> employeeSource = <Map<String, dynamic>>[];

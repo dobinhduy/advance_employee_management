@@ -53,6 +53,16 @@ class ProjectService {
     await docref.update(map);
   }
 
+  void addCompletion(String projectid, int complete) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("projectid", isEqualTo: projectid)
+        .get();
+    QueryDocumentSnapshot doc = querySnapshot.docs[0];
+    DocumentReference docref = doc.reference;
+    docref.update({'complete': FieldValue.increment(complete)});
+  }
+
   void addMember(String memberID, String projectid) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)

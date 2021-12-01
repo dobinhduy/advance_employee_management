@@ -54,7 +54,7 @@ class _AddUserPageState extends State<AddUserPage> {
   String dropDownRole = "Software developer";
 
   void deplay() {
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       timeup = true;
     });
   }
@@ -99,154 +99,169 @@ class _AddUserPageState extends State<AddUserPage> {
   @override
   Widget build(BuildContext context) {
     getAllDepartmentName();
-    return Scaffold(
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                color: Colors.deepPurpleAccent,
-              ),
-              height: 70,
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                child: Text(
-                  "Add New User",
-                  style: TextStyle(color: Colors.white, fontSize: 30),
-                ),
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 70,
-              color: Colors.white,
-              padding: const EdgeInsets.only(left: 40),
-              child: Row(
-                children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 20,
+    deplay();
+    return timeup == true
+        ? Scaffold(
+            body: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: const BoxDecoration(
+                      color: Colors.deepPurpleAccent,
+                    ),
+                    height: 70,
+                    child: const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                      child: Text(
+                        "Add New User",
+                        style: TextStyle(color: Colors.white, fontSize: 30),
                       ),
-                      titlebox("Frist Name"),
-                      inputBox("First name", fisrtname, false),
-                      titlebox("Gender"),
-                      genderSelectedBox(),
-                      titlebox("Birthday"),
-                      birthdayButton(),
-                      titlebox("ID"),
-                      inputBox("User ID", id, false),
-                      titlebox("Password"),
-                      inputBox("Password", password, false),
-                    ],
+                    ),
                   ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      titlebox("Last Name"),
-                      inputBox("Last name", lastname, false),
-                      titlebox("Address"),
-                      inputBox("Address", address, false),
-                      titlebox("Phone"),
-                      inputBox("Phone", phone, false),
-                      titlebox("Email"),
-                      inputBox("Example: abd@gmail.com", email, false),
-                      titlebox("Supervisor Id"),
-                      inputBox("Manager id", supervisorid, false),
-                      const SizedBox(
-                        height: 90,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    width: 60,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      titlebox("Role"),
-                      selectedRole(),
-                      titlebox("Department"),
-                      selectDepartment(),
-                      const SizedBox(height: 30),
-                      uploadImageButton(),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width / 5,
-                      height: MediaQuery.of(context).size.height,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 5,
-                            height: MediaQuery.of(context).size.height / 1.6,
-                            child: Column(
-                              children: [
-                                const SizedBox(
-                                  height: 50,
-                                ),
-                                _imageURL != ""
-                                    ? Image.network(
-                                        _imageURL,
-                                        width: 250,
-                                        height: 300,
-                                        fit: BoxFit.fill,
-                                      )
-                                    : Container(),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                              ],
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height - 70,
+                    color: Colors.white,
+                    padding: const EdgeInsets.only(left: 40),
+                    child: Row(
+                      children: <Widget>[
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 20,
                             ),
-                          ),
-                          SizedBox(
+                            titlebox("Frist Name"),
+                            inputBox("First name", fisrtname, false),
+                            titlebox("Gender"),
+                            genderSelectedBox(),
+                            titlebox("Birthday"),
+                            birthdayButton(),
+                            titlebox("ID"),
+                            inputBox("User ID", id, false),
+                            titlebox("Password"),
+                            inputBox("Password", password, false),
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            titlebox("Last Name"),
+                            inputBox("Last name", lastname, false),
+                            titlebox("Address"),
+                            inputBox("Address", address, false),
+                            titlebox("Phone"),
+                            inputBox("Phone", phone, false),
+                            titlebox("Email"),
+                            inputBox("Example: abd@gmail.com", email, false),
+                            titlebox("Supervisor Id"),
+                            inputBox("Manager id", supervisorid, false),
+                            const SizedBox(
+                              height: 90,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 60,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            titlebox("Role"),
+                            selectedRole(),
+                            titlebox("Department"),
+                            selectDepartment(),
+                            const SizedBox(height: 30),
+                            uploadImageButton(),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: SizedBox(
                             width: MediaQuery.of(context).size.width / 5,
-                            height: MediaQuery.of(context).size.height / 5,
+                            height: MediaQuery.of(context).size.height,
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    butonCancle(context),
-                                    const SizedBox(
-                                      width: 70,
-                                    ),
-                                    butonAdd(context),
-                                  ],
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width / 5,
+                                  height:
+                                      MediaQuery.of(context).size.height / 1.6,
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 50,
+                                      ),
+                                      _imageURL != ""
+                                          ? Image.network(
+                                              _imageURL,
+                                              width: 250,
+                                              height: 300,
+                                              fit: BoxFit.fill,
+                                            )
+                                          : Container(),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width / 5,
+                                  height:
+                                      MediaQuery.of(context).size.height / 5,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          butonCancle(context),
+                                          const SizedBox(
+                                            width: 70,
+                                          ),
+                                          butonAdd(context),
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 )
                               ],
                             ),
-                          )
-                        ],
-                      ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          )
+        : const Center(
+            child: SizedBox(
+              width: 40,
+              height: 40,
+              child: CircularProgressIndicator(),
+            ),
+          );
   }
 
   Widget inputBox(
@@ -548,10 +563,10 @@ class _AddUserPageState extends State<AddUserPage> {
               dialog(
                   DialogType.WARNING,
                   "Invalid password",
-                  "Password must contains: \n" +
-                      "+ Minimum 1 Upper case\n " +
-                      "+ Minimum 1 lowercase\n" +
-                      "+ Minimum 1 Numeric Number\n" +
+                  "Password must contains: \n"
+                      "+ Minimum 1 Upper case\n "
+                      "+ Minimum 1 lowercase\n"
+                      "+ Minimum 1 Numeric Number\n"
                       "+ Minimum 1 Special Character ( ! @ #  & * ~ )");
             }
           } else {

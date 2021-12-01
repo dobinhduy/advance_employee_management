@@ -1,13 +1,14 @@
 import 'package:advance_employee_management/models/task.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
+import 'package:advance_employee_management/service/project_service.dart';
 import 'package:advance_employee_management/service/task_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ViewProject extends StatefulWidget {
-  ViewProject(
+  const ViewProject(
       {Key? key,
       required this.projectName,
       required this.projectid,
@@ -38,11 +39,13 @@ class ViewProject extends StatefulWidget {
 class _ViewProjectState extends State<ViewProject> {
   String email = AuthClass().user()!;
   EmployeeServices employeeServices = EmployeeServices();
+  ProjectService projectService = ProjectService();
+  TaskService taskService = TaskService();
   String employeeID = "";
   List<dynamic> members = [];
   List<dynamic> memberName = [];
   List<TaskModel>? tasks = [];
-  TaskService taskService = TaskService();
+
   bool timeout = false;
   getEmployeeID() async {
     employeeID = await employeeServices.getEmployeeIDbyEmail(email);
@@ -198,55 +201,11 @@ class _ViewProjectState extends State<ViewProject> {
                           Column(
                             children: [
                               for (TaskModel task in tasks!)
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 20),
-                                  child: Container(
-                                    color: Colors.amber,
-                                    width: 500,
-                                    height: 150,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            titlebox("Description: "),
-                                            titlebox(task.description)
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            titlebox("Assign at: " +
-                                                DateFormat("dd/MM/yyyy,HH:mm")
-                                                    .format(DateTime
-                                                        .fromMillisecondsSinceEpoch(
-                                                            task.assignday))),
-                                            titlebox(
-                                                "DeadLine:" + task.deadline),
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    textStyle: const TextStyle(
-                                                        fontSize: 18)),
-                                                onPressed: () {},
-                                                child: const Text(
-                                                    'Mask as Complete'))
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                )
+                                task.status == "Uncomplete"
+                                    ? taskBox(task, "Mark as Complete",
+                                        const Color(0xFF9575CD))
+                                    : taskBox(task, "Complete",
+                                        const Color(0xFFe0e0e0))
                             ],
                           ),
                         ],
@@ -257,8 +216,8 @@ class _ViewProjectState extends State<ViewProject> {
               ),
             ))
         : SizedBox(
-            width: 200,
-            height: 200,
+            width: 100,
+            height: 100,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -266,6 +225,61 @@ class _ViewProjectState extends State<ViewProject> {
                 CircularProgressIndicator(),
               ],
             ));
+  }
+
+  Widget taskBox(TaskModel task, String title, Color color) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      child: Container(
+        color: color,
+        width: 500,
+        height: 170,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [titlebox("Description: "), titlebox(task.description)],
+            ),
+            Row(
+              children: [
+                titlebox("Assign at: " +
+                    DateFormat("dd/MM/yyyy,HH:mm").format(
+                        DateTime.fromMillisecondsSinceEpoch(task.assignday))),
+              ],
+            ),
+            Row(
+              children: [
+                titlebox("DeadLine:" + task.deadline),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          textStyle: const TextStyle(fontSize: 18)),
+                      onPressed: () {
+                        if (task.status == "Uncomplete") {
+                          taskService.updateStatus(task.id, "Complete");
+                          projectService.addCompletion(
+                              widget.projectid, task.percent);
+                        } else {
+                          print(
+                              "You can not change the status. Try to connect to you manager");
+                        }
+                      },
+                      child: Text(title))
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Widget titlebox(String title) {

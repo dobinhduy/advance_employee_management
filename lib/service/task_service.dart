@@ -5,7 +5,7 @@ class TaskService {
   String collection = "tasks";
 
   void createTask(String id, String projectid, String deadline, String memberID,
-      String description, int assignday, String status) {
+      String description, int assignday, String status, int percent) {
     FirebaseFirestore.instance.collection(collection).add({
       "id": id,
       "projectid": projectid,
@@ -13,8 +13,19 @@ class TaskService {
       "deadline": deadline,
       "memberid": memberID,
       "description": description,
-      "status": status
+      "status": status,
+      "percent": percent
     });
+  }
+
+  void updateStatus(String taskID, String status) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: taskID)
+        .get();
+    QueryDocumentSnapshot doc = querySnapshot.docs[0];
+    DocumentReference docref = doc.reference;
+    docref.update({'status': status});
   }
 
   Future<List<TaskModel>> getAllTask(

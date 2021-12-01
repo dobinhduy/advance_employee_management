@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+// ignore_for_file: constant_identifier_names
 class AdminModel {
   static const ID = "id";
   static const NAME = "name";

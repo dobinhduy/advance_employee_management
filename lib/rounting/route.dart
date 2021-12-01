@@ -62,7 +62,6 @@ PageRoute generateRoute(RouteSettings settings) {
     default:
       return _getPageRoute(const SignInPage());
   }
-  ;
 }
 
 PageRoute _getPageRoute(Widget child) {

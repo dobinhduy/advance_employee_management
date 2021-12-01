@@ -39,4 +39,7 @@ class NotificationModel {
   bool get isread => _isread;
   String get projectname => _projectname;
   String get type => _type;
+  set setisread(bool value) {
+    _isread = value;
+  }
 }

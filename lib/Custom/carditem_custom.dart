@@ -78,7 +78,7 @@ class CardItem extends StatelessWidget {
                       Row(
                         children: [
                           const Text("Project Name"),
-                          SizedBox(
+                          const SizedBox(
                             width: 30,
                           ),
                           CustomTextProject(
@@ -88,13 +88,13 @@ class CardItem extends StatelessWidget {
                               weight: FontWeight.bold)
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Row(
                         children: [
                           const Text("Project ID"),
-                          SizedBox(
+                          const SizedBox(
                             width: 30,
                           ),
                           CustomTextProject(
@@ -104,13 +104,13 @@ class CardItem extends StatelessWidget {
                               weight: FontWeight.bold)
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Row(
                         children: [
                           const Text("Manager"),
-                          SizedBox(
+                          const SizedBox(
                             width: 30,
                           ),
                           CustomTextProject(
