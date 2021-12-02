@@ -16,7 +16,7 @@ enum DisplayedPage {
   ADD,
   LOGOUT,
   PROJECTEMPLOYEEPAGE,
-  DEPARTMENT
+  DEPARTMENT,
 }
 
 class AppProvider with ChangeNotifier {

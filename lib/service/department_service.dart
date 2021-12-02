@@ -21,11 +21,13 @@ class DepartmentService {
         .collection(collection)
         .where("name", isEqualTo: departmentName)
         .get();
-    QueryDocumentSnapshot doc = querySnapshot.docs[0];
-    DocumentReference docref = doc.reference;
-    docref.update({
-      'projectid': FieldValue.arrayRemove([projectid])
-    });
+    try {
+      QueryDocumentSnapshot doc = querySnapshot.docs[0];
+      DocumentReference docref = doc.reference;
+      docref.update({
+        'projectid': FieldValue.arrayRemove([projectid])
+      });
+    } catch (e) {}
   }
 
   Future<bool> checkExistDepartment(String id) async {
@@ -43,11 +45,25 @@ class DepartmentService {
         .collection(collection)
         .where("name", isEqualTo: departmentName)
         .get();
-    QueryDocumentSnapshot doc = querySnapshot.docs[0];
-    DocumentReference docref = doc.reference;
-    docref.update({
-      'projectid': FieldValue.arrayUnion([projectid])
-    });
+    try {
+      QueryDocumentSnapshot doc = querySnapshot.docs[0];
+      DocumentReference docref = doc.reference;
+      docref.update({
+        'projectid': FieldValue.arrayUnion([projectid])
+      });
+    } catch (e) {}
+  }
+
+  void deleteDepartment(String id) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: id)
+        .get();
+    try {
+      QueryDocumentSnapshot doc = querySnapshot.docs[0];
+      DocumentReference docref = doc.reference;
+      await docref.delete();
+    } catch (e) {}
   }
 
   void updateProject(String id, Map<String, dynamic> map) async {
@@ -55,10 +71,12 @@ class DepartmentService {
         .collection(collection)
         .where("id", isEqualTo: id)
         .get();
-    QueryDocumentSnapshot doc = querySnapshot.docs[0];
-    DocumentReference docref = doc.reference;
+    try {
+      QueryDocumentSnapshot doc = querySnapshot.docs[0];
+      DocumentReference docref = doc.reference;
 
-    await docref.update(map);
+      await docref.update(map);
+    } catch (e) {}
   }
 
   Future<List<String>> getAllDepartmentName() async =>

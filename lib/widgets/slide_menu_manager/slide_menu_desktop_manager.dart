@@ -4,12 +4,11 @@ import 'package:advance_employee_management/pages/authentication/sign_in_page.da
 import 'package:advance_employee_management/provider/app_provider.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
-import 'package:advance_employee_management/service/auth_services.dart';
-import 'package:advance_employee_management/service/manager_service.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
 
 import 'package:advance_employee_management/widgets/navbar/navber_logo_manager.dart';
 import 'package:advance_employee_management/widgets/slide_menu/side_menu_items.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -84,16 +83,32 @@ class SideMenuManagerDesktop extends StatelessWidget {
                 text: "Log out",
                 icon: Icons.logout,
                 onTap: () {
-                  appProvider.changeCurrentPage(DisplayedPage.LOGOUT);
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (builder) => const SignInPage()),
-                      (route) => false);
+                  dialog(DialogType.QUESTION, "Are you sure?", "", context,
+                      appProvider);
                 }),
           ),
         ],
       ),
     );
+  }
+
+  AwesomeDialog dialog(DialogType type, String title, String description,
+      BuildContext context, AppProvider provider) {
+    return AwesomeDialog(
+      context: context,
+      width: 600,
+      dialogType: type,
+      animType: AnimType.LEFTSLIDE,
+      title: title,
+      desc: description,
+      btnCancelOnPress: () {},
+      btnOkOnPress: () {
+        provider.changeCurrentPage(DisplayedPage.LOGOUT);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (builder) => const SignInPage()),
+            (route) => false);
+      },
+    )..show();
   }
 }

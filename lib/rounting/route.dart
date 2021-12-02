@@ -1,3 +1,4 @@
+import 'package:advance_employee_management/Employee__Pages/change_password.dart';
 import 'package:advance_employee_management/Employee__Pages/employee_infor.dart';
 import 'package:advance_employee_management/Employee__Pages/notify_page.dart';
 import 'package:advance_employee_management/Employee__Pages/project_page_employee.dart';
@@ -40,6 +41,8 @@ PageRoute generateRoute(RouteSettings settings) {
       return _getPageRoute(const AddUserPage());
     case EmployeeRouteLayout:
       return _getPageRoute(EmployeeLayoutRoute());
+    case changePasswordRoute:
+      return _getPageRoute(ChangePasswordPage());
 
     case EmployeeInformationRoute:
       return _getPageRoute(const EmployeeInformation());

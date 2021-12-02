@@ -1,6 +1,5 @@
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
-import 'package:advance_employee_management/service/manager_service.dart';
 import 'package:flutter/material.dart';
 
 class NavBarLogoManager extends StatefulWidget {

@@ -50,7 +50,7 @@ class _NavBarLogoEmployeeState extends State<NavBarLogoEmployee> {
                         "images/userimage.png",
                       ),
                     )),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           name != ""

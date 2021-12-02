@@ -194,6 +194,7 @@ class _DepartmentPageState extends State<DepartmentPage> {
   }
 
   AwesomeDialog dialog(DialogType type, String title, String description) {
+    TableProvider provider = Provider.of<TableProvider>(context, listen: false);
     return AwesomeDialog(
       context: context,
       width: 600,
@@ -201,7 +202,19 @@ class _DepartmentPageState extends State<DepartmentPage> {
       animType: AnimType.LEFTSLIDE,
       title: title,
       desc: description,
-      btnOkOnPress: () {},
+      btnCancelOnPress: () {
+        setState(() {});
+      },
+      btnOkOnPress: () {
+        for (var department in provider.selecteds) {
+          departmentService.deleteDepartment(department["id"]);
+        }
+
+        setState(() {
+          provider.delectDepartment(provider.selecteds);
+          provider.isSelect == false;
+        });
+      },
     )..show();
   }
 }

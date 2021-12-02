@@ -1,6 +1,9 @@
+import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/models/employee.dart';
+import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
+import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:flutter/material.dart';
 
 class EmployeeInformation extends StatefulWidget {
@@ -62,97 +65,143 @@ class _EmployeeInformationState extends State<EmployeeInformation> {
             ),
           )
         : Scaffold(
-            backgroundColor: Colors.deepPurple[200],
+            backgroundColor: Colors.white,
             appBar: AppBar(
-              backgroundColor: Colors.blueAccent,
-              title: const Text("Employee Information"),
+              backgroundColor: Colors.purpleAccent,
+              title: const Text("Employee Data"),
             ),
-            body: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width / 4.4,
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 140,
-                        ),
-                        Image.network(employeeInfor!.photourl,
-                            width: 300, height: 300, fit: BoxFit.fill)
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 100,
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height,
-                    width: 100,
-                    child: Column(
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         const SizedBox(
-                          height: 100,
+                          width: 15,
                         ),
-                        titlebox("Name"),
-                        titlebox("ID"),
-                        titlebox("Gender"),
-                        titlebox("Birthday"),
-                        titlebox("Address"),
-                        titlebox("Phone"),
-                        titlebox("Email"),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 90,
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width / 5,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                        SizedBox(
+                          height: 500,
+                          width: MediaQuery.of(context).size.width / 4.4,
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 100,
+                              ),
+                              Image.network(employeeInfor!.photourl,
+                                  width: 300, height: 300, fit: BoxFit.fill)
+                            ],
+                          ),
+                        ),
                         const SizedBox(
-                          height: 100,
+                          width: 30,
                         ),
-                        titlebox(employeeInfor!.name),
-                        titlebox(employeeInfor!.id),
-                        titlebox(employeeInfor!.gender),
-                        titlebox(employeeInfor!.birthday),
-                        titlebox(employeeInfor!.address),
-                        titlebox(employeeInfor!.phone),
-                        titlebox(employeeInfor!.email),
-                      ],
-                    ),
-                  ),
-                  Column(
+                        Padding(
+                          padding: const EdgeInsets.only(top: 100),
+                          child: Table(
+                            defaultColumnWidth: const FixedColumnWidth(280),
+                            children: [
+                              TableRow(children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    titlebox("Name:"),
+                                    inputBox(employeeInfor!.name)
+                                  ],
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    titlebox("Address:"),
+                                    inputBox(employeeInfor!.address)
+                                  ],
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    titlebox("Gender:"),
+                                    inputBox(employeeInfor!.gender)
+                                  ],
+                                )
+                              ]),
+                              TableRow(children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    titlebox("Birthday:"),
+                                    inputBox(employeeInfor!.birthday)
+                                  ],
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    titlebox("Identification Number:"),
+                                    inputBox(employeeInfor!.id)
+                                  ],
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    titlebox("Phone:"),
+                                    inputBox(employeeInfor!.phone)
+                                  ],
+                                )
+                              ]),
+                              TableRow(children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    titlebox("Department:"),
+                                    inputBox(employeeInfor!.department)
+                                  ],
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    titlebox("Role:"),
+                                    inputBox(employeeInfor!.role)
+                                  ],
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    titlebox("Supervisor ID:"),
+                                    inputBox(employeeInfor!.supervisorid)
+                                  ],
+                                )
+                              ])
+                            ],
+                          ),
+                        ),
+                      ]),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
+                      ElevatedButton.icon(
+                          onPressed: () {
+                            locator<NavigationService>()
+                                .navigateTo(changePasswordRoute);
+                          },
+                          icon: const Icon(Icons.lock_clock),
+                          label: const Text("Change Password")),
                       const SizedBox(
-                        height: 50,
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height / 5,
-                        width: MediaQuery.of(context).size.width / 5,
-                        child: Column(
-                          children: [
-                            IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.backspace,
-                                    color: Colors.blue, size: 28)),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 350,
+                        width: 50,
                       ),
                     ],
                   )
-                ]),
+                ],
+              ),
+            ),
           );
   }
 
@@ -167,6 +216,22 @@ class _EmployeeInformationState extends State<EmployeeInformation> {
           letterSpacing: 2,
         ),
       ),
+    );
+  }
+
+  Widget inputBox(String text) {
+    return SizedBox(
+      width: 250,
+      height: 40,
+      child: TextFormField(
+          enabled: false,
+          style: const TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            hintText: text,
+            labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
+            enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(width: 1, color: Colors.grey)),
+          )),
     );
   }
 }

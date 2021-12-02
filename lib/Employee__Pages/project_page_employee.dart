@@ -61,9 +61,7 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
   @override
   Widget build(BuildContext context) {
     setisADD();
-
     getEmployeeProject();
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(

@@ -22,6 +22,8 @@ class AddUserPage extends StatefulWidget {
 }
 
 class _AddUserPageState extends State<AddUserPage> {
+  final EmployeeServices employeeServices = EmployeeServices();
+  DepartmentService departmentService = DepartmentService();
   final TextEditingController fisrtname = TextEditingController();
   final TextEditingController lastname = TextEditingController();
   final TextEditingController password = TextEditingController();
@@ -40,9 +42,6 @@ class _AddUserPageState extends State<AddUserPage> {
   List<String> listDepartment = [];
   String departmentName = "";
   String? dropdownDeName;
-
-  final EmployeeServices employeeServices = EmployeeServices();
-  DepartmentService departmentService = DepartmentService();
 
   String _imageURL = "";
   bool timeup = false;
@@ -523,7 +522,7 @@ class _AddUserPageState extends State<AddUserPage> {
                 if (1 == 1) {
                   employeeServices.addEmployee(
                       id.text,
-                      fisrtname.text + lastname.text,
+                      fisrtname.text + " " + lastname.text,
                       gender,
                       "${selectedDate.toLocal()}"
                           .split(' ')[0]

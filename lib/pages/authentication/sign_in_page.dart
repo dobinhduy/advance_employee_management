@@ -1,7 +1,7 @@
 // ignore: file_names
 
 import 'package:advance_employee_management/rounting/route_names.dart';
-import 'package:advance_employee_management/service/adminService.dart';
+import 'package:advance_employee_management/service/admin_service.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
@@ -22,6 +22,7 @@ class _SignUpPageState extends State<SignInPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   EmployeeServices employeeServices = EmployeeServices();
+  AdminService adminService = AdminService();
 
   bool circular = false;
   AuthClass authClass = AuthClass();
@@ -232,14 +233,13 @@ class _SignUpPageState extends State<SignInPage> {
         setState(() {
           circular = true;
         });
-        AdminService adminService = AdminService();
-        bool isAdmin = await adminService.getPosition(_emailController.text);
-
-        employeeID =
-            await employeeServices.getEmployeeIDbyEmail(_emailController.text);
-        bool isManager = await employeeServices.checkhasEmployee(employeeID);
 
         try {
+          bool isAdmin = await adminService.getPosition(_emailController.text);
+
+          employeeID = await employeeServices
+              .getEmployeeIDbyEmail(_emailController.text);
+          bool isManager = await employeeServices.checkhasEmployee(employeeID);
           await firebaseAuth.signInWithEmailAndPassword(
               email: _emailController.text, password: _passwordController.text);
           setState(() {
@@ -258,7 +258,7 @@ class _SignUpPageState extends State<SignInPage> {
           }
         } catch (e) {
           final snackbar = SnackBar(content: Text(e.toString()));
-          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+          AuthClass().showSnackBar(context, "Invalid email or password");
           setState(() {
             circular = false;
           });

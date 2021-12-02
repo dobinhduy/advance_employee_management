@@ -16,10 +16,12 @@ class EmployeeServices {
         .collection(collection)
         .where("email", isEqualTo: email)
         .get();
-    QueryDocumentSnapshot doc = querySnapshot.docs[0];
-    DocumentReference docref = doc.reference;
+    try {
+      QueryDocumentSnapshot doc = querySnapshot.docs[0];
+      DocumentReference docref = doc.reference;
 
-    await docref.update(map);
+      await docref.update(map);
+    } catch (e) {}
   }
 
   void deleteEmployee(String email) async {
@@ -27,10 +29,12 @@ class EmployeeServices {
         .collection(collection)
         .where("email", isEqualTo: email)
         .get();
-    QueryDocumentSnapshot doc = querySnapshot.docs[0];
-    DocumentReference docref = doc.reference;
+    try {
+      QueryDocumentSnapshot doc = querySnapshot.docs[0];
+      DocumentReference docref = doc.reference;
 
-    await docref.delete();
+      await docref.delete();
+    } catch (e) {}
   }
 
   Future<String> getphotoURL(String email) async {
@@ -39,8 +43,10 @@ class EmployeeServices {
         .collection(collection)
         .where("email", isEqualTo: email)
         .get();
-    DocumentSnapshot doc = querySnapshot.docs[0];
-    photoURL = (doc.data() as dynamic)['photourl'];
+    try {
+      DocumentSnapshot doc = querySnapshot.docs[0];
+      photoURL = (doc.data() as dynamic)['photourl'];
+    } catch (e) {}
     return photoURL;
   }
 
@@ -50,8 +56,10 @@ class EmployeeServices {
         .collection(collection)
         .where("email", isEqualTo: email)
         .get();
-    DocumentSnapshot doc = querySnapshot.docs[0];
-    name = (doc.data() as dynamic)['name'];
+    try {
+      DocumentSnapshot doc = querySnapshot.docs[0];
+      name = (doc.data() as dynamic)['name'];
+    } catch (e) {}
     return name;
   }
 
@@ -61,8 +69,10 @@ class EmployeeServices {
         .collection(collection)
         .where("email", isEqualTo: email)
         .get();
-    DocumentSnapshot doc = querySnapshot.docs[0];
-    id = (doc.data() as dynamic)['id'];
+    try {
+      DocumentSnapshot doc = querySnapshot.docs[0];
+      id = (doc.data() as dynamic)['id'];
+    } catch (e) {}
     return id;
   }
 
@@ -72,8 +82,10 @@ class EmployeeServices {
         .collection(collection)
         .where("id", isEqualTo: id)
         .get();
-    DocumentSnapshot doc = querySnapshot.docs[0];
-    name = (doc.data() as dynamic)['name'];
+    try {
+      DocumentSnapshot doc = querySnapshot.docs[0];
+      name = (doc.data() as dynamic)['name'];
+    } catch (e) {}
     return name;
   }
 
@@ -113,8 +125,10 @@ class EmployeeServices {
         .collection(collection)
         .where("id", isEqualTo: id)
         .get();
-    DocumentSnapshot doc = querySnapshot.docs[0];
-    supervisorID = (doc.data() as dynamic)['supervisorid'];
+    try {
+      DocumentSnapshot doc = querySnapshot.docs[0];
+      supervisorID = (doc.data() as dynamic)['supervisorid'];
+    } catch (e) {}
     return supervisorID;
   }
 

@@ -18,6 +18,7 @@ const String EmployeeRouteLayout = "EmployeeRouteLayout";
 const String EmployeeInformationRoute = "EmployeeInformationRoute";
 const String ProjectPageEmployee = "ProjectPageEmployee";
 const String notificationEmployeeRoute = "notificationEmployeeRoute";
+const String changePasswordRoute = "ChangePasswordRoute";
 
 //Manager Route
 const String ManagerRouteLayout = "ManagerRouteLayout";

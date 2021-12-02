@@ -472,17 +472,17 @@ class TableProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  delectProject(List<Map<String, dynamic>> list) {
+  delectDepartment(List<Map<String, dynamic>> list) {
     for (Map<String, dynamic> item in list) {
-      projectSource.remove(item);
+      departmentSource.remove(item);
     }
     isSelect == false;
     notifyListeners();
   }
 
-  delectDepartment(List<Map<String, dynamic>> list) {
+  delectProject(List<Map<String, dynamic>> list) {
     for (Map<String, dynamic> item in list) {
-      departmentSource.remove(item);
+      projectSource.remove(item);
     }
     isSelect == false;
     notifyListeners();

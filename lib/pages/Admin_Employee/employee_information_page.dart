@@ -1,3 +1,4 @@
+import 'package:advance_employee_management/models/employee.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
@@ -44,36 +45,46 @@ class _UserInforPageState extends State<UserInforPage> {
   late TextEditingController phoneController;
   late String birthdayController;
   late String genderController;
+  EmployeeModel? employeeInfor;
+  EmployeeServices employeeServices = EmployeeServices();
+  AuthClass authClass = AuthClass();
 
   late String photoURLController;
-  late String department;
+  String department = "";
+  List<String> listDepartment = [];
 
   String _imageURL = "";
-  String dropDownvalue = 'Employee';
+  String role = "";
+  String managerIDcontroller = "";
 
   DateTime selectedDate = DateTime.now();
 
   bool male = false;
   bool female = false;
-  bool timeup = false;
+  bool isEdit = false;
+  bool loading = true;
+  isLoading() {
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        loading = false;
+      });
+    });
+  }
 
-  bool editInfo = false;
-  bool editName = false;
-  bool editEmail = false;
-  bool editAdd = false;
-  bool editGender = false;
-  bool editID = false;
-  bool editPhone = false;
-  bool editBirthday = false;
-
-  bool editDepartment = false;
-  EmployeeServices employeeServices = EmployeeServices();
-
-  AuthClass authClass = AuthClass();
+  getEmployeeInf() async {
+    String email = AuthClass().user()!;
+    employeeInfor = await employeeServices.getEmployeebyEmail(widget.email);
+    Future.delayed(const Duration(seconds: 1), () {});
+    managerIDcontroller = await employeeServices.getEmployeeIDbyEmail(email);
+    role = employeeInfor!.role;
+    setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
+    getEmployeeInf();
+
     idController = TextEditingController(text: widget.id);
     emailController = TextEditingController(text: widget.email);
     nameController = TextEditingController(text: widget.name);
@@ -81,7 +92,6 @@ class _UserInforPageState extends State<UserInforPage> {
     addressController = TextEditingController(text: widget.address);
     genderController = widget.gender;
     birthdayController = widget.birthday;
-
     photoURLController = widget.photoURL;
     department = widget.department;
 
@@ -134,203 +144,279 @@ class _UserInforPageState extends State<UserInforPage> {
   @override
   Widget build(BuildContext context) {
     getImage();
+    getEmployeeInf();
+    isLoading();
 
     TableProvider provider = Provider.of<TableProvider>(context);
-    return Scaffold(
-      backgroundColor: Colors.deepPurple[200],
-      appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
-        title: const Text("Employee Information"),
-      ),
-      body: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            const SizedBox(
-              width: 20,
+    return loading == false
+        ? Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              backgroundColor: Colors.blueAccent,
+              title: const Text("Employee Information"),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width / 4.4,
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 140,
-                  ),
-                  _imageURL != ""
-                      ? Image.network(_imageURL,
-                          width: 300, height: 300, fit: BoxFit.fill)
-                      : const CircularProgressIndicator()
-                ],
-              ),
-            ),
-            const SizedBox(
-              width: 100,
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: 100,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 100,
-                  ),
-                  titlebox("Name"),
-                  titlebox("ID"),
-                  titlebox("Gender"),
-                  titlebox("Birthday"),
-                  titlebox("Address"),
-                  titlebox("Phone"),
-                  titlebox("Email"),
-                ],
-              ),
-            ),
-            const SizedBox(
-              width: 90,
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width / 5,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 100,
-                  ),
-                  !editName
-                      ? titlebox2(nameController.text)
-                      : inputBox(nameController, 20),
-                  !editID
-                      ? titlebox2(idController.text)
-                      : inputBox(idController, 8),
-                  !editGender
-                      ? titlebox2(genderController)
-                      : genderSelectedBox(),
-                  !editBirthday
-                      ? titlebox2(birthdayController)
-                      : birthdayButton(35),
-                  !editAdd
-                      ? titlebox2(addressController.text)
-                      : inputBox(addressController, 8),
-                  !editPhone
-                      ? titlebox2(phoneController.text)
-                      : inputBox(phoneController, 8),
-                  titlebox2(widget.email),
-                ],
-              ),
-            ),
-            Column(
-              children: [
-                const SizedBox(
-                  height: 50,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 5,
-                  width: MediaQuery.of(context).size.width / 5,
-                  child: Column(
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            setState(() {
-                              editInfo = !editInfo;
-                              editAdd = !editAdd;
-                              editBirthday = !editBirthday;
-                              editEmail = !editEmail;
-                              editGender = !editGender;
-                              editID = !editID;
-                              editName = !editName;
-                              editPhone = !editPhone;
-                            });
-                          },
-                          icon: Icon(Icons.edit,
-                              color: editInfo ? Colors.blue : Colors.white,
-                              size: 28)),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 350,
-                ),
-                editInfo
-                    ? InkWell(
-                        onTap: () async {
-                          //Update controller
-                          updateEmployee();
-                          Map<String, dynamic> map = <String, dynamic>{};
-                          map.addAll({
-                            "id": idController.text,
-                            "name": nameController.text,
-                            "gender": genderController,
-                            "birthday": birthdayController,
-                            "email": emailController.text,
-                            "address": addressController.text,
-                            "phone": phoneController.text,
-                            "photoURL": photoURLController,
-                          });
-
-                          setState(() {
-                            employeeServices.updateEmployee(widget.email, map);
-                            for (Map<String, dynamic> employee
-                                in provider.employeeSource) {
-                              if (employee.values.elementAt(4) ==
-                                  emailController.text) {
-                                employee.update(
-                                  "name",
-                                  (value) => nameController.text,
-                                );
-                                employee.update(
-                                  "id",
-                                  (value) => idController.text,
-                                );
-                                employee.update(
-                                  "address",
-                                  (value) => addressController.text,
-                                );
-                                employee.update(
-                                  "email",
-                                  (value) => emailController.text,
-                                );
-                                employee.update(
-                                  "phone",
-                                  (value) => phoneController.text,
-                                );
-                                employee.update(
-                                  "gender",
-                                  (value) => genderController,
-                                );
-
-                                employee.update(
-                                  "birthday",
-                                  (value) => birthdayController,
-                                );
-                                employee.update(
-                                    "department", (value) => department);
-                              }
-                            }
-                          });
-
-                          authClass.showSnackBar(context, "Add success");
-                          SchedulerBinding.instance?.addPostFrameCallback((_) {
-                            Navigator.of(context)
-                                .pushReplacementNamed(EmployeeLayout);
-                          });
-                        },
-                        child: Container(
-                          height: 40,
-                          width: 75,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.blueAccent),
-                          child: Center(
-                            child: Text(editInfo ? "Update" : "Ok"),
+            body: SingleChildScrollView(
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width / 4.4,
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 100,
+                          ),
+                          _imageURL != ""
+                              ? Image.network(_imageURL,
+                                  width: 300, height: 300, fit: BoxFit.fill)
+                              : const CircularProgressIndicator()
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 30,
+                    ),
+                    isEdit == false
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 100),
+                            child: Table(
+                              defaultColumnWidth: const FixedColumnWidth(280),
+                              children: [
+                                TableRow(children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      titlebox("Name:"),
+                                      inputBox2(nameController.text)
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      titlebox("Address:"),
+                                      inputBox2(addressController.text)
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      titlebox("Gender:"),
+                                      inputBox2(genderController)
+                                    ],
+                                  )
+                                ]),
+                                TableRow(children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      titlebox("Birthday:"),
+                                      inputBox2(birthdayController)
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      titlebox("Identification Number:"),
+                                      inputBox2(idController.text)
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      titlebox("Phone:"),
+                                      inputBox2(phoneController.text)
+                                    ],
+                                  )
+                                ]),
+                                TableRow(children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      titlebox("Department:"),
+                                      inputBox2(department)
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      titlebox("Role:"),
+                                      inputBox2(role)
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      titlebox("Supervisor ID:"),
+                                      inputBox2(managerIDcontroller)
+                                    ],
+                                  )
+                                ])
+                              ],
+                            ),
+                          )
+                        : SizedBox(
+                            height: MediaQuery.of(context).size.height,
+                            width: MediaQuery.of(context).size.width / 5,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  height: 100,
+                                ),
+                                inputBox(nameController, 20),
+                                inputBox(idController, 8),
+                                genderSelectedBox(),
+                                birthdayButton(35),
+                                inputBox(addressController, 8),
+                                inputBox(phoneController, 8),
+                                titlebox2(widget.email),
+                              ],
+                            ),
+                          ),
+                    Column(
+                      children: [
+                        const SizedBox(
+                          height: 50,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 5,
+                          width: 50,
+                          child: Column(
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      isEdit = !isEdit;
+                                    });
+                                  },
+                                  icon: Icon(Icons.edit,
+                                      color: isEdit ? Colors.red : Colors.blue,
+                                      size: 28)),
+                            ],
                           ),
                         ),
-                      )
-                    : Container(),
-              ],
-            )
-          ]),
-    );
+                        const SizedBox(
+                          height: 350,
+                        ),
+                        isEdit
+                            ? InkWell(
+                                onTap: () async {
+                                  //Update controller
+                                  updateEmployee();
+                                  Map<String, dynamic> map =
+                                      <String, dynamic>{};
+                                  map.addAll({
+                                    "id": idController.text,
+                                    "name": nameController.text,
+                                    "gender": genderController,
+                                    "birthday": birthdayController,
+                                    "email": emailController.text,
+                                    "address": addressController.text,
+                                    "phone": phoneController.text,
+                                    "photoURL": photoURLController,
+                                  });
+
+                                  setState(() {
+                                    employeeServices.updateEmployee(
+                                        widget.email, map);
+                                    for (Map<String, dynamic> employee
+                                        in provider.employeeSource) {
+                                      if (employee.values.elementAt(4) ==
+                                          emailController.text) {
+                                        employee.update(
+                                          "name",
+                                          (value) => nameController.text,
+                                        );
+                                        employee.update(
+                                          "id",
+                                          (value) => idController.text,
+                                        );
+                                        employee.update(
+                                          "address",
+                                          (value) => addressController.text,
+                                        );
+                                        employee.update(
+                                          "email",
+                                          (value) => emailController.text,
+                                        );
+                                        employee.update(
+                                          "phone",
+                                          (value) => phoneController.text,
+                                        );
+                                        employee.update(
+                                          "gender",
+                                          (value) => genderController,
+                                        );
+
+                                        employee.update(
+                                          "birthday",
+                                          (value) => birthdayController,
+                                        );
+                                        employee.update("department",
+                                            (value) => department);
+                                      }
+                                    }
+                                  });
+
+                                  authClass.showSnackBar(
+                                      context, "Add success");
+                                  SchedulerBinding.instance
+                                      ?.addPostFrameCallback((_) {
+                                    Navigator.of(context)
+                                        .pushReplacementNamed(EmployeeLayout);
+                                  });
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 75,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.blueAccent),
+                                  child: Center(
+                                    child: Text(isEdit ? "Update" : "Ok"),
+                                  ),
+                                ),
+                              )
+                            : Container(),
+                      ],
+                    )
+                  ]),
+            ),
+          )
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: const [
+              SizedBox(
+                width: 50,
+                height: 50,
+                child: CircularProgressIndicator(),
+              ),
+            ],
+          );
   }
 
   Widget birthdayButton(double size) {
@@ -430,6 +516,22 @@ class _UserInforPageState extends State<UserInforPage> {
           height: size,
         )
       ],
+    );
+  }
+
+  Widget inputBox2(String text) {
+    return SizedBox(
+      width: 250,
+      height: 40,
+      child: TextFormField(
+          enabled: false,
+          style: const TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            hintText: text,
+            labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
+            enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(width: 1, color: Colors.grey)),
+          )),
     );
   }
 

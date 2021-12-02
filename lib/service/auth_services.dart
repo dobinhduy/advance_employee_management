@@ -1,3 +1,4 @@
+import 'package:advance_employee_management/Employee__Pages/change_password.dart';
 import 'package:advance_employee_management/locator.dart';
 
 import 'package:advance_employee_management/rounting/route_names.dart';
@@ -65,11 +66,32 @@ class AuthClass {
   }
 
   Future<void> logout() async {
+    await _googleSignIn.signOut();
+    await auth.signOut();
+    await storage.delete(key: "token");
+  }
+
+  Future<bool> validateCurrentPassword(
+      String password, String newPassword, BuildContext context) async {
+    bool isSuccess = false;
+    var authCredentials = EmailAuthProvider.credential(
+        email: auth.currentUser!.email!, password: password);
     try {
-      await _googleSignIn.signOut();
-      await auth.signOut();
-      await storage.delete(key: "token");
-    } catch (e) {}
+      auth.currentUser!
+          .reauthenticateWithCredential(authCredentials)
+          .then((value) {
+        auth.currentUser!.updatePassword(newPassword).then((_) {
+          isSuccess = true;
+        }).catchError((error) {
+          isSuccess = false;
+        });
+      }).catchError((err) {
+        isSuccess = false;
+      });
+    } catch (e) {
+      isSuccess = false;
+    }
+    return isSuccess;
   }
 
   Future<void> verifyPhoneNumber(
@@ -112,8 +134,8 @@ class AuthClass {
     try {
       AuthCredential credential = PhoneAuthProvider.credential(
           verificationId: verificationId, smsCode: smsCode);
-      UserCredential userCredential =
-          await auth.signInWithCredential(credential);
+
+      await auth.signInWithCredential(credential);
 
       locator<NavigationService>().globalNavigateTo(AdLayOutRoute, context);
       showSnackBar(context, "Logged in ");
