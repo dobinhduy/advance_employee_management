@@ -94,72 +94,81 @@ class AddProjectPageState extends State<AddProjectPage> {
           title: const Text('New Project'),
           actions: [
             TextButton(
-                onPressed: () {
+                onPressed: () async {
                   List<String> members = <String>[];
+                  bool isExistE1 = true;
+                  bool isExistE2 = true;
+                  bool isExistE3 = true;
                   if (memberID1.text.isNotEmpty) {
-                    members.add(memberID1.text);
+                    isExistE1 = await checkIsExistEmployee(memberID1);
+                    if (isExistE1) {
+                      members.add(memberID1.text);
+                    } else {
+                      isExistE1 = false;
+                    }
                   }
                   if (memberID2.text.isNotEmpty) {
-                    members.add(memberID2.text);
+                    isExistE2 = await checkIsExistEmployee(memberID2);
+                    if (isExistE2) {
+                      members.add(memberID2.text);
+                    } else {
+                      isExistE2 = false;
+                    }
                   }
                   if (memberID3.text.isNotEmpty) {
-                    members.add(memberID3.text);
+                    isExistE3 = await checkIsExistEmployee(memberID3);
+                    if (isExistE3) {
+                      members.add(memberID3.text);
+                    } else {
+                      isExistE3 = false;
+                    }
                   }
-
-                  // if (checkIsExistEmployee(memberID1)) {
-                  //   if (checkIsExistEmployee(memberID2)) {
-                  //     if (checkIsExistEmployee(memberID3)) {
-
-                  //     } else {
-                  //       dialog(DialogType.INFO, "", "Employee 3 is not exist");
-                  //     }
-                  //   } else {
-                  //     dialog(DialogType.INFO, "", "Employee 2 is not exist");
-                  //   }
-                  // } else {
-                  //   dialog(DialogType.INFO, "", "Employee 1 is not exist");
-                  // }
-                  projectService.createProject(
-                      id.text,
-                      projectName.text,
-                      managerIDcontroller,
-                      "${selectedStartDate.toLocal()}".split(' ')[0],
-                      "${selectedEndDate.toLocal()}".split(' ')[0],
-                      desController.text,
-                      members,
-                      departmentName,
-                      "Open",
-                      0);
-                  setState(() {
-                    projectProvider.projectSource.add({
-                      "id": id.text,
-                      "name": projectName.text,
-                      "start": "${selectedStartDate.toLocal()}".split(' ')[0],
-                      "end": "${selectedEndDate.toLocal()}".split(' ')[0],
-                      "status": "Open",
-                      "complete": [0, 100],
-                      "members": members,
-                      "department": departmentName,
-                      "manager": managerIDcontroller,
-                      "description": desController.text,
-                      "action": [id.text, null],
+                  if (isExistE1 && isExistE2 && isExistE3) {
+                    projectService.createProject(
+                        id.text,
+                        projectName.text,
+                        managerIDcontroller,
+                        "${selectedStartDate.toLocal()}".split(' ')[0],
+                        "${selectedEndDate.toLocal()}".split(' ')[0],
+                        desController.text,
+                        members,
+                        departmentName,
+                        "Open",
+                        0);
+                    setState(() {
+                      projectProvider.projectSource.add({
+                        "id": id.text,
+                        "name": projectName.text,
+                        "start": "${selectedStartDate.toLocal()}".split(' ')[0],
+                        "end": "${selectedEndDate.toLocal()}".split(' ')[0],
+                        "status": "Open",
+                        "complete": [0, 100],
+                        "members": members,
+                        "department": departmentName,
+                        "manager": managerIDcontroller,
+                        "description": desController.text,
+                        "action": [id.text, null],
+                      });
                     });
-                  });
-                  departmentService.addProjectID(departmentName, id.text);
-                  authClass.showSnackBar(context, "Add project success");
-                  SchedulerBinding.instance?.addPostFrameCallback((_) {
-                    Navigator.of(context)
-                        .pushReplacementNamed(ProjectPageRoute);
-                  });
-                  notificationService.createNotification(
-                      const Uuid().v4(),
-                      projectName.text,
-                      managerIDcontroller,
-                      managerName,
-                      memberID1.text,
-                      DateTime.now().millisecondsSinceEpoch,
-                      false,
-                      "ADDPROJECT");
+                    departmentService.addProjectID(departmentName, id.text);
+                    authClass.showSnackBar(context, "Add project success");
+                    SchedulerBinding.instance?.addPostFrameCallback((_) {
+                      Navigator.of(context)
+                          .pushReplacementNamed(ProjectPageRoute);
+                    });
+                    notificationService.createNotification(
+                        const Uuid().v4(),
+                        projectName.text,
+                        managerIDcontroller,
+                        managerName,
+                        memberID1.text,
+                        DateTime.now().millisecondsSinceEpoch,
+                        false,
+                        "ADDPROJECT");
+                  } else {
+                    AuthClass().showSnackBar(
+                        context, "Some of employee id are not exist");
+                  }
                 },
                 child: Text('SAVE',
                     style: Theme.of(context)
@@ -239,7 +248,6 @@ class AddProjectPageState extends State<AddProjectPage> {
                                 const SizedBox(
                                   width: 50,
                                 ),
-                                checkExistButton(memberID1)
                               ],
                             ),
                             titlebox("Member 2*"),
@@ -250,7 +258,6 @@ class AddProjectPageState extends State<AddProjectPage> {
                                 const SizedBox(
                                   width: 50,
                                 ),
-                                checkExistButton(memberID2),
                               ],
                             ),
                             titlebox("Member 3*"),
@@ -261,7 +268,6 @@ class AddProjectPageState extends State<AddProjectPage> {
                                 const SizedBox(
                                   width: 50,
                                 ),
-                                checkExistButton(memberID3)
                               ],
                             ),
                           ],
@@ -326,10 +332,17 @@ class AddProjectPageState extends State<AddProjectPage> {
     );
   }
 
-  checkIsExistEmployee(TextEditingController controller) async {
+  Future<bool> checkIsExistEmployee(TextEditingController employeeID) async {
     bool result =
-        await employeeServices.checkExistEmployeebyID(controller.text);
-    return result;
+        await employeeServices.checkExistEmployeebyID(employeeID.text);
+    if (result) {
+      String supervisorID =
+          await employeeServices.getSupervisorID(employeeID.text);
+      if (supervisorID == managerIDcontroller) {
+        return true;
+      }
+    }
+    return false;
   }
 
   Widget checkExistButton(TextEditingController textEditingController) {
@@ -338,7 +351,7 @@ class AddProjectPageState extends State<AddProjectPage> {
         bool result = await employeeServices
             .checkExistEmployeebyID(textEditingController.text);
 
-        if (result == true) {
+        if (result) {
           EmployeeModel employee = await employeeServices
               .getEmployeebyID(textEditingController.text);
           dialog(DialogType.INFO, "Employee exist",

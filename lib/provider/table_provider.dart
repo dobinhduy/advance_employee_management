@@ -1,8 +1,8 @@
+import 'package:advance_employee_management/admin_pages/employee_information_page.dart';
 import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/models/department.dart';
 import 'package:advance_employee_management/models/employee.dart';
 import 'package:advance_employee_management/models/project.dart';
-import 'package:advance_employee_management/pages/Admin_Employee/employee_information_page.dart';
 // ignore: unused_import
 import 'package:advance_employee_management/provider/app_provider.dart';
 import 'package:advance_employee_management/service/auth_services.dart';

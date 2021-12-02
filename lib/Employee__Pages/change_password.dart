@@ -139,11 +139,24 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Widget saveButton() {
     return InkWell(
       onTap: () async {
-        print(currentPassword.text);
-        bool result = await AuthClass().validateCurrentPassword(
-            currentPassword.text, newPassword.text, context);
-        print(result);
-        if (result) {}
+        if (newPassword.text == confirmNewPassword.text) {
+          if (validPassword(newPassword.text)) {
+            bool result = await AuthClass().validateCurrentPassword(
+                currentPassword.text, newPassword.text, context);
+            if (result) {
+              AuthClass().showSnackBar(
+                  context, "Change password success. Please login again!!");
+            } else {
+              AuthClass().showSnackBar(
+                  context, "Password is not correct. Please try again!!");
+            }
+          } else {
+            AuthClass().showSnackBar(
+                context, "Password is not safety. Please try another password");
+          }
+        } else {
+          AuthClass().showSnackBar(context, "Password is not match");
+        }
       },
       child: Container(
         width: MediaQuery.of(context).size.width / 4.5,
@@ -159,6 +172,13 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         ),
       ),
     );
+  }
+
+  bool validPassword(String value) {
+    String pattern =
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+    RegExp regExp = RegExp(pattern);
+    return regExp.hasMatch(value);
   }
 
   Widget cancleButton() {

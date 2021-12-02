@@ -1,11 +1,13 @@
 // ignore_for_file: unrelated_type_equality_checks
 
+import 'package:advance_employee_management/admin_pages/employee_information_page.dart';
+import 'package:advance_employee_management/admin_pages/page_header.dart';
 import 'package:advance_employee_management/models/employee.dart';
-import 'package:advance_employee_management/pages/Admin_Employee/employee_information_page.dart';
-import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
+import 'package:advance_employee_management/service/notification_service.dart';
+import 'package:advance_employee_management/service/project_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +26,9 @@ class _EmployeeOfManagerPageState extends State<EmployeeOfManagerPage> {
   bool loading = true;
   String email = AuthClass().user()!;
   EmployeeServices employeeServices = EmployeeServices();
+  ProjectService projectService = ProjectService();
   List<EmployeeModel> employeeOfManager = <EmployeeModel>[];
+  NotificationService notificationService = NotificationService();
   String id = "";
 
   List<Map<String, dynamic>> employeeOfManagerSource = <Map<String, dynamic>>[];
@@ -261,8 +265,14 @@ class _EmployeeOfManagerPageState extends State<EmployeeOfManagerPage> {
         setState(() {});
       },
       btnOkOnPress: () {
-        provider.delectEmployee(provider.selecteds);
+        for (var employee in provider.selecteds) {
+          employeeServices.deleteEmployee(employee["email"]);
+          projectService.removeMemberwithMemberID(employee["id"]);
+          notificationService.removeNotificationwithMemberID(employee["id"]);
+        }
+
         setState(() {
+          provider.delectEmployee(provider.selecteds);
           provider.isSelect == false;
         });
       },

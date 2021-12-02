@@ -1,6 +1,5 @@
-import 'package:advance_employee_management/pages/PageHeader/page_header.dart';
-import 'package:advance_employee_management/pages/admin_department_page/add_department_dialog.dart';
-
+import 'package:advance_employee_management/admin_pages/add_department_dialog.dart';
+import 'package:advance_employee_management/admin_pages/page_header.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/department_service.dart';

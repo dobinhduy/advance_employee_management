@@ -52,6 +52,18 @@ class NotificationService {
     });
   }
 
+  void removeNotificationwithMemberID(String memberID) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("receiverid", isEqualTo: memberID)
+        .get();
+    List<QueryDocumentSnapshot> docSnapshots = querySnapshot.docs;
+    for (QueryDocumentSnapshot docSnapshot in docSnapshots) {
+      DocumentReference docref = docSnapshot.reference;
+      await docref.delete();
+    }
+  }
+
   void deleteNotification(String notificationid) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)

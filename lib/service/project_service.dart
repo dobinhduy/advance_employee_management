@@ -87,6 +87,18 @@ class ProjectService {
     });
   }
 
+  void removeMemberwithMemberID(String memberID) async {
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection(collection).get();
+    List<QueryDocumentSnapshot> docSnapshots = querySnapshot.docs;
+    for (QueryDocumentSnapshot docSnapshot in docSnapshots) {
+      DocumentReference docref = docSnapshot.reference;
+      docref.update({
+        'members': FieldValue.arrayRemove([memberID])
+      });
+    }
+  }
+
   void deleteProject(String id) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)

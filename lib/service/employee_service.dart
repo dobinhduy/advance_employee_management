@@ -128,7 +128,9 @@ class EmployeeServices {
     try {
       DocumentSnapshot doc = querySnapshot.docs[0];
       supervisorID = (doc.data() as dynamic)['supervisorid'];
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
     return supervisorID;
   }
 
