@@ -191,11 +191,11 @@ class AddProjectPageState extends State<AddProjectPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          titlebox("Project Title*"),
+                          titlebox("Project Title *"),
                           textItem("Project Name", projectName, false, true),
-                          titlebox("Project ID*"),
+                          titlebox("Project ID *"),
                           textItem("Project ID", id, false, true),
-                          titlebox("Start Day*"),
+                          titlebox("Start Day *"),
                           Row(
                             children: [
                               textItem(
@@ -213,7 +213,7 @@ class AddProjectPageState extends State<AddProjectPage> {
                                       const Icon(Icons.calendar_today_outlined))
                             ],
                           ),
-                          titlebox("End Day*"),
+                          titlebox("End Day *"),
                           Row(
                             children: [
                               textItem(
@@ -240,7 +240,7 @@ class AddProjectPageState extends State<AddProjectPage> {
                           children: [
                             titlebox("Department"),
                             selectDepartment(),
-                            titlebox("Member 1*"),
+                            titlebox("Member 1"),
                             Row(
                               children: [
                                 textItem(
@@ -250,7 +250,7 @@ class AddProjectPageState extends State<AddProjectPage> {
                                 ),
                               ],
                             ),
-                            titlebox("Member 2*"),
+                            titlebox("Member 2"),
                             Row(
                               children: [
                                 textItem(
@@ -260,7 +260,7 @@ class AddProjectPageState extends State<AddProjectPage> {
                                 ),
                               ],
                             ),
-                            titlebox("Member 3*"),
+                            titlebox("Member 3"),
                             Row(
                               children: [
                                 textItem(
@@ -401,22 +401,26 @@ class AddProjectPageState extends State<AddProjectPage> {
   }
 
   Widget description(TextEditingController desciption) {
-    return SizedBox(
-      height: 300,
+    return Container(
+      height: 500,
       width: 400,
-      child: TextField(
+      decoration: BoxDecoration(
+        color: Colors.white12,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: TextFormField(
         controller: desciption,
         maxLines: 7,
-        style: const TextStyle(color: Colors.grey, fontSize: 17),
+        style: const TextStyle(color: Colors.black, fontSize: 17),
         decoration: const InputDecoration(
+          border:
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.teal)),
           hintText: "Description",
-          fillColor: Color(0xFFFFEBEE),
           hintStyle: TextStyle(
             color: Colors.grey,
             fontSize: 17,
           ),
-          filled: true,
-          contentPadding: EdgeInsets.only(left: 20, right: 20),
+          contentPadding: EdgeInsets.all(10),
         ),
       ),
     );

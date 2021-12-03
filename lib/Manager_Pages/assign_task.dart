@@ -35,7 +35,7 @@ class _AssignTaskState extends State<AssignTask> {
       title: const Text("Assign Task"),
       content: SizedBox(
         width: 500,
-        height: 600,
+        height: 500,
         child: Column(
           children: <Widget>[
             SizedBox(
@@ -55,17 +55,17 @@ class _AssignTaskState extends State<AssignTask> {
             ),
             Row(
               children: [
-                const Text("Percented:"),
+                const Text("Percent of project: "),
                 const SizedBox(
                   width: 10,
                 ),
                 SizedBox(
-                  width: 60,
+                  width: 50,
                   height: 30,
                   child: TextField(
                     autofocus: true,
                     decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.all(2),
+                        contentPadding: EdgeInsets.only(top: 2, left: 5),
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal))),
                     onChanged: (value) {
@@ -73,11 +73,10 @@ class _AssignTaskState extends State<AssignTask> {
                     },
                   ),
                 ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                const Text("DeadLine "),
+                const SizedBox(
+                  width: 70,
+                ),
+                const Text("DeadLine: "),
                 const SizedBox(
                   width: 10,
                 ),
@@ -95,11 +94,16 @@ class _AssignTaskState extends State<AssignTask> {
                       });
                     }),
               ],
-            )
+            ),
           ],
         ),
       ),
       actions: <Widget>[
+        ElevatedButton(
+            child: const Text("CANCEL"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }),
         ElevatedButton(
             child: const Text('Assign'),
             onPressed: () async {
@@ -123,11 +127,6 @@ class _AssignTaskState extends State<AssignTask> {
                   "ASSIGNTASK");
 
               AuthClass().showSnackBar(context, "Assign Success");
-              Navigator.of(context).pop();
-            }),
-        ElevatedButton(
-            child: const Text("CANCEL"),
-            onPressed: () {
               Navigator.of(context).pop();
             }),
       ],

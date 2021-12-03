@@ -8,7 +8,6 @@ import 'package:advance_employee_management/admin_pages/add_user_page.dart';
 import 'package:advance_employee_management/admin_pages/department_page.dart';
 import 'package:advance_employee_management/admin_pages/employee_page.dart';
 import 'package:advance_employee_management/admin_pages/home_page.dart';
-import 'package:advance_employee_management/authentication/phone_auth.dart';
 import 'package:advance_employee_management/authentication/recover_pass_page.dart';
 import 'package:advance_employee_management/authentication/sign_in_page.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
@@ -22,8 +21,6 @@ PageRoute generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case LonginRoute:
       return _getPageRoute(const SignInPage());
-    case PhoneAuthLog:
-      return _getPageRoute(const PhoneAuth());
     case MainHomeP:
       return _getPageRoute(const HomePage());
     case RecoverPassRoute:

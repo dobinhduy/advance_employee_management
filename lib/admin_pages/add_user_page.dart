@@ -60,7 +60,10 @@ class _AddUserPageState extends State<AddUserPage> {
 
   getAllDepartmentName() async {
     listDepartment = await departmentService.getAllDepartmentName();
-    setState(() {});
+
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   _selectDate(BuildContext context) async {
@@ -83,16 +86,18 @@ class _AddUserPageState extends State<AddUserPage> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      fisrtname.clear();
-      lastname.clear();
-      password.clear();
-      address.clear();
-      id.clear();
-      phone.clear();
-      email.clear();
-      _imageURL = "";
-    });
+    if (mounted) {
+      setState(() {
+        fisrtname.clear();
+        lastname.clear();
+        password.clear();
+        address.clear();
+        id.clear();
+        phone.clear();
+        email.clear();
+        _imageURL = "";
+      });
+    }
   }
 
   @override
@@ -101,30 +106,20 @@ class _AddUserPageState extends State<AddUserPage> {
     deplay();
     return timeup == true
         ? Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: const Text("Add New Employee"),
+              backgroundColor: Colors.purpleAccent,
+            ),
             body: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(
-                      color: Colors.deepPurpleAccent,
-                    ),
-                    height: 70,
-                    child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                      child: Text(
-                        "Add New User",
-                        style: TextStyle(color: Colors.white, fontSize: 30),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height - 70,
                     color: Colors.white,
-                    padding: const EdgeInsets.only(left: 40),
+                    padding: const EdgeInsets.only(left: 55),
                     child: Row(
                       children: <Widget>[
                         Column(
@@ -320,10 +315,12 @@ class _AddUserPageState extends State<AddUserPage> {
         color: Colors.deepPurpleAccent,
       ),
       onChanged: (String? newValue) {
-        setState(() {
-          dropdownDeName = newValue!;
-          departmentName = dropdownDeName!;
-        });
+        if (mounted) {
+          setState(() {
+            dropdownDeName = newValue!;
+            departmentName = dropdownDeName!;
+          });
+        }
       },
       items: listDepartment.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
@@ -345,10 +342,12 @@ class _AddUserPageState extends State<AddUserPage> {
         color: Colors.deepPurpleAccent,
       ),
       onChanged: (String? newValue) {
-        setState(() {
-          dropDownRole = newValue!;
-          role = dropDownRole;
-        });
+        if (mounted) {
+          setState(() {
+            dropDownRole = newValue!;
+            role = dropDownRole;
+          });
+        }
       },
       items: <String>[
         'Software developer',
@@ -405,11 +404,13 @@ class _AddUserPageState extends State<AddUserPage> {
           activeColor: Colors.red,
           value: female,
           onChanged: (bool? value) {
-            setState(() {
-              female = true;
-              male = false;
-              gender = "Female";
-            });
+            if (mounted) {
+              setState(() {
+                female = true;
+                male = false;
+                gender = "Female";
+              });
+            }
           },
         ),
         const SizedBox(
@@ -424,11 +425,13 @@ class _AddUserPageState extends State<AddUserPage> {
           activeColor: Colors.red,
           value: male,
           onChanged: (bool? value) {
-            setState(() {
-              male = true;
-              female = false;
-              gender = "Male";
-            });
+            if (mounted) {
+              setState(() {
+                male = true;
+                female = false;
+                gender = "Male";
+              });
+            }
           },
         ),
       ],
@@ -484,17 +487,9 @@ class _AddUserPageState extends State<AddUserPage> {
     return ElevatedButton(
       style: raisedButtonStyle,
       onPressed: () {
-        setState(() {
-          fisrtname.clear();
-          lastname.clear();
-          password.clear();
-          address.clear();
-          id.clear();
-          phone.clear();
-          email.clear();
-        });
+        Navigator.pop(context);
       },
-      child: const Text('Clear'),
+      child: const Text('Go Back'),
     );
   }
 

@@ -151,7 +151,7 @@ class _UserInforPageState extends State<UserInforPage> {
         ? Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              backgroundColor: Colors.blueAccent,
+              backgroundColor: Colors.purpleAccent,
               title: const Text("Employee Information"),
             ),
             body: SingleChildScrollView(

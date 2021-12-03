@@ -36,6 +36,7 @@ class _AddMemberState extends State<AddMember> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      insetPadding: const EdgeInsets.symmetric(vertical: 250),
       title: const Text("Add Member"),
       content: SizedBox(
         child: Row(
@@ -67,6 +68,11 @@ class _AddMemberState extends State<AddMember> {
         ),
       ),
       actions: <Widget>[
+        ElevatedButton(
+            child: const Text("CANCEL"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }),
         ElevatedButton(
             onPressed: () async {
               DateTime now = DateTime.now();
@@ -114,11 +120,6 @@ class _AddMemberState extends State<AddMember> {
               "Add",
               style: TextStyle(color: Colors.white, fontSize: 20),
             )),
-        ElevatedButton(
-            child: const Text("CANCEL"),
-            onPressed: () {
-              Navigator.of(context).pop();
-            }),
       ],
     );
   }

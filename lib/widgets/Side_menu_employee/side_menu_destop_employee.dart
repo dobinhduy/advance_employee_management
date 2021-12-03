@@ -5,7 +5,7 @@ import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:advance_employee_management/widgets/navbar/navbar_logo_employee.dart';
-import 'package:advance_employee_management/widgets/slide_menu/side_menu_items.dart';
+import 'package:advance_employee_management/widgets/slide_menu_admin/side_menu_items.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +24,9 @@ class SideMenuEmployeeDesktop extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-                color: Colors.lightBlue, offset: Offset(3, 5), blurRadius: 10)
+                color: Colors.purpleAccent,
+                offset: Offset(3, 5),
+                blurRadius: 10)
           ]),
       width: 220,
       child: Column(

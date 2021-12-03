@@ -3,7 +3,9 @@
 import 'package:advance_employee_management/admin_pages/employee_information_page.dart';
 import 'package:advance_employee_management/admin_pages/page_header.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
+import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:advance_employee_management/service/notification_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -11,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:responsive_table/ResponsiveDatatable.dart';
+
+import '../locator.dart';
 
 class EmployeePage extends StatefulWidget {
   const EmployeePage({Key? key}) : super(key: key);
@@ -52,16 +56,32 @@ class _EmployeePageState extends State<EmployeePage> {
                 selecteds: employeeProvider.selecteds,
                 showSelect: employeeProvider.showSelect,
                 autoHeight: false,
-                title: ElevatedButton.icon(
-                  onPressed: () {
-                    dialog(
-                      DialogType.INFO,
-                      "",
-                      "Are your sure ?",
-                    );
-                  },
-                  icon: const Icon(Icons.delete_forever),
-                  label: const Text("DELETE"),
+                title: Row(
+                  children: [
+                    ElevatedButton.icon(
+                        onPressed: () {
+                          locator<NavigationService>()
+                              .navigateTo(AddUserLayout);
+                        },
+                        icon: const Icon(
+                          Icons.delete,
+                        ),
+                        label: const Text("ADD EMPLOYEE")),
+                    const SizedBox(
+                      width: 30,
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        dialog(
+                          DialogType.INFO,
+                          "",
+                          "Are your sure ?",
+                        );
+                      },
+                      icon: const Icon(Icons.delete_forever),
+                      label: const Text("DELETE"),
+                    ),
+                  ],
                 ),
                 actions: [
                   if (employeeProvider.isSearch)

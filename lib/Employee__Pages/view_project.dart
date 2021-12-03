@@ -49,7 +49,9 @@ class _ViewProjectState extends State<ViewProject> {
   bool timeout = false;
   getEmployeeID() async {
     employeeID = await employeeServices.getEmployeeIDbyEmail(email);
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   getMemberName(List<dynamic> members) async {
@@ -57,7 +59,9 @@ class _ViewProjectState extends State<ViewProject> {
     for (var item in members) {
       memberName.add(await employeeServices.getEmployeeNamebyID(item));
     }
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   void deplay() {
@@ -70,14 +74,15 @@ class _ViewProjectState extends State<ViewProject> {
     tasks = await taskService.getAllTask(
         widget.projectid, await employeeServices.getEmployeeIDbyEmail(email));
 
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
   void initState() {
     super.initState();
     members = widget.member;
-    // getEmployeeID();
     getAllTask();
     getMemberName(members);
   }
@@ -305,17 +310,5 @@ class _ViewProjectState extends State<ViewProject> {
             color: Colors.grey, fontSize: 17, fontWeight: FontWeight.normal),
       ),
     );
-  }
-
-  AwesomeDialog dialog(DialogType type, String title, String description) {
-    return AwesomeDialog(
-      context: context,
-      width: 600,
-      dialogType: type,
-      animType: AnimType.BOTTOMSLIDE,
-      title: title,
-      desc: description,
-      btnOkOnPress: () {},
-    )..show();
   }
 }

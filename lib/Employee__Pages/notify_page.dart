@@ -59,7 +59,11 @@ class _NotificationPageState extends State<NotificationPage> {
     deplay();
     return timeout
         ? Scaffold(
-            appBar: AppBar(title: const Text('Notification')),
+            appBar: AppBar(
+              title: const Text('Notification'),
+              backgroundColor: Colors.purpleAccent,
+              automaticallyImplyLeading: false,
+            ),
             body: SingleChildScrollView(
               child: Center(
                 child: Column(
@@ -69,7 +73,8 @@ class _NotificationPageState extends State<NotificationPage> {
                     const SizedBox(height: 20),
                     const Text("Assign Project"),
                     const SizedBox(height: 20),
-                    for (NotificationModel notify in notifiesAddProject!)
+                    for (NotificationModel notify
+                        in notifiesAddProject!.reversed)
                       Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 20),
@@ -79,7 +84,8 @@ class _NotificationPageState extends State<NotificationPage> {
                     const SizedBox(height: 20),
                     const Text("Assign Task"),
                     const SizedBox(height: 20),
-                    for (NotificationModel notify in notifiesAssignTask!)
+                    for (NotificationModel notify
+                        in notifiesAssignTask!.reversed)
                       Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 20),
@@ -135,13 +141,13 @@ class _NotificationPageState extends State<NotificationPage> {
               Row(
                 children: [
                   titlebox("Message: "),
-                  titlebox("You was assign a new task in project" +
+                  titlebox("You was assigned a new task in project " +
                       notify.projectname),
                 ],
               ),
               Row(
                 children: [
-                  titlebox("Send at: " +
+                  titlebox("Send at:      " +
                       DateFormat("dd/MM/yyyy,HH:mm").format(
                           DateTime.fromMillisecondsSinceEpoch(notify.sendday))),
                   const SizedBox(

@@ -67,6 +67,7 @@ class _EmployeeInformationState extends State<EmployeeInformation> {
         : Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
+              automaticallyImplyLeading: false,
               backgroundColor: Colors.purpleAccent,
               title: const Text("Employee Data"),
             ),

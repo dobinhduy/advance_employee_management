@@ -21,6 +21,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: const Text("Change Password"),
         ),
         body: Container(
@@ -194,7 +195,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Widget cancleButton() {
     return InkWell(
       hoverColor: Colors.blueAccent[700],
-      onTap: () async {},
+      onTap: () async {
+        Navigator.pop(context);
+      },
       child: Container(
         width: MediaQuery.of(context).size.width / 4.5,
         height: 30,

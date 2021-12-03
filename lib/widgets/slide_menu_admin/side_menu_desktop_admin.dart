@@ -5,7 +5,7 @@ import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:advance_employee_management/widgets/navbar/navbar_logo_admin.dart';
-import 'package:advance_employee_management/widgets/slide_menu/side_menu_items.dart';
+import 'package:advance_employee_management/widgets/slide_menu_admin/side_menu_items.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -58,15 +58,6 @@ class SildeMenuAdminDesktop extends StatelessWidget {
               onTap: () {
                 appProvider.changeCurrentPage(DisplayedPage.DEPARTMENT);
                 locator<NavigationService>().navigateTo(DepartmentLayout);
-              }),
-          SileMenuItemDesktop(
-              active: appProvider.currentPage == DisplayedPage.ADD,
-              text: "Add",
-              icon: Icons.add_box_outlined,
-              onTap: () {
-                appProvider.changeCurrentPage(DisplayedPage.ADD);
-
-                locator<NavigationService>().navigateTo(AddUserLayout);
               }),
           const SizedBox(
             height: 270,
