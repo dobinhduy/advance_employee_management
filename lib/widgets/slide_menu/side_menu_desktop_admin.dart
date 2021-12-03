@@ -78,7 +78,7 @@ class SildeMenuAdminDesktop extends StatelessWidget {
                 text: "Log out",
                 icon: Icons.logout,
                 onTap: () {
-                  dialog(DialogType.QUESTION, "Are you sure?", "", context,
+                  dialog(DialogType.QUESTION, "Are you sure ?", "", context,
                       appProvider);
                 }),
           ),

@@ -1,8 +1,11 @@
 import 'package:advance_employee_management/Manager_Pages/add_member.dart';
+import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/department_service.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
+import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +49,8 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
   DepartmentService departmentService = DepartmentService();
   TextEditingController percented = TextEditingController();
   TextEditingController taskDescription = TextEditingController();
+  ProjectService projectService = ProjectService();
+  EmployeeServices employeeServices = EmployeeServices();
 
   late TextEditingController proName;
   late TextEditingController proID;
@@ -59,6 +64,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
   bool isFinish = false;
   DateTime selectedStartDate = DateTime.now();
   DateTime selectedEndDate = DateTime.now();
+  bool loading = true;
 
   List<dynamic> members = [];
   List<dynamic> memberName = [];
@@ -76,6 +82,13 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
   bool isEditDes = false;
   bool isEditStatus = false;
   bool isEditComplete = false;
+  isLoading() {
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        loading = false;
+      });
+    });
+  }
 
   _selectEndDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -102,6 +115,11 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
             projectid: projectid,
           );
         });
+  }
+
+  getManagerName() async {
+    managerName = await employeeServices.getEmployeeNamebyID(widget.managerid);
+    setState(() {});
   }
 
   Future<void> _dialogAddMember(BuildContext context) {
@@ -153,6 +171,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
     members = widget.member;
     status = widget.status;
     getMemberName(members);
+    getManagerName();
     if (widget.status == "Open") {
       setState(() {
         isOpen == true;
@@ -177,379 +196,417 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
 
   @override
   Widget build(BuildContext context) {
+    isLoading();
     TableProvider projectProvider = Provider.of<TableProvider>(
       context,
     );
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.purpleAccent[400],
-          title: const Text('Project Information'),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 50),
-            child: Column(
-              children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Column(
+    return loading == false
+        ? Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.purpleAccent[400],
+              title: const Text('Project Information'),
+            ),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 40, horizontal: 50),
+                child: Column(
+                  children: <Widget>[
+                    Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        titlebox("Project Title*"),
-                        textItem("Project Name", proName, false, false),
-                        titlebox("Project ID*"),
-                        textItem("Project ID", proID, false, false),
-                        titlebox("Start Day*"),
-                        Row(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            textItem(start.text, start, false, false),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            isEditStart == true
-                                ? IconButton(
-                                    onPressed: () => _selectStartDate(context),
-                                    icon: const Icon(
-                                        Icons.calendar_today_outlined))
-                                : Container(
-                                    width: 40,
-                                  ),
-                          ],
-                        ),
-                        titlebox("End Day*"),
-                        Row(
-                          children: [
-                            textItem(end.text, end, false, false),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            isEditEnd == true
-                                ? IconButton(
-                                    onPressed: () => _selectEndDate(context),
-                                    icon: const Icon(
-                                        Icons.calendar_today_outlined))
-                                : Container(
-                                    width: 40,
-                                  ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            titlebox("Department"),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            titlebox(departmentName)
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            titlebox("Status"),
-                            const SizedBox(
-                              width: 25,
-                            ),
-                            isEditStatus == true
-                                ? statusButton()
-                                : Text(
-                                    status,
-                                    style: const TextStyle(
-                                        color: Colors.orangeAccent,
-                                        fontSize: 18),
-                                  )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            titlebox("Complete"),
-                            const SizedBox(
-                              width: 40,
-                            ),
-                            isEditComplete == true
-                                ? Container(
-                                    padding: const EdgeInsets.only(
-                                        bottom: 12, left: 10),
-                                    width: 30,
-                                    height: 40,
-                                    child: TextField(
-                                        controller: complete,
-                                        decoration: const InputDecoration(
-                                          contentPadding:
-                                              EdgeInsets.only(bottom: 5),
-                                          hintStyle: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 17,
-                                          ),
-                                        )),
-                                  )
-                                : Text(
-                                    complete.text,
-                                    style: const TextStyle(fontSize: 18),
-                                  ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            const Text(
-                              "/100",
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ],
-                        ),
-                        titlebox("Members"),
-                        Column(children: [
-                          Row(
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  for (var member in members)
-                                    titlebox2("ID: " + member),
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  for (var name in memberName)
-                                    titlebox2("   Name: " + name),
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  for (int i = 0; i < members.length; i++)
-                                    Container(
-                                      padding: const EdgeInsets.only(left: 10),
-                                      child: Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 10, bottom: 10),
-                                            child: TextButton.icon(
-                                                onPressed: () async {
-                                                  await _dialogCall(context,
-                                                      members[i], proID.text);
-                                                },
-                                                icon: const Icon(
-                                                    Icons.assessment),
-                                                label:
-                                                    const Text("Assign Task")),
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 10, bottom: 10),
-                                            child: TextButton.icon(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    ProjectService
-                                                        projectService =
-                                                        ProjectService();
-                                                    projectService.removeMember(
-                                                        members[i], proID.text);
-                                                    members.remove(members[i]);
-                                                    memberName
-                                                        .remove(memberName[i]);
-                                                  });
-                                                },
-                                                icon: const Icon(Icons.delete),
-                                                label: const Text("Delete")),
-                                          ),
-                                        ],
+                            titlebox("Project Title*"),
+                            textItem("Project Name", proName, false, false),
+                            titlebox("Project ID*"),
+                            textItem("Project ID", proID, false, false),
+                            titlebox("Start Day*"),
+                            Row(
+                              children: [
+                                textItem(start.text, start, false, false),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                isEditStart == true
+                                    ? IconButton(
+                                        onPressed: () =>
+                                            _selectStartDate(context),
+                                        icon: const Icon(
+                                            Icons.calendar_today_outlined))
+                                    : Container(
+                                        width: 40,
                                       ),
-                                    ),
+                              ],
+                            ),
+                            titlebox("End Day*"),
+                            Row(
+                              children: [
+                                textItem(end.text, end, false, false),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                isEditEnd == true
+                                    ? IconButton(
+                                        onPressed: () =>
+                                            _selectEndDate(context),
+                                        icon: const Icon(
+                                            Icons.calendar_today_outlined))
+                                    : Container(
+                                        width: 40,
+                                      ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                titlebox("Department"),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                titlebox(departmentName)
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                titlebox("Status"),
+                                const SizedBox(
+                                  width: 25,
+                                ),
+                                isEditStatus == true
+                                    ? statusButton()
+                                    : Text(
+                                        status,
+                                        style: const TextStyle(
+                                            color: Colors.orangeAccent,
+                                            fontSize: 18),
+                                      )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                titlebox("Complete"),
+                                const SizedBox(
+                                  width: 40,
+                                ),
+                                Text(
+                                  complete.text,
+                                  style: const TextStyle(fontSize: 18),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                const Text(
+                                  "/100",
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+                            titlebox("Members"),
+                            Column(children: [
+                              Row(
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      for (int i = 1; i <= members.length; i++)
+                                        titlebox2(i.toString() + ". "),
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      for (var member in members)
+                                        titlebox2("ID: " + member),
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      for (var name in memberName)
+                                        titlebox2("   Name: " + name),
+                                    ],
+                                  ),
+                                  isEdit == false
+                                      ? Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            for (int i = 0;
+                                                i < members.length;
+                                                i++)
+                                              Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10),
+                                                child: Row(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 10,
+                                                              bottom: 10),
+                                                      child: TextButton.icon(
+                                                          onPressed: () async {
+                                                            await _dialogCall(
+                                                                context,
+                                                                members[i],
+                                                                proID.text);
+                                                          },
+                                                          icon: const Icon(
+                                                              Icons.assessment),
+                                                          label: const Text(
+                                                              "Assign Task")),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 10,
+                                                              bottom: 10),
+                                                      child: TextButton.icon(
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              ProjectService
+                                                                  projectService =
+                                                                  ProjectService();
+                                                              projectService
+                                                                  .removeMember(
+                                                                      members[
+                                                                          i],
+                                                                      proID
+                                                                          .text);
+                                                              members.remove(
+                                                                  members[i]);
+                                                              memberName.remove(
+                                                                  memberName[
+                                                                      i]);
+                                                            });
+                                                          },
+                                                          icon: const Icon(
+                                                              Icons.delete),
+                                                          label: const Text(
+                                                              "Delete")),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                          ],
+                                        )
+                                      : Container(),
                                 ],
                               ),
-                            ],
-                          ),
-                        ]),
+                            ]),
+                            isEdit == false
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      TextButton.icon(
+                                          onPressed: () {
+                                            setState(() {
+                                              _dialogAddMember(context);
+                                            });
+                                          },
+                                          icon: const Icon(Icons.add),
+                                          label: const Text("Add member"))
+                                    ],
+                                  )
+                                : Container()
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 150,
+                        ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            TextButton.icon(
+                            IconButton(
                                 onPressed: () {
                                   setState(() {
-                                    _dialogAddMember(context);
+                                    isEdit = !isEdit;
+                                    isEditDes = !isEditDes;
+                                    isEditEnd = !isEditEnd;
+                                    isEditStart = !isEditStart;
+                                    isEditStatus = !isEditStatus;
+                                    isEditComplete = !isEditComplete;
                                   });
                                 },
-                                icon: const Icon(Icons.add),
-                                label: const Text("Add member"))
+                                icon: isEdit == false
+                                    ? const Icon(Icons.edit,
+                                        color: Colors.blue, size: 28)
+                                    : const Icon(
+                                        Icons.edit,
+                                        color: Colors.red,
+                                        size: 28,
+                                      )),
                           ],
                         )
                       ],
                     ),
-                    const SizedBox(
-                      width: 200,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                    Row(
                       children: [
-                        IconButton(
-                            onPressed: () {
-                              setState(() {
-                                isEdit = !isEdit;
-                                isEditDes = !isEditDes;
-                                isEditEnd = !isEditEnd;
-                                isEditStart = !isEditStart;
-                                isEditStatus = !isEditStatus;
-                                isEditComplete = !isEditComplete;
-                              });
-                            },
-                            icon: isEdit == false
-                                ? const Icon(Icons.edit,
-                                    color: Colors.blue, size: 28)
-                                : const Icon(
-                                    Icons.edit,
-                                    color: Colors.red,
-                                    size: 28,
-                                  )),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            titlebox("Description*"),
+                            const SizedBox(height: 10),
+                            isEditDes == true
+                                ? descriptionProject(description, true)
+                                : descriptionProject(description, false),
+                          ],
+                        ),
+                        Column(
+                          children: const [
+                            SizedBox(
+                              width: 100,
+                            )
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.only(left: 200),
+                              child: Row(
+                                children: [
+                                  TextButton.icon(
+                                      onPressed: () {
+                                        projectService
+                                            .deleteProject(proID.text);
+
+                                        departmentService.removeProject(
+                                            departmentName, proID.text);
+                                        for (Map<String, dynamic> project
+                                            in projectProvider.projectSource) {
+                                          if (project.values.elementAt(0) ==
+                                              proID.text) {
+                                            setState(() {
+                                              projectProvider.projectSource
+                                                  .remove(project);
+                                            });
+                                          }
+                                        }
+                                        AuthClass().showSnackBar(
+                                            context, "Delete Success");
+                                        Navigator.pop(context);
+                                      },
+                                      icon: const Icon(Icons.delete),
+                                      label: const Text("Delete")),
+                                  TextButton.icon(
+                                      onPressed: () {
+                                        ProjectService projectService =
+                                            ProjectService();
+                                        Map<String, dynamic> map =
+                                            <String, dynamic>{};
+                                        map.addAll({
+                                          "id": proID.text,
+                                          "name": proName.text,
+                                          "start": start.text,
+                                          "end": end.text,
+                                          "status": status,
+                                          "complete": int.parse(complete.text),
+                                          "members": members,
+                                          "manager": widget.managerid,
+                                          "department": departmentName,
+                                          "description": description.text,
+                                        });
+                                        projectService.updateProject(
+                                            proID.text, map);
+                                        setState(() {
+                                          for (Map<String, dynamic> project
+                                              in projectProvider
+                                                  .projectSource) {
+                                            if (project.values.elementAt(0) ==
+                                                proID.text) {
+                                              project.update(
+                                                  "id", (value) => proID.text);
+                                              project.update("name",
+                                                  (value) => proName.text);
+                                              project.update("start",
+                                                  (value) => start.text);
+                                              project.update(
+                                                  "end", (value) => end.text);
+                                              project.update(
+                                                  "status", (value) => status);
+                                              project.update(
+                                                  "complete",
+                                                  (value) => [
+                                                        int.parse(
+                                                            complete.text),
+                                                        100
+                                                      ]);
+                                              project.update("members",
+                                                  (value) => members);
+                                              project.update("manager",
+                                                  (value) => widget.managerid);
+                                              project.update("department",
+                                                  (value) => departmentName);
+                                              project.update("description",
+                                                  (value) => description.text);
+                                              project.update(
+                                                  "action",
+                                                  (value) =>
+                                                      [proID.text, null]);
+                                            }
+                                          }
+                                        });
+                                        dialog(DialogType.INFO, "",
+                                            "Update Success");
+                                        locator<NavigationService>()
+                                            .navigateTo(ProjectPageRoute);
+                                      },
+                                      icon: const Icon(Icons.update),
+                                      label: const Text("Update")),
+                                ],
+                              ),
+                            )
+                          ],
+                        )
                       ],
                     )
                   ],
                 ),
-                Row(
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        titlebox("Description*"),
-                        const SizedBox(height: 10),
-                        isEditDes == true
-                            ? descriptionProject(description, true)
-                            : descriptionProject(description, false),
-                      ],
-                    ),
-                    Column(
-                      children: const [
-                        SizedBox(
-                          width: 100,
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(left: 200),
-                          child: Row(
-                            children: [
-                              TextButton.icon(
-                                  onPressed: () {
-                                    ProjectService projectService =
-                                        ProjectService();
-                                    DepartmentService departmentService =
-                                        DepartmentService();
-
-                                    projectService.deleteProject(proID.text);
-
-                                    departmentService.removeProject(
-                                        departmentName, proID.text);
-                                    for (Map<String, dynamic> project
-                                        in projectProvider.projectSource) {
-                                      if (project.values.elementAt(0) ==
-                                          proID.text) {
-                                        setState(() {
-                                          projectProvider.projectSource
-                                              .remove(project);
-                                        });
-                                      }
-                                    }
-                                    AuthClass().showSnackBar(
-                                        context, "Delete Success");
-                                    Navigator.pop(context);
-                                  },
-                                  icon: const Icon(Icons.delete),
-                                  label: const Text("Delete")),
-                              TextButton.icon(
-                                  onPressed: () {
-                                    ProjectService projectService =
-                                        ProjectService();
-                                    Map<String, dynamic> map =
-                                        <String, dynamic>{};
-                                    map.addAll({
-                                      "id": proID.text,
-                                      "name": proName.text,
-                                      "start": start.text,
-                                      "end": end.text,
-                                      "status": status,
-                                      "complete": int.parse(complete.text),
-                                      "members": members,
-                                      "manager": managerID,
-                                      "department": departmentName,
-                                      "description": description.text,
-                                    });
-                                    projectService.updateProject(
-                                        proID.text, map);
-                                    setState(() {
-                                      for (Map<String, dynamic> project
-                                          in projectProvider.projectSource) {
-                                        if (project.values.elementAt(0) ==
-                                            proID.text) {
-                                          project.update(
-                                              "id", (value) => proID.text);
-                                          project.update(
-                                              "name", (value) => proName.text);
-                                          project.update(
-                                              "start", (value) => start.text);
-                                          project.update(
-                                              "end", (value) => end.text);
-                                          project.update(
-                                              "status", (value) => status);
-                                          project.update(
-                                              "complete",
-                                              (value) => [
-                                                    int.parse(complete.text),
-                                                    100
-                                                  ]);
-                                          project.update(
-                                              "members", (value) => members);
-                                          project.update(
-                                              "manager", (value) => managerID);
-                                          project.update("department",
-                                              (value) => departmentName);
-                                          project.update("description",
-                                              (value) => description.text);
-                                          project.update("action",
-                                              (value) => [proID.text, null]);
-                                        }
-                                      }
-                                    });
-                                    dialog(
-                                        DialogType.INFO, "", "Update Success");
-                                  },
-                                  icon: const Icon(Icons.update),
-                                  label: const Text("Update")),
-                            ],
-                          ),
-                        )
-                      ],
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-        ));
+              ),
+            ))
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: const [
+              SizedBox(
+                width: 50,
+                height: 50,
+                child: CircularProgressIndicator(),
+              ),
+            ],
+          );
+    ;
   }
 
   Widget textItem(String text, TextEditingController controller,
@@ -625,7 +682,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
           },
         ),
         const SizedBox(
-          width: 30,
+          width: 15,
         ),
         const Text(
           "In Progress",
@@ -647,7 +704,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
           },
         ),
         const SizedBox(
-          width: 30,
+          width: 15,
         ),
         const Text(
           "Finish",
@@ -669,7 +726,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
           },
         ),
         const SizedBox(
-          width: 30,
+          width: 15,
         ),
         const Text(
           "Close",

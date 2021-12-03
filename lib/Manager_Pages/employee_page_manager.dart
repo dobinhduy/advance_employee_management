@@ -8,6 +8,7 @@ import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/notification_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
+import 'package:advance_employee_management/service/task_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,7 @@ class _EmployeeOfManagerPageState extends State<EmployeeOfManagerPage> {
   ProjectService projectService = ProjectService();
   List<EmployeeModel> employeeOfManager = <EmployeeModel>[];
   NotificationService notificationService = NotificationService();
+  TaskService taskService = TaskService();
   String id = "";
 
   List<Map<String, dynamic>> employeeOfManagerSource = <Map<String, dynamic>>[];
@@ -52,6 +54,12 @@ class _EmployeeOfManagerPageState extends State<EmployeeOfManagerPage> {
     employeeOfManager = await employeeServices.getAllEmployeeOfManager(id);
     employeeOfManagerSource.addAll(_getEmployeeOfDataManager());
     setState(() {});
+  }
+
+  delectEmployeeOfManager(List<Map<String, dynamic>> list) {
+    for (Map<String, dynamic> item in list) {
+      employeeOfManagerSource.remove(item);
+    }
   }
 
   List<Map<String, dynamic>> _getEmployeeOfDataManager() {
@@ -269,11 +277,14 @@ class _EmployeeOfManagerPageState extends State<EmployeeOfManagerPage> {
           employeeServices.deleteEmployee(employee["email"]);
           projectService.removeMemberwithMemberID(employee["id"]);
           notificationService.removeNotificationwithMemberID(employee["id"]);
+          taskService.removeAllTasknwithMemberID(employee["id"]);
         }
 
         setState(() {
-          provider.delectEmployee(provider.selecteds);
-          provider.isSelect == false;
+          for (Map<String, dynamic> item in provider.selecteds) {
+            employeeOfManagerSource.remove(item);
+            provider.isSelect == false;
+          }
         });
       },
     )..show();

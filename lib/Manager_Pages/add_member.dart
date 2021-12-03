@@ -22,7 +22,7 @@ class AddMember extends StatefulWidget {
   final String managerID;
   final String proID;
   final String proName;
-  String managerName;
+  final String managerName;
 
   List<dynamic> members;
   List<dynamic> memberName;

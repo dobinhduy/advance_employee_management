@@ -51,8 +51,8 @@ class _SignUpPageState extends State<SignInPage> {
               end: Alignment(
                   0.8, 0.0), // 10% of the width, so there are ten blinds.
               colors: <Color>[
-                Color(0xffee0000),
-                Color(0xffeeee00)
+                Color(0xFFB2EBF2),
+                Color(0xFF81D4FA)
               ], // red to yellow
               tileMode:
                   TileMode.repeated, // repeats the gradient over the canvas
@@ -77,75 +77,9 @@ class _SignUpPageState extends State<SignInPage> {
               ),
               passwordBox("Password", _passwordController, false),
               const SizedBox(
-                height: 15,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                'Or continute with',
-                style: TextStyle(color: Colors.black, fontSize: 20),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  buttonItem(
-                    "images/google.png",
-                    "Google",
-                    25,
-                    () {
-                      authClass.googleSignIn(context);
-                    },
-                  ),
-                  const SizedBox(
-                    width: 30,
-                  ),
-                  buttonItem("images/phone.png", "Phone", 25, () {
-                    locator<NavigationService>()
-                        .globalNavigateTo(PhoneAuthLog, context);
-                  }),
-                ],
-              ),
-              const SizedBox(
                 height: 30,
               ),
               loginButton(),
-              const SizedBox(
-                height: 15,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "If you don't have an account?",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      locator<NavigationService>()
-                          .globalNavigateTo(SignupRoute, context);
-                    },
-                    child: const Text(
-                      "Sign up",
-                      // ignore: unnecessary_const
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
               const SizedBox(
                 height: 15,
               ),
@@ -268,13 +202,7 @@ class _SignUpPageState extends State<SignInPage> {
         width: MediaQuery.of(context).size.width / 4.5,
         height: 60,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(17),
-          gradient: const LinearGradient(colors: [
-            Color(0xfffd746c),
-            Color(0xffff9068),
-            Color(0xfffd746c)
-          ]),
-        ),
+            borderRadius: BorderRadius.circular(17), color: Colors.blueAccent),
         child: Center(
           child: circular
               ? const CircularProgressIndicator()

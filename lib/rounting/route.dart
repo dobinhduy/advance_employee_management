@@ -22,7 +22,6 @@ PageRoute generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case LonginRoute:
       return _getPageRoute(const SignInPage());
-
     case PhoneAuthLog:
       return _getPageRoute(const PhoneAuth());
     case MainHomeP:
@@ -33,21 +32,18 @@ PageRoute generateRoute(RouteSettings settings) {
       return _getPageRoute(AdminLayoutRoute());
     case EmployeeLayout:
       return _getPageRoute(const EmployeePage());
-
     case AddUserLayout:
       return _getPageRoute(const AddUserPage());
     case EmployeeRouteLayout:
       return _getPageRoute(EmployeeLayoutRoute());
     case changePasswordRoute:
-      return _getPageRoute(ChangePasswordPage());
-
+      return _getPageRoute(const ChangePasswordPage());
     case EmployeeInformationRoute:
       return _getPageRoute(const EmployeeInformation());
     case ManagerInformationRoute:
       return _getPageRoute(const EmployeeInformation());
     case ManagerRouteLayout:
       return _getPageRoute(ManagerLayoutRoute());
-
     case ProjectPageRoute:
       return _getPageRoute(const ProjectPage());
     case ProjectPageEmployee:

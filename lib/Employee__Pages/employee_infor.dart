@@ -183,22 +183,6 @@ class _EmployeeInformationState extends State<EmployeeInformation> {
                           ),
                         ),
                       ]),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      ElevatedButton.icon(
-                          onPressed: () {
-                            locator<NavigationService>()
-                                .navigateTo(changePasswordRoute);
-                          },
-                          icon: const Icon(Icons.lock_clock),
-                          label: const Text("Change Password")),
-                      const SizedBox(
-                        width: 50,
-                      ),
-                    ],
-                  )
                 ],
               ),
             ),

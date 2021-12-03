@@ -18,6 +18,18 @@ class TaskService {
     });
   }
 
+  void removeAllTasknwithMemberID(String memberID) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("memberid", isEqualTo: memberID)
+        .get();
+    List<QueryDocumentSnapshot> docSnapshots = querySnapshot.docs;
+    for (QueryDocumentSnapshot docSnapshot in docSnapshots) {
+      DocumentReference docref = docSnapshot.reference;
+      await docref.delete();
+    }
+  }
+
   void updateStatus(String taskID, String status) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)

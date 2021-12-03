@@ -1,4 +1,8 @@
+import 'package:advance_employee_management/authentication/sign_in_page.dart';
+import 'package:advance_employee_management/locator.dart';
+import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
+import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:flutter/material.dart';
 
 class ChangePasswordPage extends StatefulWidget {
@@ -12,6 +16,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   TextEditingController currentPassword = TextEditingController();
   TextEditingController newPassword = TextEditingController();
   TextEditingController confirmNewPassword = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,7 +97,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         inputBox("Current Password", currentPassword, true),
                         inputBox("New Password", newPassword, true),
                         inputBox(
-                            "Comfirm New Password", confirmNewPassword, true),
+                            "Re-type New Password", confirmNewPassword, true),
                         const SizedBox(
                           height: 20,
                         ),
@@ -143,12 +148,17 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           if (validPassword(newPassword.text)) {
             bool result = await AuthClass().validateCurrentPassword(
                 currentPassword.text, newPassword.text, context);
-            if (result) {
+            if (!result) {
               AuthClass().showSnackBar(
                   context, "Change password success. Please login again!!");
+
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (builder) => const SignInPage()),
+                  (route) => false);
             } else {
-              AuthClass().showSnackBar(
-                  context, "Password is not correct. Please try again!!");
+              AuthClass().showSnackBar(context,
+                  "Current Password is not correct. Please try again!!");
             }
           } else {
             AuthClass().showSnackBar(

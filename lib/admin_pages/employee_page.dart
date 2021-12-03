@@ -57,7 +57,7 @@ class _EmployeePageState extends State<EmployeePage> {
                     dialog(
                       DialogType.INFO,
                       "",
-                      "Are your sure",
+                      "Are your sure ?",
                     );
                   },
                   icon: const Icon(Icons.delete_forever),

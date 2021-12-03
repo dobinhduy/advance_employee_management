@@ -66,6 +66,9 @@ class _NotificationPageState extends State<NotificationPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 20),
+                    const Text("Assign Project"),
+                    const SizedBox(height: 20),
                     for (NotificationModel notify in notifiesAddProject!)
                       Padding(
                           padding: const EdgeInsets.symmetric(
@@ -73,8 +76,9 @@ class _NotificationPageState extends State<NotificationPage> {
                           child: notify.isread == false
                               ? notifyAddpro(notify, Colors.amberAccent)
                               : notifyAddpro(notify, Colors.white)),
+                    const SizedBox(height: 20),
                     const Text("Assign Task"),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 20),
                     for (NotificationModel notify in notifiesAssignTask!)
                       Padding(
                           padding: const EdgeInsets.symmetric(
@@ -201,7 +205,7 @@ class _NotificationPageState extends State<NotificationPage> {
             color: textColor,
           ),
           width: 550,
-          height: 100,
+          height: 120,
           child: Column(
             children: [
               Row(

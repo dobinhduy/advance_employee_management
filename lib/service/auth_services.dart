@@ -80,13 +80,8 @@ class AuthClass {
       auth.currentUser!
           .reauthenticateWithCredential(authCredentials)
           .then((value) {
-        auth.currentUser!.updatePassword(newPassword).then((_) {
-          isSuccess = true;
-        }).catchError((error) {
-          isSuccess = false;
-        });
-      }).catchError((err) {
-        isSuccess = false;
+        auth.currentUser!.updatePassword(newPassword);
+        isSuccess = true;
       });
     } catch (e) {
       isSuccess = false;

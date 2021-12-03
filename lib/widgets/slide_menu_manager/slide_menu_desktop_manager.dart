@@ -72,8 +72,16 @@ class SideMenuManagerDesktop extends StatelessWidget {
                 appProvider.changeCurrentPage(DisplayedPage.MANAGERPROJECT);
                 locator<NavigationService>().navigateTo(ProjectPageRoute);
               }),
+          SileMenuItemDesktop(
+              active: false,
+              text: "Change Password",
+              icon: Icons.change_circle,
+              onTap: () {
+                locator<NavigationService>()
+                    .globalNavigateTo(changePasswordRoute, context);
+              }),
           const SizedBox(
-            height: 270,
+            height: 220,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -82,7 +90,7 @@ class SideMenuManagerDesktop extends StatelessWidget {
                 text: "Log out",
                 icon: Icons.logout,
                 onTap: () {
-                  dialog(DialogType.QUESTION, "Are you sure?", "", context,
+                  dialog(DialogType.QUESTION, "Are you sure ?", "", context,
                       appProvider);
                 }),
           ),

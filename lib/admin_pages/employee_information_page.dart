@@ -72,10 +72,9 @@ class _UserInforPageState extends State<UserInforPage> {
   }
 
   getEmployeeInf() async {
-    String email = AuthClass().user()!;
     employeeInfor = await employeeServices.getEmployeebyEmail(widget.email);
     Future.delayed(const Duration(seconds: 1), () {});
-    managerIDcontroller = await employeeServices.getEmployeeIDbyEmail(email);
+    managerIDcontroller = await employeeServices.getSupervisorID(widget.id);
     role = employeeInfor!.role;
     setState(() {});
   }
@@ -181,121 +180,99 @@ class _UserInforPageState extends State<UserInforPage> {
                     const SizedBox(
                       width: 30,
                     ),
-                    isEdit == false
-                        ? Padding(
-                            padding: const EdgeInsets.only(top: 100),
-                            child: Table(
-                              defaultColumnWidth: const FixedColumnWidth(280),
-                              children: [
-                                TableRow(children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      titlebox("Name:"),
-                                      inputBox2(nameController.text)
-                                    ],
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      titlebox("Address:"),
-                                      inputBox2(addressController.text)
-                                    ],
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      titlebox("Gender:"),
-                                      inputBox2(genderController)
-                                    ],
-                                  )
-                                ]),
-                                TableRow(children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      titlebox("Birthday:"),
-                                      inputBox2(birthdayController)
-                                    ],
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      titlebox("Identification Number:"),
-                                      inputBox2(idController.text)
-                                    ],
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      titlebox("Phone:"),
-                                      inputBox2(phoneController.text)
-                                    ],
-                                  )
-                                ]),
-                                TableRow(children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      titlebox("Department:"),
-                                      inputBox2(department)
-                                    ],
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      titlebox("Role:"),
-                                      inputBox2(role)
-                                    ],
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      titlebox("Supervisor ID:"),
-                                      inputBox2(managerIDcontroller)
-                                    ],
-                                  )
-                                ])
-                              ],
-                            ),
-                          )
-                        : SizedBox(
-                            height: MediaQuery.of(context).size.height,
-                            width: MediaQuery.of(context).size.width / 5,
-                            child: Column(
+                    Padding(
+                      padding: const EdgeInsets.only(top: 100),
+                      child: Table(
+                        defaultColumnWidth: const FixedColumnWidth(280),
+                        children: [
+                          TableRow(children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const SizedBox(
-                                  height: 100,
-                                ),
-                                inputBox(nameController, 20),
-                                inputBox(idController, 8),
-                                genderSelectedBox(),
-                                birthdayButton(35),
-                                inputBox(addressController, 8),
-                                inputBox(phoneController, 8),
-                                titlebox2(widget.email),
+                                titlebox("Name:"),
+                                isEdit == false
+                                    ? inputBox2(nameController.text)
+                                    : inputBox(nameController, 20),
                               ],
                             ),
-                          ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                titlebox("Address:"),
+                                isEdit == false
+                                    ? inputBox2(addressController.text)
+                                    : inputBox(addressController, 8),
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                titlebox("Gender:"),
+                                isEdit == false
+                                    ? inputBox2(genderController)
+                                    : genderSelectedBox(),
+                              ],
+                            )
+                          ]),
+                          TableRow(children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                titlebox("Birthday:"),
+                                isEdit == false
+                                    ? inputBox2(birthdayController)
+                                    : birthdayButton(15)
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                titlebox("Identification Number:"),
+                                inputBox2(idController.text)
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                titlebox("Phone:"),
+                                isEdit == false
+                                    ? inputBox2(phoneController.text)
+                                    : inputBox(phoneController, 8),
+                              ],
+                            )
+                          ]),
+                          TableRow(children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                titlebox("Department:"),
+                                inputBox2(department)
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [titlebox("Role:"), inputBox2(role)],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                titlebox("Supervisor ID:"),
+                                inputBox2(managerIDcontroller)
+                              ],
+                            )
+                          ])
+                        ],
+                      ),
+                    ),
                     Column(
                       children: [
                         const SizedBox(
@@ -498,7 +475,7 @@ class _UserInforPageState extends State<UserInforPage> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
           child: SizedBox(
             height: 30,
             width: 200,

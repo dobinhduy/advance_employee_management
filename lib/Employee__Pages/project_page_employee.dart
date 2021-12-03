@@ -18,6 +18,10 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
   EmployeeServices employeeServices = EmployeeServices();
   List<ProjectModel> _projects = <ProjectModel>[];
   final List<ProjectModel> _employeeProject = <ProjectModel>[];
+  final List<ProjectModel> _openproject = <ProjectModel>[];
+  final List<ProjectModel> _inprocessproject = <ProjectModel>[];
+  final List<ProjectModel> _finishproject = <ProjectModel>[];
+  final List<ProjectModel> _closeproject = <ProjectModel>[];
 
   String memid = "";
   bool isADD = false;
@@ -42,6 +46,24 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
     setState(() {});
   }
 
+  classifyProject() {
+    for (var project in _employeeProject) {
+      if (project.status == "Open") {
+        _openproject.add(project);
+      }
+      if (project.status == "In Process") {
+        _inprocessproject.add(project);
+      }
+      if (project.status == "Finish") {
+        _finishproject.add(project);
+      }
+      if (project.status == "Close") {
+        _closeproject.add(project);
+      }
+    }
+    setState(() {});
+  }
+
   getEmployeeProject() {
     for (ProjectModel project in _projects) {
       for (String member in project.members) {
@@ -55,42 +77,107 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
 
   setisADD() {
     isADD = true;
+
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    setisADD();
     getEmployeeProject();
+    classifyProject();
+    setisADD();
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30),
+          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               titlebox("Open Project"),
-              SizedBox(
-                  height: 3500,
-                  width: MediaQuery.of(context).size.width,
-                  child: isADD == true
-                      ? Wrap(
-                          children: [
-                            for (var project in _employeeProject)
-                              CardItem(
-                                  project: project,
-                                  projectname: project.name,
-                                  projectid: project.id,
-                                  color1: Colors.white,
-                                  color2: Colors.pinkAccent,
-                                  icon: Icons.book,
-                                  startday: project.start,
-                                  manager: project.manager,
-                                  endday: project.end)
-                          ],
-                        )
-                      : Container()),
+              isADD == true
+                  ? SizedBox(
+                      child: Wrap(
+                      children: [
+                        for (var project in _openproject)
+                          CardItem(
+                              project: project,
+                              projectname: project.name,
+                              projectid: project.id,
+                              color1: Colors.white,
+                              color2: Colors.pinkAccent,
+                              icon: Icons.book,
+                              startday: project.start,
+                              manager: project.manager,
+                              endday: project.end)
+                      ],
+                    ))
+                  : Container(
+                      height: 20,
+                    ),
+              titlebox("In Process Project"),
+              isADD == true
+                  ? SizedBox(
+                      child: Wrap(
+                      children: [
+                        for (var project in _inprocessproject)
+                          CardItem(
+                              project: project,
+                              projectname: project.name,
+                              projectid: project.id,
+                              color1: Colors.white,
+                              color2: Colors.purpleAccent,
+                              icon: Icons.book,
+                              startday: project.start,
+                              manager: project.manager,
+                              endday: project.end)
+                      ],
+                    ))
+                  : Container(
+                      height: 20,
+                    ),
+              titlebox("Finish Project"),
+              isADD == true
+                  ? SizedBox(
+                      child: Wrap(
+                      children: [
+                        for (var project in _finishproject)
+                          CardItem(
+                              project: project,
+                              projectname: project.name,
+                              projectid: project.id,
+                              color1: Colors.white,
+                              color2: Colors.orangeAccent,
+                              icon: Icons.book,
+                              startday: project.start,
+                              manager: project.manager,
+                              endday: project.end)
+                      ],
+                    ))
+                  : Container(
+                      height: 20,
+                    ),
+              titlebox("Close Project"),
+              isADD == true
+                  ? SizedBox(
+                      child: Wrap(
+                      children: [
+                        for (var project in _closeproject)
+                          CardItem(
+                              project: project,
+                              projectname: project.name,
+                              projectid: project.id,
+                              color1: Colors.white,
+                              color2: Colors.blueAccent,
+                              icon: Icons.book,
+                              startday: project.start,
+                              manager: project.manager,
+                              endday: project.end)
+                      ],
+                    ))
+                  : Container(
+                      height: 20,
+                    ),
             ],
           ),
         ),
