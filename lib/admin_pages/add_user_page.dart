@@ -505,11 +505,11 @@ class _AddUserPageState extends State<AddUserPage> {
         if (checkFillImage()) {
           if (checkFillAll()) {
             if (validPassword(password.text)) {
-              try {
-                await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                    email: email.text, password: password.text);
+              if (id.text != supervisorid.text) {
+                try {
+                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                      email: email.text, password: password.text);
 
-                if (1 == 1) {
                   employeeServices.addEmployee(
                       id.text,
                       fisrtname.text + " " + lastname.text,
@@ -536,6 +536,7 @@ class _AddUserPageState extends State<AddUserPage> {
                     "address": address.text,
                     "phone": phone.text,
                     "photoURL": _imageURL,
+                    "position": "Employee",
                     "role": role,
                     "department": departmentName,
                     "action": [id.text, null],
@@ -544,9 +545,13 @@ class _AddUserPageState extends State<AddUserPage> {
                   SchedulerBinding.instance?.addPostFrameCallback((_) {
                     Navigator.of(context).pushReplacementNamed(AddUserLayout);
                   });
+                  setState(() {});
+                } catch (e) {
+                  authClass.showSnackBar(context, e.toString());
                 }
-              } catch (e) {
-                authClass.showSnackBar(context, e.toString());
+              } else {
+                dialog(DialogType.ERROR,
+                    "Employee ID and Supervisor ID can not match!!", "");
               }
             } else {
               dialog(

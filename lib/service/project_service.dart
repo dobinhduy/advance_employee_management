@@ -53,6 +53,20 @@ class ProjectService {
     await docref.update(map);
   }
 
+  Future<List<ProjectModel>> getAllProjectOfManager(String id) async =>
+      FirebaseFirestore.instance
+          .collection(collection)
+          .where("manager", isEqualTo: id)
+          .get()
+          .then((result) {
+        List<ProjectModel> projects = [];
+        for (DocumentSnapshot project in result.docs) {
+          projects.add(ProjectModel.fromSnapshot(project));
+        }
+
+        return projects;
+      });
+
   void addCompletion(String projectid, num complete) async {
     num currentComplete;
     num increase;

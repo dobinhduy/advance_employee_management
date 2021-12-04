@@ -1,6 +1,6 @@
 // ignore_for_file: unrelated_type_equality_checks
 
-import 'package:advance_employee_management/admin_pages/employee_information_page.dart';
+import 'package:advance_employee_management/Manager_Pages/user_infor_page.dart';
 import 'package:advance_employee_management/admin_pages/page_header.dart';
 import 'package:advance_employee_management/models/employee.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
@@ -29,11 +29,12 @@ class _EmployeeOfManagerPageState extends State<EmployeeOfManagerPage> {
   EmployeeServices employeeServices = EmployeeServices();
   ProjectService projectService = ProjectService();
   List<EmployeeModel> employeeOfManager = <EmployeeModel>[];
+
   NotificationService notificationService = NotificationService();
   TaskService taskService = TaskService();
   String id = "";
-
   List<Map<String, dynamic>> employeeOfManagerSource = <Map<String, dynamic>>[];
+
   @override
   void initState() {
     super.initState();
@@ -53,6 +54,7 @@ class _EmployeeOfManagerPageState extends State<EmployeeOfManagerPage> {
     id = await employeeServices.getEmployeeIDbyEmail(email);
     employeeOfManager = await employeeServices.getAllEmployeeOfManager(id);
     employeeOfManagerSource.addAll(_getEmployeeOfDataManager());
+
     setState(() {});
   }
 
@@ -157,7 +159,7 @@ class _EmployeeOfManagerPageState extends State<EmployeeOfManagerPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => UserInforPage(
+                                builder: (context) => EmployeeInfor(
                                       gender: map.values.elementAt(2),
                                       phone: map.values.elementAt(6),
                                       name: map.values.elementAt(1),

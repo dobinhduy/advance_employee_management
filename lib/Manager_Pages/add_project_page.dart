@@ -182,7 +182,6 @@ class AddProjectPageState extends State<AddProjectPage> {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 100),
             child: SizedBox(
-              height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: Column(
                 children: [

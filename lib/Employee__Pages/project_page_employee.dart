@@ -97,6 +97,7 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               titlebox("Open Project"),
+              _openproject.isEmpty ? titlebox2("(No data)") : Container(),
               isADD == true
                   ? SizedBox(
                       child: Wrap(
@@ -118,6 +119,7 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
                       height: 20,
                     ),
               titlebox("In Process Project"),
+              _inprocessproject.isEmpty ? titlebox2("(No data)") : Container(),
               isADD == true
                   ? SizedBox(
                       child: Wrap(
@@ -139,6 +141,7 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
                       height: 20,
                     ),
               titlebox("Finish Project"),
+              _finishproject.isEmpty ? titlebox2("(No data)") : Container(),
               isADD == true
                   ? SizedBox(
                       child: Wrap(
@@ -160,6 +163,7 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
                       height: 20,
                     ),
               titlebox("Close Project"),
+              _closeproject.isEmpty ? titlebox2("(No data)") : Container(),
               isADD == true
                   ? SizedBox(
                       child: Wrap(
@@ -187,9 +191,23 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
     );
   }
 
+  Widget titlebox2(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10, left: 40),
+      child: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.black,
+          fontSize: 13,
+          letterSpacing: 0.5,
+        ),
+      ),
+    );
+  }
+
   Widget titlebox(String title) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 22),
+      padding: const EdgeInsets.only(top: 15),
       child: Text(
         title,
         style: const TextStyle(

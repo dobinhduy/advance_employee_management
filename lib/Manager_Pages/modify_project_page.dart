@@ -513,9 +513,10 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                             });
                                           }
                                         }
+
+                                        Navigator.pop(context);
                                         AuthClass().showSnackBar(
                                             context, "Delete Success");
-                                        Navigator.pop(context);
                                       },
                                       icon: const Icon(Icons.delete),
                                       label: const Text("Delete")),

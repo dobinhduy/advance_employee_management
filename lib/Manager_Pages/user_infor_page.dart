@@ -8,8 +8,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
-class UserInforPage extends StatefulWidget {
-  const UserInforPage(
+class EmployeeInfor extends StatefulWidget {
+  const EmployeeInfor(
       {Key? key,
       required this.name,
       required this.email,
@@ -34,10 +34,10 @@ class UserInforPage extends StatefulWidget {
   final String department;
 
   @override
-  State<UserInforPage> createState() => _UserInforPageState();
+  State<EmployeeInfor> createState() => _EmployeeInforState();
 }
 
-class _UserInforPageState extends State<UserInforPage> {
+class _EmployeeInforState extends State<EmployeeInfor> {
   late TextEditingController emailController;
   late TextEditingController nameController;
   late TextEditingController idController;
@@ -362,8 +362,8 @@ class _UserInforPageState extends State<UserInforPage> {
                                       context, "Update success");
                                   SchedulerBinding.instance
                                       ?.addPostFrameCallback((_) {
-                                    Navigator.of(context)
-                                        .pushReplacementNamed(EmployeeLayout);
+                                    Navigator.of(context).pushReplacementNamed(
+                                        EmployeeOfManagerPageRoute);
                                   });
                                 },
                                 child: Container(
