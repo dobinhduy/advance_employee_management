@@ -103,120 +103,133 @@ class _ViewProjectState extends State<ViewProject> {
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 40, horizontal: 50),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 300,
-                        color: Colors.blue[100],
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Row(
-                              children: [
-                                titlebox("Project Title:"),
-                                titlebox2(widget.projectName),
-                                const SizedBox(
-                                  width: 230,
-                                ),
-                                titlebox("Project ID:"),
-                                titlebox2(widget.projectid),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                titlebox("Duration:"),
-                                titlebox2(widget.startDay.replaceAll("-", "/") +
-                                    "-" +
-                                    widget.endDay.replaceAll("-", "/")),
-                                const SizedBox(
-                                  width: 230,
-                                ),
-                                titlebox("Complete:"),
-                                titlebox2(widget.complete),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                titlebox("Department:"),
-                                titlebox2(widget.department),
-                                const SizedBox(
-                                  width: 230,
-                                ),
-                                titlebox("Status:"),
-                                titlebox2(widget.status),
-                                const SizedBox(
-                                  width: 30,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                titlebox("Members"),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    for (var member in members)
-                                      titlebox2("ID: " + member),
-                                  ],
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    for (var name in memberName)
-                                      titlebox2("   Name: " + name),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                titlebox("Description"),
-                                const SizedBox(height: 10),
-                                titlebox2(widget.description),
-                                Column(
-                                  children: const [
-                                    SizedBox(
-                                      width: 100,
-                                    )
-                                  ],
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          titlebox("Your task"),
-                          Column(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black)),
+                      child: Table(children: [
+                        TableRow(children: [
+                          Row(
                             children: [
-                              for (TaskModel task in tasks!)
-                                task.status == "Uncomplete"
-                                    ? taskBox(task, "Mark as Complete",
-                                        const Color(0xFF9575CD))
-                                    : taskBox(task, "Complete",
-                                        const Color(0xFFe0e0e0))
+                              titlebox("Project Title:"),
+                              titlebox2(widget.projectName),
                             ],
                           ),
-                        ],
-                      )
-                    ],
-                  ),
+                          Row(
+                            children: [
+                              titlebox("Project ID:"),
+                              titlebox2(widget.projectid),
+                            ],
+                          )
+                        ]),
+                        TableRow(children: [
+                          Row(
+                            children: [
+                              titlebox("Duration:"),
+                              titlebox2(widget.startDay.replaceAll("-", "/") +
+                                  "-" +
+                                  widget.endDay.replaceAll("-", "/")),
+                              const SizedBox(
+                                width: 230,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              titlebox("Project Manager ID:"),
+                              titlebox2(widget.managerid),
+                            ],
+                          )
+                        ]),
+                        TableRow(children: [
+                          Row(
+                            children: [
+                              titlebox("Complete:"),
+                              titlebox2(widget.complete),
+                              const Text(" %"),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              titlebox("Department:"),
+                              titlebox2(widget.department),
+                            ],
+                          )
+                        ]),
+                        TableRow(children: [
+                          Row(
+                            children: [
+                              titlebox("Status:"),
+                              titlebox2(widget.status),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              titlebox("Team Members"),
+                            ],
+                          )
+                        ]),
+                        TableRow(children: [
+                          Row(
+                            children: [
+                              titlebox("Description"),
+                              titlebox2(widget.description),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const SizedBox(
+                                width: 30,
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  for (var i = 1; i <= members.length; i++)
+                                    titlebox2(i.toString()),
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  for (var name in memberName)
+                                    titlebox2(". " + name + " - "),
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  for (var member in members) titlebox2(member),
+                                ],
+                              ),
+                            ],
+                          )
+                        ]),
+                      ]),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        titlebox("Your task"),
+                        Column(
+                          children: [
+                            for (TaskModel task in tasks!)
+                              task.status == "Uncomplete"
+                                  ? taskBox(task, "Mark as Complete",
+                                      const Color(0xFF9575CD))
+                                  : taskBox(task, "Completed",
+                                      const Color(0xFFe0e0e0))
+                          ],
+                        ),
+                      ],
+                    )
+                  ],
                 ),
               ),
             ))
@@ -244,7 +257,7 @@ class _ViewProjectState extends State<ViewProject> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              children: [titlebox("Description: "), titlebox(task.description)],
+              children: [titlebox("Description:"), titlebox(task.description)],
             ),
             Row(
               children: [
@@ -255,7 +268,7 @@ class _ViewProjectState extends State<ViewProject> {
             ),
             Row(
               children: [
-                titlebox("DeadLine:" + task.deadline),
+                titlebox("DeadLine:  " + task.deadline),
               ],
             ),
             Padding(
@@ -272,6 +285,7 @@ class _ViewProjectState extends State<ViewProject> {
                           taskService.updateStatus(task.id, "Complete");
                           projectService.addCompletion(
                               widget.projectid, task.percent);
+                          setState(() {});
                         } else {
                           print(
                               "You can not change the status. Try to connect to you manager");

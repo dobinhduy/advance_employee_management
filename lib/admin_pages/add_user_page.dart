@@ -34,7 +34,6 @@ class _AddUserPageState extends State<AddUserPage> {
   final TextEditingController supervisorid = TextEditingController();
 
   String role = "";
-  String department = "";
 
   final AuthClass authClass = AuthClass();
 
@@ -315,12 +314,10 @@ class _AddUserPageState extends State<AddUserPage> {
         color: Colors.deepPurpleAccent,
       ),
       onChanged: (String? newValue) {
-        if (mounted) {
-          setState(() {
-            dropdownDeName = newValue!;
-            departmentName = dropdownDeName!;
-          });
-        }
+        setState(() {
+          dropdownDeName = newValue!;
+          departmentName = dropdownDeName!;
+        });
       },
       items: listDepartment.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
@@ -342,12 +339,10 @@ class _AddUserPageState extends State<AddUserPage> {
         color: Colors.deepPurpleAccent,
       ),
       onChanged: (String? newValue) {
-        if (mounted) {
-          setState(() {
-            dropDownRole = newValue!;
-            role = dropDownRole;
-          });
-        }
+        setState(() {
+          dropDownRole = newValue!;
+          role = dropDownRole;
+        });
       },
       items: <String>[
         'Software developer',
@@ -528,11 +523,11 @@ class _AddUserPageState extends State<AddUserPage> {
                       _imageURL,
                       "Employee",
                       role,
-                      department,
+                      departmentName,
                       supervisorid.text);
                   provider.employeeSource.add({
                     "id": id.text,
-                    "name": lastname.text + fisrtname.text,
+                    "name": fisrtname.text + " " + lastname.text,
                     "gender": gender,
                     "birthday": "${selectedDate.toLocal()}"
                         .split(' ')[0]
@@ -542,7 +537,7 @@ class _AddUserPageState extends State<AddUserPage> {
                     "phone": phone.text,
                     "photoURL": _imageURL,
                     "role": role,
-                    "department": department,
+                    "department": departmentName,
                     "action": [id.text, null],
                   });
                   authClass.showSnackBar(context, "Add employee success");

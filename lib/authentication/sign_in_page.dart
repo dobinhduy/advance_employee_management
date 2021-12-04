@@ -86,6 +86,9 @@ class _SignUpPageState extends State<SignInPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  const SizedBox(
+                    width: 160,
+                  ),
                   InkWell(
                     onTap: () {
                       locator<NavigationService>()
@@ -191,7 +194,6 @@ class _SignUpPageState extends State<SignInPage> {
                 .globalNavigateTo(EmployeeRouteLayout, context);
           }
         } catch (e) {
-          final snackbar = SnackBar(content: Text(e.toString()));
           AuthClass().showSnackBar(context, "Invalid email or password");
           setState(() {
             circular = false;

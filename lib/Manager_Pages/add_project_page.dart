@@ -92,6 +92,7 @@ class AddProjectPageState extends State<AddProjectPage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('New Project'),
+          backgroundColor: Colors.purpleAccent,
           actions: [
             TextButton(
                 onPressed: () async {

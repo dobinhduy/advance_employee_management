@@ -9,7 +9,7 @@ class TaskModel {
   static const STATUS = "status";
   static const DEADLINE = "deadline";
   static const DESCRIPTION = "description";
-  static const PERCENTED = "percented";
+  static const PERCENT = "percent";
   late String _id;
   late String _projectid;
   late String _memberid;
@@ -25,7 +25,7 @@ class TaskModel {
   String get status => _status;
   String get deadline => _deadline;
   String get description => _description;
-  int get percent => _percent;
+  num get percent => _percent;
 
   TaskModel.fromSnapshot(DocumentSnapshot snapshot) {
     _id = (snapshot.data() as dynamic)[ID];
@@ -35,6 +35,6 @@ class TaskModel {
     _assignday = (snapshot.data() as dynamic)[ASSIGNDAY];
     _deadline = (snapshot.data() as dynamic)[DEADLINE];
     _description = (snapshot.data() as dynamic)[DESCRIPTION];
-    _percent = (snapshot.data() as dynamic)[PERCENTED];
+    _percent = (snapshot.data() as dynamic)[PERCENT];
   }
 }

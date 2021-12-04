@@ -26,6 +26,7 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
   String memid = "";
   bool isADD = false;
   int i = 0;
+  bool loading = true;
 
   @override
   void initState() {
@@ -51,7 +52,7 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
       if (project.status == "Open") {
         _openproject.add(project);
       }
-      if (project.status == "In Process") {
+      if (project.status == "In Progress") {
         _inprocessproject.add(project);
       }
       if (project.status == "Finish") {
@@ -86,6 +87,7 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
     getEmployeeProject();
     classifyProject();
     setisADD();
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(

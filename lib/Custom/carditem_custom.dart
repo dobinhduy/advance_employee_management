@@ -56,8 +56,8 @@ class CardItem extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                height: 140,
-                width: 300,
+                height: 120,
+                width: 350,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
@@ -77,9 +77,9 @@ class CardItem extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          const Text("Project Name"),
+                          const Text("Project Name:"),
                           const SizedBox(
-                            width: 30,
+                            width: 15,
                           ),
                           CustomTextProject(
                               text: projectname,
@@ -93,9 +93,9 @@ class CardItem extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          const Text("Project ID"),
+                          const Text("Project ID: "),
                           const SizedBox(
-                            width: 30,
+                            width: 35,
                           ),
                           CustomTextProject(
                               text: projectid,
@@ -109,12 +109,28 @@ class CardItem extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          const Text("Manager"),
+                          const Text("Manager ID:"),
                           const SizedBox(
-                            width: 30,
+                            width: 35,
                           ),
                           CustomTextProject(
                               text: manager,
+                              size: 16,
+                              color: Colors.black,
+                              weight: FontWeight.bold)
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        children: [
+                          const Text("DeadLine:"),
+                          const SizedBox(
+                            width: 35,
+                          ),
+                          CustomTextProject(
+                              text: endday.replaceAll("-", "/"),
                               size: 16,
                               color: Colors.black,
                               weight: FontWeight.bold)

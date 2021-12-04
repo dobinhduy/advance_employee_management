@@ -53,14 +53,18 @@ class ProjectService {
     await docref.update(map);
   }
 
-  void addCompletion(String projectid, int complete) async {
+  void addCompletion(String projectid, num complete) async {
+    num currentComplete;
+    num increase;
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)
-        .where("projectid", isEqualTo: projectid)
+        .where("id", isEqualTo: projectid)
         .get();
     QueryDocumentSnapshot doc = querySnapshot.docs[0];
     DocumentReference docref = doc.reference;
-    docref.update({'complete': FieldValue.increment(complete)});
+    currentComplete = (doc.data() as dynamic)["complete"];
+    increase = currentComplete + complete;
+    docref.update(<String, dynamic>{'complete': increase});
   }
 
   void addMember(String memberID, String projectid) async {

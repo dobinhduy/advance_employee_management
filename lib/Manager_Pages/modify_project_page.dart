@@ -439,7 +439,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                           ],
                         ),
                         const SizedBox(
-                          width: 150,
+                          width: 80,
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -784,6 +784,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
       animType: AnimType.BOTTOMSLIDE,
       title: title,
       desc: description,
+      btnCancelOnPress: () {},
       btnOkOnPress: () {},
     )..show();
   }

@@ -77,7 +77,7 @@ class _RecoverPasswordState extends State<RecoverPassword> {
       onTap: () async {
         try {
           await FirebaseAuth.instance.sendPasswordResetEmail(email: email.text);
-          authClass.showSnackBar(context, "Send email");
+          authClass.showSnackBar(context, "Sended email");
           Navigator.pop(context);
         } catch (e) {
           authClass.showSnackBar(context, e.toString());

@@ -36,15 +36,6 @@ class SideMenuEmployeeDesktop extends StatelessWidget {
             height: 30,
           ),
           SileMenuItemDesktop(
-              active: appProvider.currentPage == DisplayedPage.DASHBOARD,
-              text: "Dashboard",
-              icon: Icons.home,
-              onTap: () {
-                ChangeNotifierProvider.value(value: TableProvider.init());
-                appProvider.changeCurrentPage(DisplayedPage.DASHBOARD);
-                locator<NavigationService>().navigateTo(MainHomeP);
-              }),
-          SileMenuItemDesktop(
               active:
                   appProvider.currentPage == DisplayedPage.EMPLOYEEINFORMATION,
               text: "Profile",

@@ -34,15 +34,6 @@ class SideMenuManagerDesktop extends StatelessWidget {
             height: 30,
           ),
           SileMenuItemDesktop(
-              active: appProvider.currentPage == DisplayedPage.DASHBOARD,
-              text: "Dashboard",
-              icon: Icons.home,
-              onTap: () {
-                ChangeNotifierProvider.value(value: TableProvider.init());
-                appProvider.changeCurrentPage(DisplayedPage.DASHBOARD);
-                locator<NavigationService>().navigateTo(MainHomeP);
-              }),
-          SileMenuItemDesktop(
               active:
                   appProvider.currentPage == DisplayedPage.MANAGERINFORMATION,
               text: "Profile",
@@ -80,7 +71,7 @@ class SideMenuManagerDesktop extends StatelessWidget {
                     .globalNavigateTo(changePasswordRoute, context);
               }),
           const SizedBox(
-            height: 220,
+            height: 290,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
