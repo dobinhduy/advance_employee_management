@@ -578,10 +578,11 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                             }
                                           }
                                         });
-                                        dialog(DialogType.INFO, "",
-                                            "Update Success");
+
                                         locator<NavigationService>()
                                             .navigateTo(ProjectPageRoute);
+                                        AuthClass().showSnackBar(
+                                            context, "Update Success");
                                       },
                                       icon: const Icon(Icons.update),
                                       label: const Text("Update")),

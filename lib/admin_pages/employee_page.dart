@@ -9,6 +9,7 @@ import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:advance_employee_management/service/notification_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -109,11 +110,14 @@ class _EmployeePageState extends State<EmployeePage> {
                           });
                         })
                 ],
-                onTabRow: (data) {
+                onTabRow: (data) async {
                   print(data);
-
+                  String supID;
                   Map<String, dynamic> map =
                       Map<String, dynamic>.from(data as Map<String, dynamic>);
+                  supID = await employeeServices
+                      .getSupervisorID(map.values.elementAt(0));
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -128,6 +132,7 @@ class _EmployeePageState extends State<EmployeePage> {
                                 photoURL: map.values.elementAt(7),
                                 position: map.values.elementAt(8),
                                 department: map.values.elementAt(10),
+                                supID: supID,
                               )));
                 },
                 onSort: employeeProvider.onSort,
@@ -175,7 +180,7 @@ class _EmployeePageState extends State<EmployeePage> {
                     icon: const Icon(Icons.arrow_forward_ios, size: 16),
                     onPressed: employeeProvider.next,
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                  )
+                  ),
                 ],
               ),
             ),

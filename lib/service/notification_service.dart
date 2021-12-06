@@ -90,6 +90,18 @@ class NotificationService {
         }
         return notifies;
       });
+  Future<int> getNumNotificationAssignTask(String employeeid) async =>
+      FirebaseFirestore.instance
+          .collection(collection)
+          .where("receiverid", isEqualTo: employeeid)
+          .where("type", isEqualTo: "ASSIGNTASK")
+          .orderBy("sendday")
+          .limitToLast(2)
+          .get()
+          .then((result) {
+        int value = result.docs.length;
+        return value;
+      });
   Future<List<NotificationModel>> getNotificationAddProject(
           String employeeid) async =>
       FirebaseFirestore.instance
@@ -104,5 +116,16 @@ class NotificationService {
           notifies.add(NotificationModel.fromSnapshot(notify));
         }
         return notifies;
+      });
+  Future<int> getNumNotificationAddProject(String employeeid) async =>
+      FirebaseFirestore.instance
+          .collection(collection)
+          .where("receiverid", isEqualTo: employeeid)
+          .where("type", isEqualTo: "ADDPROJECT")
+          .orderBy("sendday")
+          .get()
+          .then((result) {
+        int value = result.docs.length;
+        return value;
       });
 }

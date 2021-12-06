@@ -313,11 +313,11 @@ class _EmployeeInforState extends State<EmployeeInfor> {
                                     "email": emailController.text,
                                     "address": addressController.text,
                                     "phone": phoneController.text,
-                                    "photoURL": photoURLController,
+                                    "photourl": photoURLController,
                                   });
 
                                   setState(() {
-                                    employeeServices.updateEmployee(
+                                    employeeServices.updateEmployeeManager(
                                         widget.email, map);
                                     for (Map<String, dynamic> employee
                                         in provider.employeeSource) {

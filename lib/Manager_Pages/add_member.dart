@@ -103,9 +103,9 @@ class _AddMemberState extends State<AddMember> {
                       now.millisecondsSinceEpoch,
                       false,
                       "ADDPROJECT");
+                  Navigator.pop(context);
                   AuthClass().showSnackBar(context, "Add success");
-                  Navigator.of(context).pop();
-                  locator<NavigationService>().navigateTo(ProjectPageRoute);
+                  setState(() {});
                 } else {
                   AuthClass()
                       .showSnackBar(context, "Employee is not belong to you");

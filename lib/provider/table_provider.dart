@@ -85,8 +85,11 @@ class TableProvider with ChangeNotifier {
                 IconButton(
                   tooltip: "View",
                   onPressed: () async {
+                    String supID;
                     EmployeeModel employeeModel =
                         await EmployeeServices().getEmployeebyID(list.first);
+                    supID = await EmployeeServices()
+                        .getSupervisorID(employeeModel.id);
                     locator<NavigationService>()
                         .navigatorKey
                         .currentState
@@ -102,6 +105,7 @@ class TableProvider with ChangeNotifier {
                                   phone: employeeModel.phone,
                                   position: employeeModel.position,
                                   department: employeeModel.department,
+                                  supID: supID,
                                 )));
                   },
                   icon: const Icon(Icons.remove_red_eye_sharp),

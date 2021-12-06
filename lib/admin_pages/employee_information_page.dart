@@ -3,6 +3,7 @@ import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/scheduler.dart';
@@ -20,7 +21,8 @@ class UserInforPage extends StatefulWidget {
       required this.gender,
       required this.phone,
       required this.position,
-      required this.department})
+      required this.department,
+      required this.supID})
       : super(key: key);
   final String name;
   final String email;
@@ -32,6 +34,7 @@ class UserInforPage extends StatefulWidget {
   final String phone;
   final String position;
   final String department;
+  final String supID;
 
   @override
   State<UserInforPage> createState() => _UserInforPageState();
@@ -43,6 +46,7 @@ class _UserInforPageState extends State<UserInforPage> {
   late TextEditingController idController;
   late TextEditingController addressController;
   late TextEditingController phoneController;
+  late TextEditingController supervisorIDController;
   late String birthdayController;
   late String genderController;
   EmployeeModel? employeeInfor;
@@ -82,13 +86,13 @@ class _UserInforPageState extends State<UserInforPage> {
   @override
   void initState() {
     super.initState();
-    getEmployeeInf();
 
     idController = TextEditingController(text: widget.id);
     emailController = TextEditingController(text: widget.email);
     nameController = TextEditingController(text: widget.name);
     phoneController = TextEditingController(text: widget.phone);
     addressController = TextEditingController(text: widget.address);
+    supervisorIDController = TextEditingController(text: widget.supID);
     genderController = widget.gender;
     birthdayController = widget.birthday;
     photoURLController = widget.photoURL;
@@ -134,7 +138,7 @@ class _UserInforPageState extends State<UserInforPage> {
       genderController = genderController;
       birthdayController = birthdayController;
       genderController = genderController;
-
+      supervisorIDController = supervisorIDController;
       phoneController = phoneController;
       photoURLController = photoURLController;
     });
@@ -155,232 +159,312 @@ class _UserInforPageState extends State<UserInforPage> {
               title: const Text("Employee Information"),
             ),
             body: SingleChildScrollView(
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.width / 4.4,
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            height: 100,
-                          ),
-                          _imageURL != ""
-                              ? Image.network(_imageURL,
-                                  width: 300, height: 300, fit: BoxFit.fill)
-                              : const CircularProgressIndicator()
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 30,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 100),
-                      child: Table(
-                        defaultColumnWidth: const FixedColumnWidth(280),
-                        children: [
-                          TableRow(children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                titlebox("Name:"),
-                                isEdit == false
-                                    ? inputBox2(nameController.text)
-                                    : inputBox(nameController, 20),
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                titlebox("Address:"),
-                                isEdit == false
-                                    ? inputBox2(addressController.text)
-                                    : inputBox(addressController, 8),
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                titlebox("Gender:"),
-                                isEdit == false
-                                    ? inputBox2(genderController)
-                                    : genderSelectedBox(),
-                              ],
-                            )
-                          ]),
-                          TableRow(children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                titlebox("Birthday:"),
-                                isEdit == false
-                                    ? inputBox2(birthdayController)
-                                    : birthdayButton(15)
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                titlebox("Identification Number:"),
-                                inputBox2(idController.text)
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                titlebox("Phone:"),
-                                isEdit == false
-                                    ? inputBox2(phoneController.text)
-                                    : inputBox(phoneController, 8),
-                              ],
-                            )
-                          ]),
-                          TableRow(children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                titlebox("Department:"),
-                                inputBox2(department)
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [titlebox("Role:"), inputBox2(role)],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                titlebox("Supervisor ID:"),
-                                inputBox2(managerIDcontroller)
-                              ],
-                            )
-                          ])
-                        ],
-                      ),
-                    ),
-                    Column(
-                      children: [
+              child: Column(
+                children: [
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
                         const SizedBox(
-                          height: 50,
+                          width: 20,
                         ),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height / 5,
-                          width: 50,
+                          height: MediaQuery.of(context).size.height,
+                          width: MediaQuery.of(context).size.width / 4.4,
                           child: Column(
                             children: [
-                              IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      isEdit = !isEdit;
-                                    });
-                                  },
-                                  icon: Icon(Icons.edit,
-                                      color: isEdit ? Colors.red : Colors.blue,
-                                      size: 28)),
+                              const SizedBox(
+                                height: 100,
+                              ),
+                              _imageURL != ""
+                                  ? Image.network(_imageURL,
+                                      width: 300, height: 300, fit: BoxFit.fill)
+                                  : const CircularProgressIndicator()
                             ],
                           ),
                         ),
                         const SizedBox(
-                          height: 350,
+                          width: 30,
                         ),
-                        isEdit
-                            ? InkWell(
-                                onTap: () async {
-                                  //Update controller
-                                  updateEmployee();
-                                  Map<String, dynamic> map =
-                                      <String, dynamic>{};
-                                  map.addAll({
-                                    "id": idController.text,
-                                    "name": nameController.text,
-                                    "gender": genderController,
-                                    "birthday": birthdayController,
-                                    "email": emailController.text,
-                                    "address": addressController.text,
-                                    "phone": phoneController.text,
-                                    "photoURL": photoURLController,
-                                  });
-
-                                  setState(() {
-                                    employeeServices.updateEmployee(
-                                        widget.email, map);
-                                    for (Map<String, dynamic> employee
-                                        in provider.employeeSource) {
-                                      if (employee.values.elementAt(4) ==
-                                          emailController.text) {
-                                        employee.update(
-                                          "name",
-                                          (value) => nameController.text,
-                                        );
-                                        employee.update(
-                                          "id",
-                                          (value) => idController.text,
-                                        );
-                                        employee.update(
-                                          "address",
-                                          (value) => addressController.text,
-                                        );
-                                        employee.update(
-                                          "email",
-                                          (value) => emailController.text,
-                                        );
-                                        employee.update(
-                                          "phone",
-                                          (value) => phoneController.text,
-                                        );
-                                        employee.update(
-                                          "gender",
-                                          (value) => genderController,
-                                        );
-
-                                        employee.update(
-                                          "birthday",
-                                          (value) => birthdayController,
-                                        );
-                                        employee.update("department",
-                                            (value) => department);
-                                      }
-                                    }
-                                  });
-
-                                  authClass.showSnackBar(
-                                      context, "Update success");
-                                  SchedulerBinding.instance
-                                      ?.addPostFrameCallback((_) {
-                                    Navigator.of(context)
-                                        .pushReplacementNamed(EmployeeLayout);
-                                  });
-                                },
-                                child: Container(
-                                  height: 40,
-                                  width: 75,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.blueAccent),
-                                  child: Center(
-                                    child: Text(isEdit ? "Update" : "Ok"),
-                                  ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 100),
+                          child: Table(
+                            defaultColumnWidth: const FixedColumnWidth(280),
+                            children: [
+                              TableRow(children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    titlebox("Name:"),
+                                    isEdit == false
+                                        ? inputBox2(nameController.text)
+                                        : inputBox(nameController, 20),
+                                  ],
                                 ),
-                              )
-                            : Container(),
-                      ],
-                    )
-                  ]),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    titlebox("Address:"),
+                                    isEdit == false
+                                        ? inputBox2(addressController.text)
+                                        : inputBox(addressController, 8),
+                                  ],
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    titlebox("Gender:"),
+                                    isEdit == false
+                                        ? inputBox2(genderController)
+                                        : genderSelectedBox(),
+                                  ],
+                                )
+                              ]),
+                              TableRow(children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    titlebox("Birthday:"),
+                                    isEdit == false
+                                        ? inputBox2(birthdayController)
+                                        : birthdayButton(15)
+                                  ],
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    titlebox("Identification Number:"),
+                                    inputBox2(idController.text)
+                                  ],
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    titlebox("Phone:"),
+                                    isEdit == false
+                                        ? inputBox2(phoneController.text)
+                                        : inputBox(phoneController, 8),
+                                  ],
+                                )
+                              ]),
+                              TableRow(children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    titlebox("Department:"),
+                                    inputBox2(department)
+                                  ],
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    titlebox("Role:"),
+                                    inputBox2(role)
+                                  ],
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    titlebox("Supervisor ID:"),
+                                    isEdit == false
+                                        ? inputBox2(managerIDcontroller)
+                                        : inputBox(supervisorIDController, 10)
+                                  ],
+                                )
+                              ])
+                            ],
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 50,
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height / 5,
+                              width: 50,
+                              child: Column(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          isEdit = !isEdit;
+                                        });
+                                      },
+                                      icon: Icon(Icons.edit,
+                                          color:
+                                              isEdit ? Colors.red : Colors.blue,
+                                          size: 28)),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 350,
+                            ),
+                            isEdit
+                                ? InkWell(
+                                    onTap: () async {
+                                      // updateEmployee();
+                                      setState(() {});
+                                      bool isExist = await employeeServices
+                                          .checkExistEmployeebyID(
+                                              supervisorIDController.text);
+
+                                      if (isExist) {
+                                        Map<String, dynamic> map =
+                                            <String, dynamic>{};
+                                        map.addAll({
+                                          "name": nameController.text,
+                                          "gender": genderController,
+                                          "birthday": birthdayController,
+                                          "email": emailController.text,
+                                          "address": addressController.text,
+                                          "phone": phoneController.text,
+                                          "supervisorid":
+                                              supervisorIDController.text
+                                        });
+
+                                        setState(() {
+                                          employeeServices.updateEmployee(
+                                              widget.email, map);
+                                          for (Map<String, dynamic> employee
+                                              in provider.employeeSource) {
+                                            if (employee.values.elementAt(4) ==
+                                                emailController.text) {
+                                              employee.update(
+                                                "name",
+                                                (value) => nameController.text,
+                                              );
+                                              employee.update(
+                                                "id",
+                                                (value) => idController.text,
+                                              );
+                                              employee.update(
+                                                "address",
+                                                (value) =>
+                                                    addressController.text,
+                                              );
+                                              employee.update(
+                                                "email",
+                                                (value) => emailController.text,
+                                              );
+                                              employee.update(
+                                                "phone",
+                                                (value) => phoneController.text,
+                                              );
+                                              employee.update(
+                                                "gender",
+                                                (value) => genderController,
+                                              );
+
+                                              employee.update(
+                                                "birthday",
+                                                (value) => birthdayController,
+                                              );
+                                              employee.update("department",
+                                                  (value) => department);
+                                            }
+                                          }
+                                        });
+
+                                        authClass.showSnackBar(
+                                            context, "Update success");
+                                        SchedulerBinding.instance
+                                            ?.addPostFrameCallback((_) {
+                                          Navigator.of(context)
+                                              .pushReplacementNamed(
+                                                  EmployeeLayout);
+                                        });
+                                      } else {
+                                        authClass.showSnackBar(context,
+                                            "Supervisor ID is not exsit");
+                                      }
+                                    },
+                                    child: Container(
+                                      height: 40,
+                                      width: 75,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          color: Colors.blueAccent),
+                                      child: Center(
+                                        child: Text(isEdit ? "Update" : "Ok"),
+                                      ),
+                                    ),
+                                  )
+                                : Container(),
+                          ],
+                        )
+                      ]),
+                  Row(
+                    children: [
+                      // Expanded(
+                      //   flex: 2,
+                      //   child: DropdownSearch<String>(
+                      //     validator: (v) => v == null ? "required field" : null,
+                      //     mode: Mode.MENU,
+                      //     dropdownSearchDecoration: InputDecoration(
+                      //       hintText: "Select a country",
+                      //       labelText: "Menu mode *",
+                      //       filled: true,
+                      //       border: UnderlineInputBorder(
+                      //         borderSide: BorderSide(color: Color(0xFF01689A)),
+                      //       ),
+                      //     ),
+                      //     showAsSuffixIcons: true,
+                      //     clearButtonBuilder: (_) => Padding(
+                      //       padding: const EdgeInsets.all(8.0),
+                      //       child: const Icon(
+                      //         Icons.clear,
+                      //         size: 24,
+                      //         color: Colors.black,
+                      //       ),
+                      //     ),
+                      //     dropdownButtonBuilder: (_) => Padding(
+                      //       padding: const EdgeInsets.all(8.0),
+                      //       child: const Icon(
+                      //         Icons.arrow_drop_down,
+                      //         size: 24,
+                      //         color: Colors.black,
+                      //       ),
+                      //     ),
+                      //     showSelectedItems: true,
+                      //     items: [
+                      //       "Brazil",
+                      //       "Italia (Disabled)",
+                      //       "Tunisia",
+                      //       'Canada'
+                      //     ],
+                      //     showClearButton: true,
+                      //     onChanged: print,
+                      //     popupItemDisabled: (String? s) =>
+                      //         s?.startsWith('I') ?? true,
+                      //     selectedItem: "Tunisia",
+                      //   ),
+                      // ),
+                      // Expanded(
+                      //     child: TextField(
+                      //   decoration: InputDecoration(
+                      //     filled: true,
+                      //     labelText: "Menu mode *",
+                      //     border: UnderlineInputBorder(
+                      //       borderSide: BorderSide(color: Color(0xFF01689A)),
+                      //     ),
+                      //   ),
+                      // ))
+                    ],
+                  ),
+                ],
+              ),
             ),
           )
         : Column(

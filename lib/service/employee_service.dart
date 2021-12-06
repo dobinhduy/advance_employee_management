@@ -16,12 +16,27 @@ class EmployeeServices {
         .collection(collection)
         .where("email", isEqualTo: email)
         .get();
-    try {
-      QueryDocumentSnapshot doc = querySnapshot.docs[0];
-      DocumentReference docref = doc.reference;
+    QueryDocumentSnapshot doc = querySnapshot.docs[0];
+    DocumentReference docref = doc.reference;
+    await docref.update(<String, dynamic>{
+      "name": map.values.elementAt(0),
+      "gender": map.values.elementAt(1),
+      "birthday": map.values.elementAt(2),
+      "email": map.values.elementAt(3),
+      "address": map.values.elementAt(4),
+      "phone": map.values.elementAt(5),
+      "supervisorid": map.values.elementAt(6)
+    });
+  }
 
-      await docref.update(map);
-    } catch (e) {}
+  void updateEmployeeManager(String email, Map<String, dynamic> map) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("email", isEqualTo: email)
+        .get();
+    QueryDocumentSnapshot doc = querySnapshot.docs[0];
+    DocumentReference docref = doc.reference;
+    await docref.update(map);
   }
 
   void deleteEmployee(String email) async {
@@ -93,6 +108,16 @@ class EmployeeServices {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)
         .where("email", isEqualTo: email)
+        .get();
+    List<DocumentSnapshot> doc = querySnapshot.docs;
+
+    return doc.length == 1;
+  }
+
+  Future<bool> checkUniqueID(String id) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: id)
         .get();
     List<DocumentSnapshot> doc = querySnapshot.docs;
 

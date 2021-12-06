@@ -45,6 +45,8 @@ class _ViewProjectState extends State<ViewProject> {
   List<dynamic> members = [];
   List<dynamic> memberName = [];
   List<TaskModel>? tasks = [];
+  String comple = "";
+  num value = 0;
 
   bool timeout = false;
   getEmployeeID() async {
@@ -81,10 +83,12 @@ class _ViewProjectState extends State<ViewProject> {
 
   @override
   void initState() {
+    value = int.parse(widget.complete);
     super.initState();
     members = widget.member;
     getAllTask();
     getMemberName(members);
+    comple = widget.complete;
   }
 
   @override
@@ -148,7 +152,7 @@ class _ViewProjectState extends State<ViewProject> {
                           Row(
                             children: [
                               titlebox("Complete:"),
-                              titlebox2(widget.complete),
+                              titlebox2(value.toString()),
                               const Text(" %"),
                             ],
                           ),
@@ -281,11 +285,15 @@ class _ViewProjectState extends State<ViewProject> {
                       style: ElevatedButton.styleFrom(
                           textStyle: const TextStyle(fontSize: 18)),
                       onPressed: () {
+                        value = value + task.percent;
+
                         if (task.status == "Uncomplete") {
                           taskService.updateStatus(task.id, "Complete");
                           projectService.addCompletion(
                               widget.projectid, task.percent);
-                          setState(() {});
+                          setState(() {
+                            value;
+                          });
                         } else {
                           print(
                               "You can not change the status. Try to connect to you manager");

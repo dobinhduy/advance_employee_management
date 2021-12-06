@@ -12,7 +12,7 @@ class SideMenuEmployee extends StatelessWidget {
       breakpoints:
           const ScreenBreakpoints(desktop: 1400, tablet: 600, watch: 300),
       mobile: const SideMenuMoblie(),
-      desktop: const SideMenuEmployeeDesktop(),
+      desktop: SideMenuEmployeeDesktop(),
     );
   }
 }

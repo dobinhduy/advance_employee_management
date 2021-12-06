@@ -41,7 +41,7 @@ class _RecoverPasswordState extends State<RecoverPassword> {
                 const SizedBox(
                   height: 10,
                 ),
-                senButton(),
+                sendButton(),
               ],
             ),
           ),
@@ -72,12 +72,12 @@ class _RecoverPasswordState extends State<RecoverPassword> {
     );
   }
 
-  Widget senButton() {
+  Widget sendButton() {
     return InkWell(
       onTap: () async {
         try {
           await FirebaseAuth.instance.sendPasswordResetEmail(email: email.text);
-          authClass.showSnackBar(context, "Sended email");
+          authClass.showSnackBar(context, "Email was sended...");
           Navigator.pop(context);
         } catch (e) {
           authClass.showSnackBar(context, e.toString());

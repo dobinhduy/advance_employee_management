@@ -20,6 +20,7 @@ class _NotificationPageState extends State<NotificationPage> {
   List<NotificationModel>? notifiesAddProject;
   List<NotificationModel>? notifiesAssignTask;
   String userID = "";
+  bool read = false;
   bool timeout = false;
   @override
   void initState() {
@@ -125,6 +126,7 @@ class _NotificationPageState extends State<NotificationPage> {
 
   Widget notifyAssignTask(NotificationModel notify, Color color) {
     Color textColor = color;
+    bool read = notify.isread;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -180,10 +182,11 @@ class _NotificationPageState extends State<NotificationPage> {
                           textStyle: const TextStyle(fontSize: 18)),
                       onPressed: () {
                         setState(() {
-                          notificationService.updateStatus(notify.id, true);
+                          read = !read;
+                          notificationService.updateStatus(notify.id, read);
                         });
                       },
-                      child: notify.isread == false
+                      child: read == false
                           ? const Text('Mark as read')
                           : const Text("Mark as unread")),
                   const SizedBox(
@@ -200,6 +203,7 @@ class _NotificationPageState extends State<NotificationPage> {
 
   Widget notifyAddpro(NotificationModel notify, Color color) {
     Color textColor = color;
+    bool read = notify.isread;
     NotificationService notificationService = NotificationService();
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -256,11 +260,11 @@ class _NotificationPageState extends State<NotificationPage> {
                       style: ElevatedButton.styleFrom(
                           textStyle: const TextStyle(fontSize: 18)),
                       onPressed: () {
-                        notificationService.updateStatus(
-                            notify.id, !notify.isread);
+                        read = !read;
+                        notificationService.updateStatus(notify.id, read);
                         setState(() {});
                       },
-                      child: notify.isread == false
+                      child: read == false
                           ? const Text('Mark as read')
                           : const Text("Mark as unread")),
                   const SizedBox(

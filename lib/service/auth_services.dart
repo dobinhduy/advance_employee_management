@@ -1,4 +1,5 @@
 import 'package:advance_employee_management/Employee__Pages/change_password.dart';
+import 'package:advance_employee_management/authentication/sign_in_page.dart';
 import 'package:advance_employee_management/locator.dart';
 
 import 'package:advance_employee_management/rounting/route_names.dart';
@@ -71,22 +72,26 @@ class AuthClass {
     await storage.delete(key: "token");
   }
 
-  Future<bool> validateCurrentPassword(
+  validateCurrentPassword(
       String password, String newPassword, BuildContext context) async {
-    bool isSuccess = false;
     var authCredentials = EmailAuthProvider.credential(
         email: auth.currentUser!.email!, password: password);
-    try {
-      auth.currentUser!
-          .reauthenticateWithCredential(authCredentials)
-          .then((value) {
-        auth.currentUser!.updatePassword(newPassword);
-        isSuccess = true;
+
+    auth.currentUser!
+        .reauthenticateWithCredential(authCredentials)
+        .then((value) {
+      auth.currentUser!.updatePassword(newPassword).then((_) {
+        AuthClass().showSnackBar(context, "Password was changed");
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (builder) => const SignInPage()),
+            (route) => false);
+      }).catchError((error) {
+        AuthClass().showSnackBar(context, "Not success");
       });
-    } catch (e) {
-      isSuccess = false;
-    }
-    return isSuccess;
+    }).catchError((error) {
+      AuthClass().showSnackBar(context, "Password is not correct");
+    });
   }
 
   Future<void> verifyPhoneNumber(

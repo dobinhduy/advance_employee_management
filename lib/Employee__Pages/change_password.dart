@@ -1,8 +1,5 @@
 import 'package:advance_employee_management/authentication/sign_in_page.dart';
-import 'package:advance_employee_management/locator.dart';
-import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
-import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:flutter/material.dart';
 
 class ChangePasswordPage extends StatefulWidget {
@@ -61,7 +58,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.check),
                           ),
-                          initialValue: 'At Least 6 characters',
+                          initialValue: 'At Least 8 characters',
                           readOnly: true,
                         ),
                         TextFormField(
@@ -148,20 +145,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       onTap: () async {
         if (newPassword.text == confirmNewPassword.text) {
           if (validPassword(newPassword.text)) {
-            bool result = await AuthClass().validateCurrentPassword(
+            AuthClass().validateCurrentPassword(
                 currentPassword.text, newPassword.text, context);
-            if (!result) {
-              AuthClass().showSnackBar(
-                  context, "Change password success. Please login again!!");
-
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (builder) => const SignInPage()),
-                  (route) => false);
-            } else {
-              AuthClass().showSnackBar(context,
-                  "Current Password is not correct. Please try again!!");
-            }
           } else {
             AuthClass().showSnackBar(
                 context, "Password is not safety. Please try another password");

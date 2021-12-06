@@ -4,6 +4,7 @@ import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/department_service.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
+import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -13,6 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+import 'dart:math';
+
+import '../locator.dart';
 
 class AddUserPage extends StatefulWidget {
   const AddUserPage({Key? key}) : super(key: key);
@@ -27,7 +31,7 @@ class _AddUserPageState extends State<AddUserPage> {
   final TextEditingController fisrtname = TextEditingController();
   final TextEditingController lastname = TextEditingController();
   final TextEditingController password = TextEditingController();
-  final TextEditingController id = TextEditingController();
+
   final TextEditingController address = TextEditingController();
   final TextEditingController phone = TextEditingController();
   final TextEditingController email = TextEditingController();
@@ -41,6 +45,7 @@ class _AddUserPageState extends State<AddUserPage> {
   List<String> listDepartment = [];
   String departmentName = "";
   String? dropdownDeName;
+  String randomID = "";
 
   String _imageURL = "";
   bool timeup = false;
@@ -91,7 +96,7 @@ class _AddUserPageState extends State<AddUserPage> {
         lastname.clear();
         password.clear();
         address.clear();
-        id.clear();
+
         phone.clear();
         email.clear();
         _imageURL = "";
@@ -135,7 +140,16 @@ class _AddUserPageState extends State<AddUserPage> {
                             titlebox("Birthday"),
                             birthdayButton(),
                             titlebox("ID"),
-                            inputBox("User ID", id, false),
+                            Row(
+                              children: [
+                                randomBox(),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      random();
+                                    },
+                                    child: const Text("Generate"))
+                              ],
+                            ),
                             titlebox("Password"),
                             inputBox("Password", password, false),
                           ],
@@ -260,7 +274,7 @@ class _AddUserPageState extends State<AddUserPage> {
   Widget inputBox(
       String text, TextEditingController controller, bool obscureText) {
     return SizedBox(
-      width: 250,
+      width: 260,
       height: 40,
       child: TextFormField(
           controller: controller,
@@ -277,6 +291,45 @@ class _AddUserPageState extends State<AddUserPage> {
                 borderSide: const BorderSide(width: 1, color: Colors.grey)),
           )),
     );
+  }
+
+  Widget randomBox() {
+    return SizedBox(
+      width: 260,
+      height: 40,
+      child: TextFormField(
+          style: const TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            hintText: randomID,
+            labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(width: 1, color: Colors.amber)),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(width: 1, color: Colors.grey)),
+          )),
+    );
+  }
+
+  random() async {
+    bool isExist;
+    String id = "";
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random _rnd = Random();
+    String getRandomString(int length) =>
+        String.fromCharCodes(Iterable.generate(
+            length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+    id = getRandomString(10);
+    isExist = await employeeServices.checkUniqueID(id);
+    if (!isExist) {
+      setState(() {
+        randomID = id;
+      });
+    } else {
+      print('exist');
+    }
   }
 
   Widget uploadImageButton() {
@@ -505,13 +558,13 @@ class _AddUserPageState extends State<AddUserPage> {
         if (checkFillImage()) {
           if (checkFillAll()) {
             if (validPassword(password.text)) {
-              if (id.text != supervisorid.text) {
+              if (randomID != supervisorid.text) {
                 try {
                   await FirebaseAuth.instance.createUserWithEmailAndPassword(
                       email: email.text, password: password.text);
 
                   employeeServices.addEmployee(
-                      id.text,
+                      randomID,
                       fisrtname.text + " " + lastname.text,
                       gender,
                       "${selectedDate.toLocal()}"
@@ -526,7 +579,7 @@ class _AddUserPageState extends State<AddUserPage> {
                       departmentName,
                       supervisorid.text);
                   provider.employeeSource.add({
-                    "id": id.text,
+                    "id": randomID,
                     "name": fisrtname.text + " " + lastname.text,
                     "gender": gender,
                     "birthday": "${selectedDate.toLocal()}"
@@ -539,12 +592,13 @@ class _AddUserPageState extends State<AddUserPage> {
                     "position": "Employee",
                     "role": role,
                     "department": departmentName,
-                    "action": [id.text, null],
+                    "action": [randomID, null],
                   });
+                  Navigator.pop(context);
+                  locator<NavigationService>().navigateTo(EmployeeLayout);
+
                   authClass.showSnackBar(context, "Add employee success");
-                  SchedulerBinding.instance?.addPostFrameCallback((_) {
-                    Navigator.of(context).pushReplacementNamed(AddUserLayout);
-                  });
+
                   setState(() {});
                 } catch (e) {
                   authClass.showSnackBar(context, e.toString());
@@ -614,8 +668,10 @@ class _AddUserPageState extends State<AddUserPage> {
         password.text.isEmpty ||
         address.text.isEmpty ||
         phone.text.isEmpty ||
-        id.text.isEmpty ||
-        email.text.isEmpty) {
+        randomID == "" ||
+        email.text.isEmpty ||
+        gender.isEmpty ||
+        role.isEmpty) {
       return false;
     }
     return true;
