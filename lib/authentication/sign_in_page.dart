@@ -75,7 +75,7 @@ class _SignUpPageState extends State<SignInPage> {
               const SizedBox(
                 height: 15,
               ),
-              passwordBox("Password", _passwordController, false),
+              passwordBox("Password", _passwordController, true),
               const SizedBox(
                 height: 30,
               ),
