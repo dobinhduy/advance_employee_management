@@ -223,7 +223,7 @@ class _ViewProjectState extends State<ViewProject> {
                         titlebox("Your task"),
                         Column(
                           children: [
-                            for (TaskModel task in tasks!)
+                            for (TaskModel task in tasks!.reversed)
                               task.status == "Uncomplete"
                                   ? taskBox(task, "Mark as Complete",
                                       const Color(0xFF9575CD))
