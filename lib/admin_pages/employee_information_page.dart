@@ -3,6 +3,7 @@ import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
+import 'package:advance_employee_management/service/project_service.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -51,6 +52,7 @@ class _UserInforPageState extends State<UserInforPage> {
   late String genderController;
   EmployeeModel? employeeInfor;
   EmployeeServices employeeServices = EmployeeServices();
+  ProjectService projectService = ProjectService();
   AuthClass authClass = AuthClass();
 
   late String photoURLController;
@@ -313,80 +315,90 @@ class _UserInforPageState extends State<UserInforPage> {
                             isEdit
                                 ? InkWell(
                                     onTap: () async {
-                                      // updateEmployee();
                                       setState(() {});
                                       bool isExist = await employeeServices
                                           .checkExistEmployeebyID(
                                               supervisorIDController.text);
+                                      bool isChange = await projectService
+                                          .checkFinishAllProject(widget.id);
 
                                       if (isExist) {
-                                        Map<String, dynamic> map =
-                                            <String, dynamic>{};
-                                        map.addAll({
-                                          "name": nameController.text,
-                                          "gender": genderController,
-                                          "birthday": birthdayController,
-                                          "email": emailController.text,
-                                          "address": addressController.text,
-                                          "phone": phoneController.text,
-                                          "supervisorid":
-                                              supervisorIDController.text
-                                        });
+                                        if (isChange) {
+                                          Map<String, dynamic> map =
+                                              <String, dynamic>{};
+                                          map.addAll({
+                                            "name": nameController.text,
+                                            "gender": genderController,
+                                            "birthday": birthdayController,
+                                            "email": emailController.text,
+                                            "address": addressController.text,
+                                            "phone": phoneController.text,
+                                            "supervisorid":
+                                                supervisorIDController.text
+                                          });
 
-                                        setState(() {
-                                          employeeServices.updateEmployee(
-                                              widget.email, map);
-                                          for (Map<String, dynamic> employee
-                                              in provider.employeeSource) {
-                                            if (employee.values.elementAt(4) ==
-                                                emailController.text) {
-                                              employee.update(
-                                                "name",
-                                                (value) => nameController.text,
-                                              );
-                                              employee.update(
-                                                "id",
-                                                (value) => idController.text,
-                                              );
-                                              employee.update(
-                                                "address",
-                                                (value) =>
-                                                    addressController.text,
-                                              );
-                                              employee.update(
-                                                "email",
-                                                (value) => emailController.text,
-                                              );
-                                              employee.update(
-                                                "phone",
-                                                (value) => phoneController.text,
-                                              );
-                                              employee.update(
-                                                "gender",
-                                                (value) => genderController,
-                                              );
+                                          setState(() {
+                                            employeeServices.updateEmployee(
+                                                widget.email, map);
+                                            for (Map<String, dynamic> employee
+                                                in provider.employeeSource) {
+                                              if (employee.values
+                                                      .elementAt(4) ==
+                                                  emailController.text) {
+                                                employee.update(
+                                                  "name",
+                                                  (value) =>
+                                                      nameController.text,
+                                                );
+                                                employee.update(
+                                                  "id",
+                                                  (value) => idController.text,
+                                                );
+                                                employee.update(
+                                                  "address",
+                                                  (value) =>
+                                                      addressController.text,
+                                                );
+                                                employee.update(
+                                                  "email",
+                                                  (value) =>
+                                                      emailController.text,
+                                                );
+                                                employee.update(
+                                                  "phone",
+                                                  (value) =>
+                                                      phoneController.text,
+                                                );
+                                                employee.update(
+                                                  "gender",
+                                                  (value) => genderController,
+                                                );
 
-                                              employee.update(
-                                                "birthday",
-                                                (value) => birthdayController,
-                                              );
-                                              employee.update("department",
-                                                  (value) => department);
+                                                employee.update(
+                                                  "birthday",
+                                                  (value) => birthdayController,
+                                                );
+                                                employee.update("department",
+                                                    (value) => department);
+                                              }
                                             }
-                                          }
-                                        });
+                                          });
 
-                                        authClass.showSnackBar(
-                                            context, "Update success");
-                                        SchedulerBinding.instance
-                                            ?.addPostFrameCallback((_) {
-                                          Navigator.of(context)
-                                              .pushReplacementNamed(
-                                                  EmployeeLayout);
-                                        });
+                                          authClass.showSnackBar(
+                                              context, "Update success");
+                                          SchedulerBinding.instance
+                                              ?.addPostFrameCallback((_) {
+                                            Navigator.of(context)
+                                                .pushReplacementNamed(
+                                                    EmployeeLayout);
+                                          });
+                                        } else {
+                                          authClass.showSnackBar(context,
+                                              "This employee is working on some project!!!");
+                                        }
                                       } else {
-                                        authClass.showSnackBar(context,
-                                            "Supervisor ID is not exsit");
+                                        authClass.showSnackBar(
+                                            context, "ID is not exsit");
                                       }
                                     },
                                     child: Container(
@@ -405,64 +417,6 @@ class _UserInforPageState extends State<UserInforPage> {
                           ],
                         )
                       ]),
-                  Row(
-                    children: [
-                      // Expanded(
-                      //   flex: 2,
-                      //   child: DropdownSearch<String>(
-                      //     validator: (v) => v == null ? "required field" : null,
-                      //     mode: Mode.MENU,
-                      //     dropdownSearchDecoration: InputDecoration(
-                      //       hintText: "Select a country",
-                      //       labelText: "Menu mode *",
-                      //       filled: true,
-                      //       border: UnderlineInputBorder(
-                      //         borderSide: BorderSide(color: Color(0xFF01689A)),
-                      //       ),
-                      //     ),
-                      //     showAsSuffixIcons: true,
-                      //     clearButtonBuilder: (_) => Padding(
-                      //       padding: const EdgeInsets.all(8.0),
-                      //       child: const Icon(
-                      //         Icons.clear,
-                      //         size: 24,
-                      //         color: Colors.black,
-                      //       ),
-                      //     ),
-                      //     dropdownButtonBuilder: (_) => Padding(
-                      //       padding: const EdgeInsets.all(8.0),
-                      //       child: const Icon(
-                      //         Icons.arrow_drop_down,
-                      //         size: 24,
-                      //         color: Colors.black,
-                      //       ),
-                      //     ),
-                      //     showSelectedItems: true,
-                      //     items: [
-                      //       "Brazil",
-                      //       "Italia (Disabled)",
-                      //       "Tunisia",
-                      //       'Canada'
-                      //     ],
-                      //     showClearButton: true,
-                      //     onChanged: print,
-                      //     popupItemDisabled: (String? s) =>
-                      //         s?.startsWith('I') ?? true,
-                      //     selectedItem: "Tunisia",
-                      //   ),
-                      // ),
-                      // Expanded(
-                      //     child: TextField(
-                      //   decoration: InputDecoration(
-                      //     filled: true,
-                      //     labelText: "Menu mode *",
-                      //     border: UnderlineInputBorder(
-                      //       borderSide: BorderSide(color: Color(0xFF01689A)),
-                      //     ),
-                      //   ),
-                      // ))
-                    ],
-                  ),
                 ],
               ),
             ),

@@ -11,7 +11,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:math';
@@ -54,7 +53,7 @@ class _AddUserPageState extends State<AddUserPage> {
   bool female = false;
   String gender = "";
 
-  String dropDownRole = "Software developer";
+  String? dropDownRole;
 
   void deplay() {
     Future.delayed(const Duration(seconds: 1), () {
@@ -96,7 +95,6 @@ class _AddUserPageState extends State<AddUserPage> {
         lastname.clear();
         password.clear();
         address.clear();
-
         phone.clear();
         email.clear();
         _imageURL = "";
@@ -139,11 +137,11 @@ class _AddUserPageState extends State<AddUserPage> {
                             genderSelectedBox(),
                             titlebox("Birthday"),
                             birthdayButton(),
-                            titlebox("ID"),
+                            titlebox("Employee ID"),
                             Row(
                               children: [
                                 randomBox(),
-                                SizedBox(
+                                const SizedBox(
                                   width: 5,
                                 ),
                                 ElevatedButton(
@@ -301,6 +299,7 @@ class _AddUserPageState extends State<AddUserPage> {
       width: 250,
       height: 40,
       child: TextFormField(
+          enabled: false,
           obscureText: true,
           style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
@@ -400,7 +399,7 @@ class _AddUserPageState extends State<AddUserPage> {
       onChanged: (String? newValue) {
         setState(() {
           dropDownRole = newValue!;
-          role = dropDownRole;
+          role = dropDownRole!;
         });
       },
       items: <String>[
@@ -431,6 +430,7 @@ class _AddUserPageState extends State<AddUserPage> {
       ),
       onChanged: null,
       items: <String>[
+        '',
         'Software developer',
         'Hardware Technician',
         'Network Administrator',
@@ -503,7 +503,7 @@ class _AddUserPageState extends State<AddUserPage> {
           height: 40,
           child: TextFormField(
               obscureText: false,
-              enabled: true,
+              enabled: false,
               style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 hintText: "${selectedDate.toLocal()}"

@@ -137,15 +137,20 @@ class EmployeeServices {
     return doc.length == 1;
   }
 
-  Future<bool> checkhasEmployee(String id) async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection(collection)
-        .where("supervisorid", isEqualTo: id)
-        .get();
-    List<DocumentSnapshot> doc = querySnapshot.docs;
+  Future<bool> checkhasEmployee(String id) async => FirebaseFirestore.instance
+          .collection(collection)
+          .where("supervisorid", isEqualTo: id)
+          .get()
+          .then((result) {
+        List<EmployeeModel> users = [];
+        for (DocumentSnapshot user in result.docs) {
+          if ((user.data() as dynamic)["id"] != id) {
+            users.add(EmployeeModel.fromSnapshot(user));
+          }
+        }
 
-    return doc.isNotEmpty;
-  }
+        return users.isNotEmpty;
+      });
 
   Future<bool> checkExistEmployeebyID(String id) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -252,7 +257,9 @@ class EmployeeServices {
           .then((result) {
         List<EmployeeModel> users = [];
         for (DocumentSnapshot user in result.docs) {
-          users.add(EmployeeModel.fromSnapshot(user));
+          if ((user.data() as dynamic)["id"] != id) {
+            users.add(EmployeeModel.fromSnapshot(user));
+          }
         }
 
         return users;

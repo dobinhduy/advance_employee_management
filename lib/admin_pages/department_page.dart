@@ -121,24 +121,7 @@ class _DepartmentPageState extends State<DepartmentPage> {
                           });
                         })
                 ],
-                onTabRow: (data) {
-                  // Map<String, dynamic> map =
-                  //     Map<String, dynamic>.from(data as Map<String, dynamic>);
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => UserInforPage(
-                  //               id: map.values.elementAt(0),
-                  //               name: map.values.elementAt(1),
-                  //               gender: map.values.elementAt(2),
-                  //               birthday: map.values.elementAt(3),
-                  //               email: map.values.elementAt(4),
-                  //               address: map.values.elementAt(5),
-                  //               phone: map.values.elementAt(6),
-                  //               photoURL: map.values.elementAt(7),
-                  //               position: map.values.elementAt(8),
-                  //             )));
-                },
+                onTabRow: (data) {},
                 onSort: departmentProvider.onSort,
                 sortAscending: departmentProvider.sortAscending,
                 sortColumn: departmentProvider.sortColumn,

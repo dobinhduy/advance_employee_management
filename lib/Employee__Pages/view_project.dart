@@ -73,7 +73,7 @@ class _ViewProjectState extends State<ViewProject> {
   }
 
   getAllTask() async {
-    tasks = await taskService.getAllTask(
+    tasks = await taskService.getAllTaskOfEmployee(
         widget.projectid, await employeeServices.getEmployeeIDbyEmail(email));
 
     if (mounted) {

@@ -1,5 +1,6 @@
 import 'package:advance_employee_management/Manager_Pages/add_member.dart';
 import 'package:advance_employee_management/locator.dart';
+import 'package:advance_employee_management/models/task.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
@@ -7,8 +8,10 @@ import 'package:advance_employee_management/service/department_service.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
+import 'package:advance_employee_management/service/task_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'assign_task.dart';
@@ -51,6 +54,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
   TextEditingController taskDescription = TextEditingController();
   ProjectService projectService = ProjectService();
   EmployeeServices employeeServices = EmployeeServices();
+  TaskService taskService = TaskService();
 
   late TextEditingController proName;
   late TextEditingController proID;
@@ -68,6 +72,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
 
   List<dynamic> members = [];
   List<dynamic> memberName = [];
+  List<TaskModel> tasks = [];
 
   String managerIDcontroller = "";
   String managerName = "";
@@ -115,6 +120,11 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
             projectid: projectid,
           );
         });
+  }
+
+  getAllTask() async {
+    tasks = await taskService.getAllTask(widget.projectid);
+    setState(() {});
   }
 
   getManagerName() async {
@@ -170,6 +180,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
     departmentName = widget.department;
     members = widget.member;
     status = widget.status;
+    getAllTask();
     getMemberName(members);
     getManagerName();
     if (widget.status == "Open") {
@@ -419,6 +430,11 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                                                 ProjectService
                                                                     projectService =
                                                                     ProjectService();
+
+                                                                taskService
+                                                                    .removeAllTasknwithMemberID(
+                                                                        members[
+                                                                            i]);
                                                                 projectService
                                                                     .removeMember(
                                                                         members[
@@ -442,7 +458,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                                 ),
                                             ],
                                           )
-                                        : Container(),
+                                        : Container()
                                   ],
                                 ),
                               ]),
@@ -503,9 +519,141 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                       ],
                     ),
                     Column(
-                      children: [
+                      children: <Widget>[
                         isEdit == false
-                            ? Container()
+                            ? tasks.isNotEmpty
+                                ? Container(
+                                    margin: const EdgeInsets.all(20),
+                                    padding: const EdgeInsets.only(bottom: 50),
+                                    child: Table(
+                                      defaultColumnWidth:
+                                          const FixedColumnWidth(200.0),
+                                      border: TableBorder.all(
+                                          color: Colors.black,
+                                          style: BorderStyle.solid,
+                                          width: 2),
+                                      children: [
+                                        TableRow(children: [
+                                          Column(children: const [
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text('Description',
+                                                style:
+                                                    TextStyle(fontSize: 20.0)),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                          ]),
+                                          Column(children: const [
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text('Member Id',
+                                                style:
+                                                    TextStyle(fontSize: 20.0)),
+                                            SizedBox(
+                                              height: 5,
+                                            )
+                                          ]),
+                                          Column(children: const [
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text('Assign Day',
+                                                style:
+                                                    TextStyle(fontSize: 20.0)),
+                                            SizedBox(
+                                              height: 5,
+                                            )
+                                          ]),
+                                          Column(children: const [
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text('Status',
+                                                style:
+                                                    TextStyle(fontSize: 20.0)),
+                                            SizedBox(
+                                              height: 5,
+                                            )
+                                          ]),
+                                          Column(children: const [
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text('Percent(%)',
+                                                style:
+                                                    TextStyle(fontSize: 20.0)),
+                                            SizedBox(
+                                              height: 5,
+                                            )
+                                          ]),
+                                        ]),
+                                        for (var item in tasks)
+                                          TableRow(children: [
+                                            Column(children: [
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              Text(item.description),
+                                              const SizedBox(
+                                                height: 5,
+                                              )
+                                            ]),
+                                            Column(
+                                              children: [
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(item.memberid),
+                                                const SizedBox(
+                                                  height: 5,
+                                                )
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(DateFormat(
+                                                        "dd/MM/yyyy,HH:mm")
+                                                    .format(DateTime
+                                                        .fromMillisecondsSinceEpoch(
+                                                            item.assignday))),
+                                                const SizedBox(
+                                                  height: 5,
+                                                )
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(item.status),
+                                                const SizedBox(
+                                                  height: 5,
+                                                )
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(item.percent.toString()),
+                                                const SizedBox(
+                                                  height: 5,
+                                                )
+                                              ],
+                                            ),
+                                          ]),
+                                      ],
+                                    ),
+                                  )
+                                : Container()
                             : Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -667,7 +815,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
 
   Widget descriptionProject(TextEditingController desciption, bool enable) {
     return Container(
-      height: 500,
+      height: 200,
       width: 400,
       decoration: BoxDecoration(
         color: Colors.white12,

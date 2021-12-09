@@ -40,12 +40,27 @@ class TaskService {
     docref.update({'status': status});
   }
 
-  Future<List<TaskModel>> getAllTask(
+  Future<List<TaskModel>> getAllTask(String projectid) async =>
+      FirebaseFirestore.instance
+          .collection(collection)
+          .where("projectid", isEqualTo: projectid)
+          .orderBy("assginday")
+          .get()
+          .then((result) {
+        List<TaskModel> tasks = [];
+        for (DocumentSnapshot task in result.docs) {
+          tasks.add(TaskModel.fromSnapshot(task));
+        }
+        return tasks;
+      });
+
+  Future<List<TaskModel>> getAllTaskOfEmployee(
           String projectid, String employeeid) async =>
       FirebaseFirestore.instance
           .collection(collection)
           .where("projectid", isEqualTo: projectid)
           .where("memberid", isEqualTo: employeeid)
+          .orderBy("assignday")
           .get()
           .then((result) {
         List<TaskModel> tasks = [];

@@ -26,7 +26,14 @@ class _AssignTaskState extends State<AssignTask> {
   String description = "";
   String percent = "";
   bool button = false;
+  String message = "";
   DateTime deadline = DateTime.now();
+  bool isNumeric(String s) {
+    if (s.isEmpty) {
+      return false;
+    }
+    return double.tryParse(s) != null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +102,13 @@ class _AssignTaskState extends State<AssignTask> {
                     }),
               ],
             ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              message,
+              style: const TextStyle(color: Colors.red),
+            ),
           ],
         ),
       ),
@@ -107,27 +121,37 @@ class _AssignTaskState extends State<AssignTask> {
         ElevatedButton(
             child: const Text('Assign'),
             onPressed: () async {
-              taskService.createTask(
-                  const Uuid().v4(),
-                  widget.projectid,
-                  DateFormat("dd/MM/yyyy").format(deadline),
-                  widget.memberid,
-                  description,
-                  DateTime.now().millisecondsSinceEpoch,
-                  "Uncomplete",
-                  int.parse(percent));
-              notificationService.createNewTask(
-                  const Uuid().v4(),
-                  widget.projectName,
-                  widget.memberid,
-                  DateTime.now().millisecondsSinceEpoch,
-                  false,
-                  int.parse(percent),
-                  description,
-                  "ASSIGNTASK");
-
-              AuthClass().showSnackBar(context, "Assign Success");
-              Navigator.of(context).pop();
+              if (isNumeric(percent)) {
+                if (description.isNotEmpty && percent.isNotEmpty) {
+                  taskService.createTask(
+                      const Uuid().v4(),
+                      widget.projectid,
+                      DateFormat("dd/MM/yyyy").format(deadline),
+                      widget.memberid,
+                      description,
+                      DateTime.now().millisecondsSinceEpoch,
+                      "Uncomplete",
+                      int.parse(percent));
+                  notificationService.createNewTask(
+                      const Uuid().v4(),
+                      widget.projectName,
+                      widget.memberid,
+                      DateTime.now().millisecondsSinceEpoch,
+                      false,
+                      int.parse(percent),
+                      description,
+                      "ASSIGNTASK");
+                  Navigator.pop(context);
+                  AuthClass().showSnackBar(context, "Assign Success");
+                  setState(() {});
+                } else {
+                  message = "Fill all information";
+                  setState(() {});
+                }
+              } else {
+                message = "Percent must be a number !!";
+                setState(() {});
+              }
             }),
       ],
     );

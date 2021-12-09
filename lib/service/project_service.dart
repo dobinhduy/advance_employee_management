@@ -39,6 +39,24 @@ class ProjectService {
     return doc.length == 1;
   }
 
+  //check employee is finish all project
+  Future<bool> checkFinishAllProject(String employeeID) =>
+      FirebaseFirestore.instance.collection(collection).get().then((value) {
+        String status = "";
+        List members = [];
+        bool isFinish = true;
+        for (DocumentSnapshot value in value.docs) {
+          members = (value.data() as dynamic)["members"];
+          if (members.contains(employeeID)) {
+            status = (value.data() as dynamic)["status"];
+            if (status != "Finish") {
+              isFinish = false;
+            }
+          }
+        }
+        return isFinish;
+      });
+
   void updateStatus(String projectID, String status) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)

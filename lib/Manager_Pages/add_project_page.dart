@@ -61,7 +61,7 @@ class AddProjectPageState extends State<AddProjectPage> {
     listEmployeeOfManager =
         await employeeServices.getAllEmployeeOfManager(managerIDcontroller);
     for (var element in listEmployeeOfManager) {
-      employeeIDName.add(element.name + "-" + element.id);
+      employeeIDName.add(element.id + "-" + element.name);
     }
 
     setState(() {});
@@ -372,7 +372,7 @@ class AddProjectPageState extends State<AddProjectPage> {
                           )
                         : Container();
                   },
-                  popupItemDisabled: (String s) => s.startsWith('I'),
+                  // popupItemDisabled: (String s) => s.startsWith('I'),
                   clearButtonSplashRadius: 20,
                   selectedItems: const [],
                 ),
@@ -400,14 +400,14 @@ class AddProjectPageState extends State<AddProjectPage> {
     if (employeeID.isEmpty) {
       employeeName = id;
       for (var item in employeeName) {
-        employeeID.add(item.split("-")[1]);
+        employeeID.add(item.split("-")[0]);
       }
     } else {
       employeeName.clear();
       employeeName = id;
       employeeID.clear();
       for (var item in employeeName) {
-        employeeID.add(item.split("-")[1]);
+        employeeID.add(item.split("-")[0]);
       }
     }
 
@@ -427,44 +427,12 @@ class AddProjectPageState extends State<AddProjectPage> {
     return false;
   }
 
-  Widget checkExistButton(TextEditingController textEditingController) {
-    return InkWell(
-      onTap: () async {
-        bool result = await employeeServices
-            .checkExistEmployeebyID(textEditingController.text);
-
-        if (result) {
-          EmployeeModel employee = await employeeServices
-              .getEmployeebyID(textEditingController.text);
-          dialog(DialogType.INFO, "Employee exist",
-              "Name: " + employee.name + "\n Email: " + employee.email);
-        } else {
-          dialog(DialogType.ERROR, "Employee is not exist", "");
-        }
-      },
-      child: Container(
-        width: 50,
-        height: 40,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(0),
-          color: Colors.blueAccent,
-        ),
-        child: const Center(
-          child: Text(
-            "Varify",
-            style: TextStyle(fontSize: 15, color: Colors.white),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget randomBox() {
     return SizedBox(
       width: 250,
       height: 40,
       child: TextFormField(
-          obscureText: true,
+          enabled: false,
           style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             hintText: projectid,
