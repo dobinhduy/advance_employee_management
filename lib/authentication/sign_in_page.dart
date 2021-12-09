@@ -28,15 +28,6 @@ class _SignUpPageState extends State<SignInPage> {
   AuthClass authClass = AuthClass();
   String position = "";
   String employeeID = "";
-  // checkisEmployee(String email) async {
-  //   bool isEmployee = await employeeServices.checkExistEmployee(email);
-  //   if (isEmployee) {
-  //     setState(() {
-  //       position = "Employee";
-  //     });
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

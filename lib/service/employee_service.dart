@@ -65,6 +65,19 @@ class EmployeeServices {
     return photoURL;
   }
 
+  Future<String> getDepartmentName(String email) async {
+    String departmentName = "";
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("email", isEqualTo: email)
+        .get();
+    try {
+      DocumentSnapshot doc = querySnapshot.docs[0];
+      departmentName = (doc.data() as dynamic)['department'];
+    } catch (e) {}
+    return departmentName;
+  }
+
   Future<String> getEmployeeName(String email) async {
     String name = "";
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -232,6 +245,19 @@ class EmployeeServices {
       });
 
   Future<List<EmployeeModel>> getAllEmployeeOfManager(String id) async =>
+      FirebaseFirestore.instance
+          .collection(collection)
+          .where("supervisorid", isEqualTo: id)
+          .get()
+          .then((result) {
+        List<EmployeeModel> users = [];
+        for (DocumentSnapshot user in result.docs) {
+          users.add(EmployeeModel.fromSnapshot(user));
+        }
+
+        return users;
+      });
+  Future<List<EmployeeModel>> getAllEmployeeOfManagerName(String id) async =>
       FirebaseFirestore.instance
           .collection(collection)
           .where("supervisorid", isEqualTo: id)

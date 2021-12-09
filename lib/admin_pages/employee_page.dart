@@ -188,38 +188,6 @@ class _EmployeePageState extends State<EmployeePage> {
         ]));
   }
 
-  showAlertDialog(BuildContext context, Function function) {
-    // Create button
-    Widget okButton = TextButton(
-      child: const Text("OK"),
-      onPressed: () {
-        function;
-        Navigator.of(context).pop();
-      },
-    );
-    Widget cancelButton = TextButton(
-      child: const Text("Cancel"),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-
-    // Create AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("Simple Alert"),
-      content: const Text("This is an alert message."),
-      actions: [okButton, cancelButton],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
   AwesomeDialog dialog(DialogType type, String title, String description) {
     TableProvider provider = Provider.of<TableProvider>(context, listen: false);
     return AwesomeDialog(

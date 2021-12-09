@@ -121,7 +121,7 @@ class _EmployeeOfManagerPageState extends State<EmployeeOfManagerPage> {
                           dialog(
                             DialogType.INFO,
                             "",
-                            "Are your sure",
+                            "Are your sure?",
                           );
                         },
                         icon: const Icon(Icons.delete_forever),

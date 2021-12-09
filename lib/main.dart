@@ -1,3 +1,4 @@
+import 'package:advance_employee_management/Manager_Pages/add_project_page.dart';
 import 'package:advance_employee_management/locator.dart';
 
 import 'package:advance_employee_management/provider/app_provider.dart';
@@ -17,6 +18,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   setupLocator();
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider.value(value: AppProvider.init()),

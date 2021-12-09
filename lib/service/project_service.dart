@@ -29,6 +29,16 @@ class ProjectService {
     });
   }
 
+  Future<bool> checkUniqueID(String id) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: id)
+        .get();
+    List<DocumentSnapshot> doc = querySnapshot.docs;
+
+    return doc.length == 1;
+  }
+
   void updateStatus(String projectID, String status) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)

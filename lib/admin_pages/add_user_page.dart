@@ -121,9 +121,9 @@ class _AddUserPageState extends State<AddUserPage> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height - 70,
+                    height: MediaQuery.of(context).size.height,
                     color: Colors.white,
-                    padding: const EdgeInsets.only(left: 55),
+                    padding: const EdgeInsets.only(left: 30),
                     child: Row(
                       children: <Widget>[
                         Column(
@@ -143,6 +143,9 @@ class _AddUserPageState extends State<AddUserPage> {
                             Row(
                               children: [
                                 randomBox(),
+                                SizedBox(
+                                  width: 5,
+                                ),
                                 ElevatedButton(
                                     onPressed: () {
                                       random();
@@ -295,9 +298,10 @@ class _AddUserPageState extends State<AddUserPage> {
 
   Widget randomBox() {
     return SizedBox(
-      width: 260,
+      width: 250,
       height: 40,
       child: TextFormField(
+          obscureText: true,
           style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             hintText: randomID,
@@ -315,20 +319,22 @@ class _AddUserPageState extends State<AddUserPage> {
   random() async {
     bool isExist;
     String id = "";
-    const _chars =
-        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    const _chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const _nums = "1234567890";
     Random _rnd = Random();
     String getRandomString(int length) =>
         String.fromCharCodes(Iterable.generate(
             length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-    id = getRandomString(10);
+    String getRandomNum(int length) => String.fromCharCodes(Iterable.generate(
+        length, (_) => _nums.codeUnitAt(_rnd.nextInt(_nums.length))));
+    id = getRandomString(2) + getRandomNum(5);
     isExist = await employeeServices.checkUniqueID(id);
     if (!isExist) {
       setState(() {
         randomID = id;
       });
     } else {
-      print('exist');
+      random();
     }
   }
 
@@ -441,48 +447,51 @@ class _AddUserPageState extends State<AddUserPage> {
   }
 
   Widget genderSelectedBox() {
-    return Row(
-      children: [
-        const Text(
-          "Male",
-          style: TextStyle(fontSize: 18),
-        ),
-        Checkbox(
-          checkColor: Colors.black,
-          activeColor: Colors.red,
-          value: female,
-          onChanged: (bool? value) {
-            if (mounted) {
-              setState(() {
-                female = true;
-                male = false;
-                gender = "Female";
-              });
-            }
-          },
-        ),
-        const SizedBox(
-          width: 30,
-        ),
-        const Text(
-          "Female",
-          style: TextStyle(fontSize: 18),
-        ),
-        Checkbox(
-          checkColor: Colors.black,
-          activeColor: Colors.red,
-          value: male,
-          onChanged: (bool? value) {
-            if (mounted) {
-              setState(() {
-                male = true;
-                female = false;
-                gender = "Male";
-              });
-            }
-          },
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 30),
+      child: Row(
+        children: [
+          const Text(
+            "Male",
+            style: TextStyle(fontSize: 18),
+          ),
+          Checkbox(
+            checkColor: Colors.black,
+            activeColor: Colors.red,
+            value: female,
+            onChanged: (bool? value) {
+              if (mounted) {
+                setState(() {
+                  female = true;
+                  male = false;
+                  gender = "Female";
+                });
+              }
+            },
+          ),
+          const SizedBox(
+            width: 30,
+          ),
+          const Text(
+            "Female",
+            style: TextStyle(fontSize: 18),
+          ),
+          Checkbox(
+            checkColor: Colors.black,
+            activeColor: Colors.red,
+            value: male,
+            onChanged: (bool? value) {
+              if (mounted) {
+                setState(() {
+                  male = true;
+                  female = false;
+                  gender = "Male";
+                });
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 
