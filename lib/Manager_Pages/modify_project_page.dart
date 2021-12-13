@@ -66,6 +66,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
   bool isProgress = false;
   bool isClose = false;
   bool isFinish = false;
+  num percent = 0;
   DateTime selectedStartDate = DateTime.now();
   DateTime selectedEndDate = DateTime.now();
   bool loading = true;
@@ -89,9 +90,11 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
   bool isEditComplete = false;
   isLoading() {
     Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        loading = false;
-      });
+      if (mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
     });
   }
 
@@ -109,20 +112,24 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
     setState(() {});
   }
 
-  Future<void> _dialogCall(
-      BuildContext context, String memberid, String projectid) {
+  Future<void> _dialogCall(BuildContext context, String memberid,
+      String projectid, num percent, List<TaskModel> list, String managerid) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AssignTask(
-            projectName: proName.text,
-            memberid: memberid,
-            projectid: projectid,
-          );
+              projectName: proName.text,
+              memberid: memberid,
+              projectid: projectid,
+              percent: percent,
+              list: tasks,
+              managerid: widget.managerid);
         });
   }
 
   getAllTask() async {
+    percent = await taskService.getComplete(widget.projectid);
+    print(percent);
     tasks = await taskService.getAllTask(widget.projectid);
     setState(() {});
   }
@@ -218,6 +225,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
               title: const Text('Project Information'),
             ),
             body: SingleChildScrollView(
+              physics: const ScrollPhysics(),
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 40, horizontal: 50),
@@ -403,7 +411,10 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                                                 await _dialogCall(
                                                                     context,
                                                                     members[i],
-                                                                    proID.text);
+                                                                    proID.text,
+                                                                    percent,
+                                                                    tasks,
+                                                                    managerID);
                                                               }
                                                             },
                                                             icon: const Icon(
@@ -426,27 +437,37 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                                                 bottom: 10),
                                                         child: TextButton.icon(
                                                             onPressed: () {
-                                                              setState(() {
-                                                                ProjectService
-                                                                    projectService =
-                                                                    ProjectService();
+                                                              if (status !=
+                                                                  "Finish") {
+                                                                setState(() {
+                                                                  ProjectService
+                                                                      projectService =
+                                                                      ProjectService();
 
-                                                                taskService
-                                                                    .removeAllTasknwithMemberID(
-                                                                        members[
-                                                                            i]);
-                                                                projectService
-                                                                    .removeMember(
-                                                                        members[
-                                                                            i],
-                                                                        proID
-                                                                            .text);
-                                                                members.remove(
-                                                                    members[i]);
-                                                                memberName.remove(
-                                                                    memberName[
-                                                                        i]);
-                                                              });
+                                                                  taskService
+                                                                      .removeAllTasknwithMemberID(
+                                                                          members[
+                                                                              i]);
+                                                                  projectService
+                                                                      .removeMember(
+                                                                          members[
+                                                                              i],
+                                                                          proID
+                                                                              .text);
+                                                                  members.remove(
+                                                                      members[
+                                                                          i]);
+                                                                  memberName.remove(
+                                                                      memberName[
+                                                                          i]);
+                                                                });
+                                                              } else {
+                                                                dialog(
+                                                                    DialogType
+                                                                        .INFO,
+                                                                    "You can not edit project",
+                                                                    "Because this project have already finished");
+                                                              }
                                                             },
                                                             icon: const Icon(
                                                                 Icons.delete),
@@ -474,6 +495,11 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                               setState(() {
                                                 _dialogAddMember(context);
                                               });
+                                            } else {
+                                              dialog(
+                                                  DialogType.INFO,
+                                                  "You can not edit project",
+                                                  "Because this project have already finished");
                                             }
                                           },
                                           icon: const Icon(Icons.add),
@@ -518,6 +544,13 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                         )
                       ],
                     ),
+                    isEdit == false
+                        ? const Text(
+                            "Project's Tasks",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          )
+                        : Container(),
                     Column(
                       children: <Widget>[
                         isEdit == false
@@ -590,7 +623,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                             )
                                           ]),
                                         ]),
-                                        for (var item in tasks)
+                                        for (var item in tasks.reversed)
                                           TableRow(children: [
                                             Column(children: [
                                               const SizedBox(
@@ -653,7 +686,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                       ],
                                     ),
                                   )
-                                : Container()
+                                : const Text("(There is no task)")
                             : Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -682,7 +715,6 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                                   });
                                                 }
                                               }
-
                                               Navigator.pop(context);
                                               AuthClass().showSnackBar(
                                                   context, "Delete Success");
@@ -691,78 +723,108 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                             label: const Text("Delete")),
                                         TextButton.icon(
                                             onPressed: () {
-                                              ProjectService projectService =
-                                                  ProjectService();
-                                              Map<String, dynamic> map =
-                                                  <String, dynamic>{};
-                                              map.addAll({
-                                                "id": proID.text,
-                                                "name": proName.text,
-                                                "start": start.text,
-                                                "end": end.text,
-                                                "status": status,
-                                                "complete":
-                                                    int.parse(complete.text),
-                                                "members": members,
-                                                "manager": widget.managerid,
-                                                "department": departmentName,
-                                                "description": description.text,
-                                              });
-                                              projectService.updateProject(
-                                                  proID.text, map);
-                                              setState(() {
-                                                for (Map<String,
-                                                        dynamic> project
-                                                    in projectProvider
-                                                        .projectSource) {
-                                                  if (project.values
-                                                          .elementAt(0) ==
-                                                      proID.text) {
-                                                    project.update("id",
-                                                        (value) => proID.text);
-                                                    project.update(
-                                                        "name",
-                                                        (value) =>
-                                                            proName.text);
-                                                    project.update("start",
-                                                        (value) => start.text);
-                                                    project.update("end",
-                                                        (value) => end.text);
-                                                    project.update("status",
-                                                        (value) => status);
-                                                    project.update(
-                                                        "complete",
-                                                        (value) => [
-                                                              int.parse(complete
-                                                                  .text),
-                                                              100
-                                                            ]);
-                                                    project.update("members",
-                                                        (value) => members);
-                                                    project.update(
-                                                        "manager",
-                                                        (value) =>
-                                                            widget.managerid);
-                                                    project.update(
-                                                        "department",
-                                                        (value) =>
-                                                            departmentName);
-                                                    project.update(
-                                                        "description",
-                                                        (value) =>
-                                                            description.text);
-                                                    project.update(
-                                                        "action",
-                                                        (value) =>
-                                                            [proID.text, null]);
-                                                  }
-                                                }
-                                              });
+                                              if (description.text.isNotEmpty) {
+                                                if (status == "Finish" &&
+                                                    int.parse(complete.text) <
+                                                        100) {
+                                                  AuthClass().showSnackBar(
+                                                      context,
+                                                      "Your project completion is not reached 100 %. So you can not change the status to complete");
+                                                } else {
+                                                  ProjectService
+                                                      projectService =
+                                                      ProjectService();
+                                                  Map<String, dynamic> map =
+                                                      <String, dynamic>{};
+                                                  map.addAll({
+                                                    "id": proID.text,
+                                                    "name": proName.text,
+                                                    "start": start.text,
+                                                    "end": end.text,
+                                                    "status": status,
+                                                    "complete": int.parse(
+                                                        complete.text),
+                                                    "members": members,
+                                                    "manager": widget.managerid,
+                                                    "department":
+                                                        departmentName,
+                                                    "description":
+                                                        description.text,
+                                                  });
+                                                  projectService.updateProject(
+                                                      proID.text, map);
+                                                  setState(() {
+                                                    for (Map<String,
+                                                            dynamic> project
+                                                        in projectProvider
+                                                            .projectSource) {
+                                                      if (project.values
+                                                              .elementAt(0) ==
+                                                          proID.text) {
+                                                        project.update(
+                                                            "id",
+                                                            (value) =>
+                                                                proID.text);
+                                                        project.update(
+                                                            "name",
+                                                            (value) =>
+                                                                proName.text);
+                                                        project.update(
+                                                            "start",
+                                                            (value) =>
+                                                                start.text);
+                                                        project.update(
+                                                            "end",
+                                                            (value) =>
+                                                                end.text);
+                                                        project.update("status",
+                                                            (value) => status);
+                                                        project.update(
+                                                            "complete",
+                                                            (value) => [
+                                                                  int.parse(
+                                                                      complete
+                                                                          .text),
+                                                                  100
+                                                                ]);
+                                                        project.update(
+                                                            "members",
+                                                            (value) => members);
+                                                        project.update(
+                                                            "manager",
+                                                            (value) => widget
+                                                                .managerid);
+                                                        project.update(
+                                                            "department",
+                                                            (value) =>
+                                                                departmentName);
+                                                        project.update(
+                                                            "description",
+                                                            (value) =>
+                                                                description
+                                                                    .text);
+                                                        project.update(
+                                                            "action",
+                                                            (value) => [
+                                                                  proID.text,
+                                                                  null
+                                                                ]);
+                                                      }
+                                                    }
+                                                  });
 
-                                              locator<NavigationService>()
-                                                  .navigateTo(ProjectPageRoute);
-                                              AuthClass().showSnackBar(
-                                                  context, "Update Success");
+                                                  locator<NavigationService>()
+                                                      .navigateTo(
+                                                          ProjectPageRoute);
+                                                  AuthClass().showSnackBar(
+                                                      context,
+                                                      "Update Success");
+                                                }
+                                              } else {
+                                                AuthClass().showSnackBar(
+                                                    context,
+                                                    "Please fill the description!!");
+                                              }
                                             },
                                             icon: const Icon(Icons.update),
                                             label: const Text("Update")),
@@ -965,7 +1027,6 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
       animType: AnimType.BOTTOMSLIDE,
       title: title,
       desc: description,
-      btnCancelOnPress: () {},
       btnOkOnPress: () {},
     )..show();
   }

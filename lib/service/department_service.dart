@@ -40,6 +40,26 @@ class DepartmentService {
     return doc.length == 1;
   }
 
+  Future<bool> checkExistDepartmentName(String name) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("name", isEqualTo: name)
+        .get();
+    List<DocumentSnapshot> doc = querySnapshot.docs;
+
+    return doc.length == 1;
+  }
+
+  Future<bool> checkUniqueID(String id) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: id)
+        .get();
+    List<DocumentSnapshot> doc = querySnapshot.docs;
+
+    return doc.length == 1;
+  }
+
   void addProjectID(String departmentName, String projectid) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)

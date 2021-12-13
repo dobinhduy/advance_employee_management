@@ -26,6 +26,17 @@ class TaskModel {
   String get deadline => _deadline;
   String get description => _description;
   num get percent => _percent;
+  TaskModel(String id, String projectid, String memberid, int assignday,
+      String status, String deadline, String description, int percent) {
+    _id = id;
+    _projectid = projectid;
+    _memberid = memberid;
+    _assignday = assignday;
+    _status = status;
+    _deadline = deadline;
+    _description = description;
+    _percent = percent;
+  }
 
   TaskModel.fromSnapshot(DocumentSnapshot snapshot) {
     _id = (snapshot.data() as dynamic)[ID];

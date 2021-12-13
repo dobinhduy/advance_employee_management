@@ -94,7 +94,6 @@ class _ViewProjectState extends State<ViewProject> {
   @override
   Widget build(BuildContext context) {
     getAllTask();
-
     deplay();
 
     return timeout
@@ -226,9 +225,9 @@ class _ViewProjectState extends State<ViewProject> {
                             for (TaskModel task in tasks!.reversed)
                               task.status == "Uncomplete"
                                   ? taskBox(task, "Mark as Complete",
-                                      const Color(0xFF9575CD))
-                                  : taskBox(task, "Completed",
                                       const Color(0xFFe0e0e0))
+                                  : taskBox(task, "Completed",
+                                      const Color(0xFFE8EAF6))
                           ],
                         ),
                       ],
@@ -254,8 +253,8 @@ class _ViewProjectState extends State<ViewProject> {
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: Container(
         color: color,
-        width: 500,
-        height: 170,
+        width: 700,
+        height: 160,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,

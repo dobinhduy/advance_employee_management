@@ -18,6 +18,18 @@ class TaskService {
     });
   }
 
+  Future<num> getComplete(String projectid) async => FirebaseFirestore.instance
+          .collection(collection)
+          .where("projectid", isEqualTo: projectid)
+          .get()
+          .then((value) {
+        num percent = 0;
+        for (DocumentSnapshot element in value.docs) {
+          percent += (element.data() as dynamic)["percent"];
+        }
+        return percent;
+      });
+
   void removeAllTasknwithMemberID(String memberID) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(collection)
@@ -44,7 +56,7 @@ class TaskService {
       FirebaseFirestore.instance
           .collection(collection)
           .where("projectid", isEqualTo: projectid)
-          .orderBy("assginday")
+          .orderBy("assignday")
           .get()
           .then((result) {
         List<TaskModel> tasks = [];

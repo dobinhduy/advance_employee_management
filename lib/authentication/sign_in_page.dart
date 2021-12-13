@@ -162,30 +162,40 @@ class _SignUpPageState extends State<SignInPage> {
           circular = true;
         });
 
-        try {
-          bool isAdmin = await adminService.getPosition(_emailController.text);
+        if (_emailController.text.isNotEmpty ||
+            _passwordController.text.isNotEmpty) {
+          try {
+            bool isAdmin =
+                await adminService.getPosition(_emailController.text);
+            employeeID = await employeeServices
+                .getEmployeeIDbyEmail(_emailController.text);
+            bool isManager =
+                await employeeServices.checkhasEmployee(employeeID);
+            await firebaseAuth.signInWithEmailAndPassword(
+                email: _emailController.text,
+                password: _passwordController.text);
+            setState(() {
+              circular = true;
+            });
 
-          employeeID = await employeeServices
-              .getEmployeeIDbyEmail(_emailController.text);
-          bool isManager = await employeeServices.checkhasEmployee(employeeID);
-          await firebaseAuth.signInWithEmailAndPassword(
-              email: _emailController.text, password: _passwordController.text);
-          setState(() {
-            circular = true;
-          });
-
-          if (isAdmin) {
-            locator<NavigationService>()
-                .globalNavigateTo(AdLayOutRoute, context);
-          } else if (isManager) {
-            locator<NavigationService>()
-                .globalNavigateTo(ManagerRouteLayout, context);
-          } else {
-            locator<NavigationService>()
-                .globalNavigateTo(EmployeeRouteLayout, context);
+            if (isAdmin) {
+              locator<NavigationService>()
+                  .globalNavigateTo(AdLayOutRoute, context);
+            } else if (isManager) {
+              locator<NavigationService>()
+                  .globalNavigateTo(ManagerRouteLayout, context);
+            } else {
+              locator<NavigationService>()
+                  .globalNavigateTo(EmployeeRouteLayout, context);
+            }
+          } catch (e) {
+            AuthClass().showSnackBar(context, "Invalid email or password");
+            setState(() {
+              circular = false;
+            });
           }
-        } catch (e) {
-          AuthClass().showSnackBar(context, "Invalid email or password");
+        } else {
+          AuthClass().showSnackBar(context, "Input username and passwod");
           setState(() {
             circular = false;
           });

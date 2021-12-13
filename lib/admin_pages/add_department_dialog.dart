@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
@@ -30,6 +32,29 @@ class _AddDepartmentState extends State<AddDepartment> {
   DepartmentService departmentService = DepartmentService();
   DateTime startday = DateTime.now();
   List<String> list = <String>[];
+  String randomID = "";
+  random() async {
+    bool isExist;
+    String id = "";
+    const _chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const _nums = "1234567890";
+    Random _rnd = Random();
+    String getRandomString(int length) =>
+        String.fromCharCodes(Iterable.generate(
+            length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+    String getRandomNum(int length) => String.fromCharCodes(Iterable.generate(
+        length, (_) => _nums.codeUnitAt(_rnd.nextInt(_nums.length))));
+    id = getRandomString(2) + getRandomNum(5);
+    isExist = await departmentService.checkUniqueID(id);
+    if (!isExist) {
+      setState(() {
+        randomID = id;
+      });
+    } else {
+      random();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     TableProvider provider = Provider.of<TableProvider>(context);
@@ -44,15 +69,31 @@ class _AddDepartmentState extends State<AddDepartment> {
               children: <Widget>[
                 SizedBox(
                   width: 300,
-                  child: TextField(
-                    controller: widget.id,
-                    decoration: const InputDecoration(
-                      icon: Icon(
-                        Icons.vpn_key_rounded,
+                  child: Row(
+                    children: [
+                      // TextField(
+                      //   controller: widget.id,
+                      // decoration: const InputDecoration(
+                      //   icon: Icon(
+                      //     Icons.vpn_key_rounded,
+                      //   ),
+                      //   labelText: 'Department ID',
+                      // ),
+                      // ),
+                      randomBox(),
+                      const SizedBox(
+                        width: 5,
                       ),
-                      labelText: 'Department ID',
-                    ),
+                      ElevatedButton(
+                          onPressed: () {
+                            random();
+                          },
+                          child: const Text("Generate"))
+                    ],
                   ),
+                ),
+                SizedBox(
+                  height: 6,
                 ),
                 SizedBox(
                   width: 300,
@@ -106,33 +147,44 @@ class _AddDepartmentState extends State<AddDepartment> {
             onPressed: () async {
               bool checkID =
                   await departmentService.checkExistDepartment(widget.id.text);
+              bool checkName = await departmentService
+                  .checkExistDepartmentName(widget.name.text);
               if (checkFillAll()) {
-                if (!checkID) {
-                  setState(() {
-                    departmentService.addDepartment(
-                        widget.id.text,
-                        widget.name.text,
-                        widget.email.text,
-                        widget.phone.text,
-                        list,
-                        "${startday.toLocal()}".split(' ')[0]);
-                    provider.departmentSource.add({
-                      "id": widget.id.text,
-                      "name": widget.name.text,
-                      "email": widget.email.text,
-                      "phone": widget.phone.text,
-                      "createday": "${startday.toLocal()}".split(' ')[0],
+                if (!checkName) {
+                  if (!checkID) {
+                    setState(() {
+                      departmentService.addDepartment(
+                          randomID,
+                          widget.name.text,
+                          widget.email.text,
+                          widget.phone.text,
+                          list,
+                          "${startday.toLocal()}".split(' ')[0]);
+                      provider.departmentSource.add({
+                        "id": randomID,
+                        "name": widget.name.text,
+                        "email": widget.email.text,
+                        "phone": widget.phone.text,
+                        "createday": "${startday.toLocal()}".split(' ')[0],
+                      });
                     });
-                  });
-                  Navigator.pop(context);
-                  locator<NavigationService>().navigateTo(DepartmentLayout);
-                  AuthClass().showSnackBar(context, "Add success");
+                    Navigator.pop(context);
+                    locator<NavigationService>().navigateTo(DepartmentLayout);
+                    AuthClass().showSnackBar(context, "Add success");
+                  } else {
+                    Navigator.pop(context);
+                    AuthClass().showSnackBar(
+                        context, "Department id is already exist");
+                  }
                 } else {
-                  AuthClass().showSnackBar(context, "Id is allready exist");
+                  Navigator.pop(context);
+                  AuthClass().showSnackBar(
+                      context, "Department name is already exist");
                 }
               } else {
+                Navigator.pop(context);
                 AuthClass().showSnackBar(
-                    context, "Please fill all the require information");
+                    context, "Please fill all required information!!");
               }
             }),
       ],
@@ -153,9 +205,28 @@ class _AddDepartmentState extends State<AddDepartment> {
     )..show();
   }
 
+  Widget randomBox() {
+    return SizedBox(
+      width: 200,
+      height: 40,
+      child: TextFormField(
+        enabled: false,
+        obscureText: true,
+        style: const TextStyle(color: Colors.black),
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.only(bottom: 5),
+          hintText: randomID,
+          icon: const Icon(
+            Icons.vpn_key_rounded,
+          ),
+        ),
+      ),
+    );
+  }
+
   bool checkFillAll() {
     if (widget.phone.text.isEmpty ||
-        widget.id.text.isEmpty ||
+        randomID.isEmpty ||
         widget.email.text.isEmpty ||
         widget.name.text.isEmpty) {
       return false;

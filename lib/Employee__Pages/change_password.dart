@@ -1,4 +1,3 @@
-import 'package:advance_employee_management/authentication/sign_in_page.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:flutter/material.dart';
 
@@ -55,6 +54,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           height: 25,
                         ),
                         TextFormField(
+                          enabled: true,
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.check),
                           ),
@@ -62,6 +62,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           readOnly: true,
                         ),
                         TextFormField(
+                          enabled: true,
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.check),
                           ),
@@ -69,6 +70,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           readOnly: true,
                         ),
                         TextFormField(
+                          enabled: true,
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.check),
                           ),
@@ -76,6 +78,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           readOnly: true,
                         ),
                         TextFormField(
+                          enabled: true,
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.check),
                           ),
@@ -143,16 +146,21 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Widget saveButton() {
     return InkWell(
       onTap: () async {
-        if (newPassword.text == confirmNewPassword.text) {
-          if (validPassword(newPassword.text)) {
-            AuthClass().validateCurrentPassword(
-                currentPassword.text, newPassword.text, context);
+        if (checkFill()) {
+          if (newPassword.text == confirmNewPassword.text) {
+            if (validPassword(newPassword.text)) {
+              AuthClass().validateCurrentPassword(
+                  currentPassword.text, newPassword.text, context);
+            } else {
+              AuthClass().showSnackBar(context,
+                  "Password is not safety. Please try another password");
+            }
           } else {
-            AuthClass().showSnackBar(
-                context, "Password is not safety. Please try another password");
+            AuthClass().showSnackBar(context, "Password is not match");
           }
         } else {
-          AuthClass().showSnackBar(context, "Password is not match");
+          AuthClass()
+              .showSnackBar(context, "Please fill all require information");
         }
       },
       child: Container(
@@ -169,6 +177,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         ),
       ),
     );
+  }
+
+  checkFill() {
+    if (currentPassword.text.isEmpty ||
+        newPassword.text.isEmpty ||
+        confirmNewPassword.text.isEmpty) {
+      return false;
+    }
+    return true;
   }
 
   bool validPassword(String value) {

@@ -83,7 +83,7 @@ class _DepartmentPageState extends State<DepartmentPage> {
                             onPressed: () {
                               dialog(
                                 DialogType.QUESTION,
-                                "Are you sure",
+                                "Are you sure?",
                                 "",
                               );
                             },

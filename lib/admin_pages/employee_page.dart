@@ -4,10 +4,12 @@ import 'package:advance_employee_management/admin_pages/employee_information_pag
 import 'package:advance_employee_management/admin_pages/page_header.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
+import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:advance_employee_management/service/notification_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
+import 'package:advance_employee_management/service/task_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,7 @@ class _EmployeePageState extends State<EmployeePage> {
   EmployeeServices employeeServices = EmployeeServices();
   ProjectService projectService = ProjectService();
   NotificationService notificationService = NotificationService();
+  TaskService taskService = TaskService();
   bool isOK = false;
   @override
   Widget build(BuildContext context) {
@@ -73,11 +76,16 @@ class _EmployeePageState extends State<EmployeePage> {
                     ),
                     ElevatedButton.icon(
                       onPressed: () {
-                        dialog(
-                          DialogType.INFO,
-                          "",
-                          "Are your sure ?",
-                        );
+                        if (employeeProvider.selecteds.isEmpty) {
+                          AuthClass().showSnackBar(
+                              context, "Please select employee!!");
+                        } else {
+                          dialog(
+                            DialogType.INFO,
+                            "",
+                            "Are your sure ?",
+                          );
+                        }
                       },
                       icon: const Icon(Icons.delete_forever),
                       label: const Text("DELETE"),
@@ -130,7 +138,7 @@ class _EmployeePageState extends State<EmployeePage> {
                                 birthday: map.values.elementAt(3),
                                 address: map.values.elementAt(5),
                                 photoURL: map.values.elementAt(7),
-                                position: map.values.elementAt(8),
+                                role: map.values.elementAt(9),
                                 department: map.values.elementAt(10),
                                 supID: supID,
                               )));
@@ -205,8 +213,8 @@ class _EmployeePageState extends State<EmployeePage> {
           employeeServices.deleteEmployee(employee["email"]);
           projectService.removeMemberwithMemberID(employee["id"]);
           notificationService.removeNotificationwithMemberID(employee["id"]);
+          taskService.removeAllTasknwithMemberID(employee["id"]);
         }
-
         setState(() {
           provider.delectEmployee(provider.selecteds);
           provider.isSelect == false;

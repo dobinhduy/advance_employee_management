@@ -1,6 +1,5 @@
 import 'package:advance_employee_management/authentication/sign_in_page.dart';
 import 'package:advance_employee_management/locator.dart';
-import 'package:advance_employee_management/models/notification.dart';
 import 'package:advance_employee_management/provider/app_provider.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
@@ -32,29 +31,20 @@ class _SideMenuEmployeeDesktopState extends State<SideMenuEmployeeDesktop> {
   bool timeout = false;
   bool isClick = false;
   int value1 = 0;
-  int value2 = 0;
   @override
   void initState() {
     super.initState();
     getUserID();
-    getNotifyAddProject();
-    getNotifyAssignTask();
+    getNumberNotify();
   }
 
-  getNotifyAddProject() async {
-    value1 = await notificationService.getNumNotificationAddProject(userID);
-
+  getNumberNotify() async {
+    value1 = await notificationService.getNumNotification(userID);
     setState(() {});
   }
 
   getUserID() async {
     userID = await employeeServices.getEmployeeIDbyEmail(useremail);
-    setState(() {});
-  }
-
-  getNotifyAssignTask() async {
-    value2 = await notificationService.getNumNotificationAssignTask(userID);
-
     setState(() {});
   }
 
@@ -75,8 +65,7 @@ class _SideMenuEmployeeDesktopState extends State<SideMenuEmployeeDesktop> {
   @override
   Widget build(BuildContext context) {
     getUserID();
-    getNotifyAddProject();
-    getNotifyAssignTask();
+    getNumberNotify();
     deplay();
     final AppProvider appProvider = Provider.of<AppProvider>(context);
     return timeout == true
@@ -126,9 +115,7 @@ class _SideMenuEmployeeDesktopState extends State<SideMenuEmployeeDesktop> {
                     ? SileMenuItemDesktop(
                         active: appProvider.currentPage ==
                             DisplayedPage.NOTIFICATION,
-                        text: "Notification (" +
-                            (value1 + value2).toString() +
-                            ")",
+                        text: "Notification (" + value1.toString() + ")",
                         icon: Icons.notification_add,
                         onTap: () {
                           setState(() {

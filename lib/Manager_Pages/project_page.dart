@@ -259,8 +259,8 @@ class _ProjectPageState extends State<ProjectPage> {
         setState(() {});
       },
       btnOkOnPress: () {
-        for (var employee in provider.selecteds) {
-          projectService.deleteProject(id);
+        for (var project in provider.selecteds) {
+          projectService.deleteProject(project["id"]);
         }
 
         setState(() {

@@ -4,38 +4,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class NotificationService {
   String collection = "notifications";
 
-  void createNotification(
-      String id,
-      String projectname,
-      String senderID,
-      String sendername,
-      String receiverID,
-      int sendDay,
-      bool isread,
-      String type) {
+  void createNotification(String id, String senderID, String receiverID,
+      int sendDay, bool isread, String message) {
     FirebaseFirestore.instance.collection(collection).add({
       "id": id,
-      "projectname": projectname,
       "senderid": senderID,
-      "sendername": sendername,
       "receiverid": receiverID,
       "sendday": sendDay,
       "isread": isread,
-      "type": type
-    });
-  }
-
-  void createNewTask(String id, String projectname, String receiverID,
-      int sendDay, bool isread, int percent, String description, String type) {
-    FirebaseFirestore.instance.collection(collection).add({
-      "id": id,
-      "projectname": projectname,
-      "receiverid": receiverID,
-      "sendday": sendDay,
-      "isread": isread,
-      "description": description,
-      "percent": percent,
-      "type": type
+      "message": message
     });
   }
 
@@ -74,40 +51,10 @@ class NotificationService {
     await docref.delete();
   }
 
-  Future<List<NotificationModel>> getNotificationAssignTask(
-          String employeeid) async =>
+  Future<List<NotificationModel>> getAllNotification(String employeeid) async =>
       FirebaseFirestore.instance
           .collection(collection)
           .where("receiverid", isEqualTo: employeeid)
-          .where("type", isEqualTo: "ASSIGNTASK")
-          .orderBy("sendday")
-          .limitToLast(2)
-          .get()
-          .then((result) {
-        List<NotificationModel> notifies = [];
-        for (DocumentSnapshot notify in result.docs) {
-          notifies.add(NotificationModel.fromSnapshot(notify));
-        }
-        return notifies;
-      });
-  Future<int> getNumNotificationAssignTask(String employeeid) async =>
-      FirebaseFirestore.instance
-          .collection(collection)
-          .where("receiverid", isEqualTo: employeeid)
-          .where("type", isEqualTo: "ASSIGNTASK")
-          .orderBy("sendday")
-          .limitToLast(2)
-          .get()
-          .then((result) {
-        int value = result.docs.length;
-        return value;
-      });
-  Future<List<NotificationModel>> getNotificationAddProject(
-          String employeeid) async =>
-      FirebaseFirestore.instance
-          .collection(collection)
-          .where("receiverid", isEqualTo: employeeid)
-          .where("type", isEqualTo: "ADDPROJECT")
           .orderBy("sendday")
           .get()
           .then((result) {
@@ -117,15 +64,18 @@ class NotificationService {
         }
         return notifies;
       });
-  Future<int> getNumNotificationAddProject(String employeeid) async =>
+  Future<int> getNumNotification(String employeeid) async =>
       FirebaseFirestore.instance
           .collection(collection)
           .where("receiverid", isEqualTo: employeeid)
-          .where("type", isEqualTo: "ADDPROJECT")
-          .orderBy("sendday")
           .get()
           .then((result) {
-        int value = result.docs.length;
+        int value = 0;
+        for (DocumentSnapshot notify in result.docs) {
+          if ((notify.data() as dynamic)["isread"] == false) {
+            value += 1;
+          }
+        }
         return value;
       });
 }

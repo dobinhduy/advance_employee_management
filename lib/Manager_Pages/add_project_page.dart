@@ -28,9 +28,6 @@ class AddProjectPageState extends State<AddProjectPage> {
   TextEditingController startday = TextEditingController();
   TextEditingController endday = TextEditingController();
   TextEditingController desController = TextEditingController();
-  TextEditingController memberID1 = TextEditingController();
-  TextEditingController memberID2 = TextEditingController();
-  TextEditingController memberID3 = TextEditingController();
 
   DateTime selectedStartDate = DateTime.now();
   DateTime selectedEndDate = DateTime.now();
@@ -133,50 +130,56 @@ class AddProjectPageState extends State<AddProjectPage> {
           actions: [
             TextButton(
                 onPressed: () async {
-                  if (employeeID.isNotEmpty) {
-                    projectService.createProject(
-                        id.text,
-                        projectName.text,
-                        managerIDcontroller,
-                        "${selectedStartDate.toLocal()}".split(' ')[0],
-                        "${selectedEndDate.toLocal()}".split(' ')[0],
-                        desController.text,
-                        employeeID,
-                        departmentName,
-                        "Open",
-                        0);
-                    setState(() {
-                      projectProvider.projectSource.add({
-                        "id": id.text,
-                        "name": projectName.text,
-                        "start": "${selectedStartDate.toLocal()}".split(' ')[0],
-                        "end": "${selectedEndDate.toLocal()}".split(' ')[0],
-                        "status": "Open",
-                        "complete": [0, 100],
-                        "members": employeeID,
-                        "department": departmentName,
-                        "manager": managerIDcontroller,
-                        "description": desController.text,
-                        "action": [id.text, null],
+                  if (checkFill()) {
+                    if (employeeID.isNotEmpty) {
+                      projectService.createProject(
+                          projectid,
+                          projectName.text,
+                          managerIDcontroller,
+                          "${selectedStartDate.toLocal()}".split(' ')[0],
+                          "${selectedEndDate.toLocal()}".split(' ')[0],
+                          desController.text,
+                          employeeID,
+                          departmentName,
+                          "Open",
+                          0);
+                      setState(() {
+                        projectProvider.projectSource.add({
+                          "id": projectid,
+                          "name": projectName.text,
+                          "start":
+                              "${selectedStartDate.toLocal()}".split(' ')[0],
+                          "end": "${selectedEndDate.toLocal()}".split(' ')[0],
+                          "status": "Open",
+                          "complete": [0, 100],
+                          "members": employeeID,
+                          "department": departmentName,
+                          "manager": managerIDcontroller,
+                          "description": desController.text,
+                          "action": [id.text, null],
+                        });
                       });
-                    });
-                    departmentService.addProjectID(departmentName, id.text);
-                    authClass.showSnackBar(context, "Add project success");
-                    SchedulerBinding.instance?.addPostFrameCallback((_) {
-                      Navigator.of(context)
-                          .pushReplacementNamed(ProjectPageRoute);
-                    });
-                    notificationService.createNotification(
-                        const Uuid().v4(),
-                        projectName.text,
-                        managerIDcontroller,
-                        managerName,
-                        memberID1.text,
-                        DateTime.now().millisecondsSinceEpoch,
-                        false,
-                        "ADDPROJECT");
+                      departmentService.addProjectID(departmentName, id.text);
+                      authClass.showSnackBar(context, "Add project success");
+                      SchedulerBinding.instance?.addPostFrameCallback((_) {
+                        Navigator.of(context)
+                            .pushReplacementNamed(ProjectPageRoute);
+                      });
+                      for (var item in employeeID) {
+                        notificationService.createNotification(
+                            const Uuid().v4(),
+                            managerIDcontroller,
+                            item,
+                            DateTime.now().millisecondsSinceEpoch,
+                            false,
+                            "You was add to project " + projectName.text);
+                      }
+                    } else {
+                      AuthClass()
+                          .showSnackBar(context, "Please select members");
+                    }
                   } else {
-                    AuthClass().showSnackBar(context, "Member can not null");
+                    dialog(DialogType.INFO, "Please fill all information", "");
                   }
                 },
                 child: Text('SAVE',
@@ -412,6 +415,15 @@ class AddProjectPageState extends State<AddProjectPage> {
     }
 
     setState(() {});
+  }
+
+  bool checkFill() {
+    if (projectName.text.isEmpty ||
+        projectid.isEmpty ||
+        desController.text.isEmpty) {
+      return false;
+    }
+    return true;
   }
 
   Future<bool> checkIsExistEmployee(TextEditingController employeeID) async {

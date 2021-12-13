@@ -103,7 +103,7 @@ class TableProvider with ChangeNotifier {
                                   address: employeeModel.address,
                                   gender: employeeModel.gender,
                                   phone: employeeModel.phone,
-                                  position: employeeModel.position,
+                                  role: employeeModel.role,
                                   department: employeeModel.department,
                                   supID: supID,
                                 )));

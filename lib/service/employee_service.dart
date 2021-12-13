@@ -25,7 +25,9 @@ class EmployeeServices {
       "email": map.values.elementAt(3),
       "address": map.values.elementAt(4),
       "phone": map.values.elementAt(5),
-      "supervisorid": map.values.elementAt(6)
+      "role": map.values.elementAt(6),
+      "department": map.values.elementAt(7),
+      "supervisorid": map.values.elementAt(8)
     });
   }
 

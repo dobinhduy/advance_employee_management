@@ -44,6 +44,7 @@ class _AddUserPageState extends State<AddUserPage> {
   List<String> listDepartment = [];
   String departmentName = "";
   String? dropdownDeName;
+  String? dropDownRole;
   String randomID = "";
 
   String _imageURL = "";
@@ -52,8 +53,6 @@ class _AddUserPageState extends State<AddUserPage> {
   bool male = false;
   bool female = false;
   String gender = "";
-
-  String? dropDownRole;
 
   void deplay() {
     Future.delayed(const Duration(seconds: 1), () {
@@ -418,34 +417,6 @@ class _AddUserPageState extends State<AddUserPage> {
     );
   }
 
-  Widget unselectedRole() {
-    return DropdownButton<String>(
-      value: dropDownRole,
-      iconSize: 24,
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: null,
-      items: <String>[
-        '',
-        'Software developer',
-        'Hardware Technician',
-        'Network Administrator',
-        'Business Analyst',
-        ' IT Project Manager',
-        'Systems Engineering Manager'
-      ].map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-    );
-  }
-
   Widget genderSelectedBox() {
     return Padding(
       padding: const EdgeInsets.only(left: 30),
@@ -564,53 +535,60 @@ class _AddUserPageState extends State<AddUserPage> {
     return ElevatedButton(
       style: raisedButtonStyle,
       onPressed: () async {
+        bool issupExist =
+            await employeeServices.checkExistEmployeebyID(supervisorid.text);
+
         if (checkFillImage()) {
           if (checkFillAll()) {
             if (validPassword(password.text)) {
               if (randomID != supervisorid.text) {
-                try {
-                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                      email: email.text, password: password.text);
+                if (issupExist) {
+                  try {
+                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                        email: email.text, password: password.text);
 
-                  employeeServices.addEmployee(
-                      randomID,
-                      fisrtname.text + " " + lastname.text,
-                      gender,
-                      "${selectedDate.toLocal()}"
+                    employeeServices.addEmployee(
+                        randomID,
+                        fisrtname.text + " " + lastname.text,
+                        gender,
+                        "${selectedDate.toLocal()}"
+                            .split(' ')[0]
+                            .replaceAll("-", "/"),
+                        email.text,
+                        address.text,
+                        phone.text,
+                        _imageURL,
+                        "Employee",
+                        role,
+                        departmentName,
+                        supervisorid.text);
+                    provider.employeeSource.add({
+                      "id": randomID,
+                      "name": fisrtname.text + " " + lastname.text,
+                      "gender": gender,
+                      "birthday": "${selectedDate.toLocal()}"
                           .split(' ')[0]
                           .replaceAll("-", "/"),
-                      email.text,
-                      address.text,
-                      phone.text,
-                      _imageURL,
-                      "Employee",
-                      role,
-                      departmentName,
-                      supervisorid.text);
-                  provider.employeeSource.add({
-                    "id": randomID,
-                    "name": fisrtname.text + " " + lastname.text,
-                    "gender": gender,
-                    "birthday": "${selectedDate.toLocal()}"
-                        .split(' ')[0]
-                        .replaceAll("-", "/"),
-                    "email": email.text,
-                    "address": address.text,
-                    "phone": phone.text,
-                    "photoURL": _imageURL,
-                    "position": "Employee",
-                    "role": role,
-                    "department": departmentName,
-                    "action": [randomID, null],
-                  });
-                  Navigator.pop(context);
-                  locator<NavigationService>().navigateTo(EmployeeLayout);
+                      "email": email.text,
+                      "address": address.text,
+                      "phone": phone.text,
+                      "photoURL": _imageURL,
+                      "position": "Employee",
+                      "role": role,
+                      "department": departmentName,
+                      "action": [randomID, null],
+                    });
+                    Navigator.pop(context);
+                    locator<NavigationService>().navigateTo(EmployeeLayout);
 
-                  authClass.showSnackBar(context, "Add employee success");
+                    authClass.showSnackBar(context, "Add employee success");
 
-                  setState(() {});
-                } catch (e) {
-                  authClass.showSnackBar(context, e.toString());
+                    setState(() {});
+                  } catch (e) {
+                    authClass.showSnackBar(context, e.toString());
+                  }
+                } else {
+                  dialog(DialogType.ERROR, "", "Supervisor id is not exist");
                 }
               } else {
                 dialog(DialogType.ERROR,
@@ -619,7 +597,7 @@ class _AddUserPageState extends State<AddUserPage> {
             } else {
               dialog(
                   DialogType.WARNING,
-                  "Invalid password",
+                  "Unsafety password",
                   "Password must contains: \n"
                       "+ Minimum 1 Upper case\n "
                       "+ Minimum 1 lowercase\n"
@@ -631,7 +609,7 @@ class _AddUserPageState extends State<AddUserPage> {
                 "Please fill all the require information");
           }
         } else {
-          dialog(DialogType.ERROR, "Missing Image", "Please select a image");
+          dialog(DialogType.ERROR, "Missing Image", "Please select an image");
         }
       },
       child: const Text('Add'),
@@ -680,7 +658,8 @@ class _AddUserPageState extends State<AddUserPage> {
         randomID == "" ||
         email.text.isEmpty ||
         gender.isEmpty ||
-        role.isEmpty) {
+        role.isEmpty ||
+        supervisorid.text.isEmpty) {
       return false;
     }
     return true;

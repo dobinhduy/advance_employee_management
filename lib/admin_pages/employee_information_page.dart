@@ -2,6 +2,7 @@ import 'package:advance_employee_management/models/employee.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
+import 'package:advance_employee_management/service/department_service.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -21,7 +22,7 @@ class UserInforPage extends StatefulWidget {
       required this.address,
       required this.gender,
       required this.phone,
-      required this.position,
+      required this.role,
       required this.department,
       required this.supID})
       : super(key: key);
@@ -33,7 +34,7 @@ class UserInforPage extends StatefulWidget {
   final String photoURL;
   final String gender;
   final String phone;
-  final String position;
+  final String role;
   final String department;
   final String supID;
 
@@ -53,15 +54,24 @@ class _UserInforPageState extends State<UserInforPage> {
   EmployeeModel? employeeInfor;
   EmployeeServices employeeServices = EmployeeServices();
   ProjectService projectService = ProjectService();
+  DepartmentService departmentService = DepartmentService();
   AuthClass authClass = AuthClass();
 
   late String photoURLController;
-  String department = "";
-  List<String> listDepartment = [];
 
+  List<String> listDepartment = [];
   String _imageURL = "";
   String role = "";
   String managerIDcontroller = "";
+  String departmentName = "";
+  String? dropdownDeName;
+  String? dropDownRole;
+  bool isChange = false;
+
+  getAllDepartmentName() async {
+    listDepartment = await departmentService.getAllDepartmentName();
+    setState(() {});
+  }
 
   DateTime selectedDate = DateTime.now();
 
@@ -78,10 +88,8 @@ class _UserInforPageState extends State<UserInforPage> {
   }
 
   getEmployeeInf() async {
-    employeeInfor = await employeeServices.getEmployeebyEmail(widget.email);
     Future.delayed(const Duration(seconds: 1), () {});
     managerIDcontroller = await employeeServices.getSupervisorID(widget.id);
-    role = employeeInfor!.role;
     setState(() {});
   }
 
@@ -98,7 +106,8 @@ class _UserInforPageState extends State<UserInforPage> {
     genderController = widget.gender;
     birthdayController = widget.birthday;
     photoURLController = widget.photoURL;
-    department = widget.department;
+    departmentName = widget.department;
+    role = widget.role;
 
     if (genderController == "Male") {
       male = true;
@@ -132,6 +141,63 @@ class _UserInforPageState extends State<UserInforPage> {
     }
   }
 
+  Widget selectedRole() {
+    return DropdownButton<String>(
+      value: dropDownRole,
+      iconSize: 24,
+      elevation: 16,
+      style: const TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String? newValue) {
+        setState(() {
+          dropDownRole = newValue!;
+          role = dropDownRole!;
+        });
+      },
+      items: <String>[
+        'Software developer',
+        'Hardware Technician',
+        'Network Administrator',
+        'Business Analyst',
+        ' IT Project Manager',
+        'Systems Engineering Manager'
+      ].map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget selectDepartment() {
+    return DropdownButton<String>(
+      value: dropdownDeName,
+      iconSize: 24,
+      elevation: 16,
+      style: const TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String? newValue) {
+        setState(() {
+          dropdownDeName = newValue!;
+          departmentName = dropdownDeName!;
+        });
+      },
+      items: listDepartment.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
+  }
+
   updateEmployee() {
     setState(() {
       idController = idController;
@@ -146,10 +212,17 @@ class _UserInforPageState extends State<UserInforPage> {
     });
   }
 
+  checkFinishAllProject() async {
+    isChange = await projectService.checkFinishAllProject(widget.id);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     getImage();
     getEmployeeInf();
+    getAllDepartmentName();
+    checkFinishAllProject();
     isLoading();
 
     TableProvider provider = Provider.of<TableProvider>(context);
@@ -261,7 +334,9 @@ class _UserInforPageState extends State<UserInforPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     titlebox("Department:"),
-                                    inputBox2(department)
+                                    isEdit == false
+                                        ? inputBox2(departmentName)
+                                        : selectDepartment(),
                                   ],
                                 ),
                                 Column(
@@ -269,7 +344,9 @@ class _UserInforPageState extends State<UserInforPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     titlebox("Role:"),
-                                    inputBox2(role)
+                                    isEdit == false
+                                        ? inputBox2(role)
+                                        : selectedRole(),
                                   ],
                                 ),
                                 Column(
@@ -277,9 +354,9 @@ class _UserInforPageState extends State<UserInforPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     titlebox("Supervisor ID:"),
-                                    isEdit == false
-                                        ? inputBox2(managerIDcontroller)
-                                        : inputBox(supervisorIDController, 10)
+                                    isEdit == true && isChange
+                                        ? inputBox(supervisorIDController, 10)
+                                        : inputBox2(managerIDcontroller)
                                   ],
                                 )
                               ])
@@ -315,15 +392,12 @@ class _UserInforPageState extends State<UserInforPage> {
                             isEdit
                                 ? InkWell(
                                     onTap: () async {
-                                      setState(() {});
                                       bool isExist = await employeeServices
                                           .checkExistEmployeebyID(
                                               supervisorIDController.text);
-                                      bool isChange = await projectService
-                                          .checkFinishAllProject(widget.id);
 
-                                      if (isExist) {
-                                        if (isChange) {
+                                      if (checkFill()) {
+                                        if (isExist) {
                                           Map<String, dynamic> map =
                                               <String, dynamic>{};
                                           map.addAll({
@@ -333,6 +407,8 @@ class _UserInforPageState extends State<UserInforPage> {
                                             "email": emailController.text,
                                             "address": addressController.text,
                                             "phone": phoneController.text,
+                                            "role": role,
+                                            "department": departmentName,
                                             "supervisorid":
                                                 supervisorIDController.text
                                           });
@@ -378,8 +454,10 @@ class _UserInforPageState extends State<UserInforPage> {
                                                   "birthday",
                                                   (value) => birthdayController,
                                                 );
+                                                employee.update(
+                                                    "role", (value) => role);
                                                 employee.update("department",
-                                                    (value) => department);
+                                                    (value) => departmentName);
                                               }
                                             }
                                           });
@@ -394,11 +472,11 @@ class _UserInforPageState extends State<UserInforPage> {
                                           });
                                         } else {
                                           authClass.showSnackBar(context,
-                                              "This employee is working on some project!!!");
+                                              "Supervisor ID is not exsit");
                                         }
                                       } else {
-                                        authClass.showSnackBar(
-                                            context, "ID is not exsit");
+                                        authClass.showSnackBar(context,
+                                            "Please fill all information!!");
                                       }
                                     },
                                     child: Container(
@@ -464,6 +542,17 @@ class _UserInforPageState extends State<UserInforPage> {
         )
       ],
     );
+  }
+
+  bool checkFill() {
+    if (nameController.text.isEmpty ||
+        genderController.isEmpty ||
+        addressController.text.isEmpty ||
+        phoneController.text.isEmpty ||
+        supervisorIDController.text.isEmpty) {
+      return false;
+    }
+    return true;
   }
 
   Widget butonCancle(BuildContext context) {

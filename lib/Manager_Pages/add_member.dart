@@ -23,7 +23,6 @@ class AddMember extends StatefulWidget {
   final String proID;
   final String proName;
   final String managerName;
-
   List<dynamic> members;
   List<dynamic> memberName;
   @override
@@ -96,13 +95,11 @@ class _AddMemberState extends State<AddMember> {
                   });
                   notificationService.createNotification(
                       const Uuid().v4(),
-                      widget.proName,
                       widget.managerID,
-                      widget.managerName,
                       id.text,
                       now.millisecondsSinceEpoch,
                       false,
-                      "ADDPROJECT");
+                      "You was add to new project: " + widget.proName);
                   Navigator.pop(context);
                   AuthClass().showSnackBar(context, "Add success");
                   setState(() {});

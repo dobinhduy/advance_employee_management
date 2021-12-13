@@ -1,10 +1,7 @@
-import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/models/employee.dart';
-import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
+import 'package:advance_employee_management/service/department_service.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
-import 'package:advance_employee_management/service/navigation_service.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 class EmployeeInformation extends StatefulWidget {
@@ -16,12 +13,11 @@ class EmployeeInformation extends StatefulWidget {
 
 class _EmployeeInformationState extends State<EmployeeInformation> {
   EmployeeServices employeeServices = EmployeeServices();
+  DepartmentService departmentService = DepartmentService();
   EmployeeModel? employeeInfor;
   String email = AuthClass().user()!;
   bool loading = true;
   List<String> list = [];
-  final _formKey = GlobalKey<FormState>();
-  final _multiKey = GlobalKey<DropdownSearchState<String>>();
 
   getManagerInf() async {
     employeeInfor = await employeeServices.getEmployeebyEmail(email);
@@ -53,6 +49,7 @@ class _EmployeeInformationState extends State<EmployeeInformation> {
   @override
   Widget build(BuildContext context) {
     getEmployeeInf();
+
     isLoading();
     return loading == true
         ? Center(

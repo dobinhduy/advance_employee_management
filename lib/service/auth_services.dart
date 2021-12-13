@@ -90,7 +90,8 @@ class AuthClass {
         AuthClass().showSnackBar(context, "Not success");
       });
     }).catchError((error) {
-      AuthClass().showSnackBar(context, "Password is not correct");
+      AuthClass().showSnackBar(
+          context, "Current Password is  incorrect, Please input again!!");
     });
   }
 

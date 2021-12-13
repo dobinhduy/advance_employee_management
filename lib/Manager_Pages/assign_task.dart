@@ -1,3 +1,4 @@
+import 'package:advance_employee_management/models/task.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/notification_service.dart';
 import 'package:advance_employee_management/service/task_service.dart';
@@ -6,15 +7,21 @@ import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 class AssignTask extends StatefulWidget {
-  const AssignTask(
+  AssignTask(
       {Key? key,
       required this.projectName,
       required this.projectid,
-      required this.memberid})
+      required this.memberid,
+      required this.percent,
+      required this.list,
+      required this.managerid})
       : super(key: key);
   final String projectName;
   final String projectid;
   final String memberid;
+  final num percent;
+  final List<TaskModel> list;
+  final String managerid;
 
   @override
   _AssignTaskState createState() => _AssignTaskState();
@@ -121,35 +128,53 @@ class _AssignTaskState extends State<AssignTask> {
         ElevatedButton(
             child: const Text('Assign'),
             onPressed: () async {
-              if (isNumeric(percent)) {
-                if (description.isNotEmpty && percent.isNotEmpty) {
-                  taskService.createTask(
-                      const Uuid().v4(),
-                      widget.projectid,
-                      DateFormat("dd/MM/yyyy").format(deadline),
-                      widget.memberid,
-                      description,
-                      DateTime.now().millisecondsSinceEpoch,
-                      "Uncomplete",
-                      int.parse(percent));
-                  notificationService.createNewTask(
-                      const Uuid().v4(),
-                      widget.projectName,
-                      widget.memberid,
-                      DateTime.now().millisecondsSinceEpoch,
-                      false,
-                      int.parse(percent),
-                      description,
-                      "ASSIGNTASK");
-                  Navigator.pop(context);
-                  AuthClass().showSnackBar(context, "Assign Success");
-                  setState(() {});
+              String id = const Uuid().v4();
+
+              if (description.isNotEmpty && percent.isNotEmpty) {
+                if (isNumeric(percent)) {
+                  if ((100 - widget.percent) >= num.parse(percent)) {
+                    taskService.createTask(
+                        id,
+                        widget.projectid,
+                        DateFormat("dd/MM/yyyy").format(deadline),
+                        widget.memberid,
+                        description,
+                        DateTime.now().millisecondsSinceEpoch,
+                        "Uncomplete",
+                        int.parse(percent));
+                    TaskModel task = TaskModel(
+                        id,
+                        widget.projectid,
+                        widget.memberid,
+                        DateTime.now().millisecondsSinceEpoch,
+                        "Uncomplete",
+                        DateFormat("dd/MM/yyyy").format(deadline),
+                        description,
+                        int.parse(percent));
+                    widget.list.add(task);
+
+                    notificationService.createNotification(
+                        const Uuid().v4(),
+                        widget.managerid,
+                        widget.memberid,
+                        DateTime.now().millisecondsSinceEpoch,
+                        false,
+                        "You was assigned a new task in project" +
+                            widget.projectName);
+                    Navigator.pop(context);
+                    AuthClass().showSnackBar(context, "Assign Success");
+                    setState(() {});
+                  } else {
+                    message = "The percent of this task must be less than " +
+                        (100 - widget.percent).toString();
+                    setState(() {});
+                  }
                 } else {
-                  message = "Fill all information";
+                  message = "Percent must be a number !!";
                   setState(() {});
                 }
               } else {
-                message = "Percent must be a number !!";
+                message = "Please, Fill all information";
                 setState(() {});
               }
             }),
