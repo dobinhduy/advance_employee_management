@@ -129,7 +129,6 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
 
   getAllTask() async {
     percent = await taskService.getComplete(widget.projectid);
-    print(percent);
     tasks = await taskService.getAllTask(widget.projectid);
     setState(() {});
   }
@@ -544,7 +543,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                         )
                       ],
                     ),
-                    isEdit == false
+                    isEdit == false && tasks.isNotEmpty
                         ? const Text(
                             "Project's Tasks",
                             style: TextStyle(
@@ -594,6 +593,17 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                               height: 5,
                                             ),
                                             Text('Assign Day',
+                                                style:
+                                                    TextStyle(fontSize: 20.0)),
+                                            SizedBox(
+                                              height: 5,
+                                            )
+                                          ]),
+                                          Column(children: const [
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text('Deadline',
                                                 style:
                                                     TextStyle(fontSize: 20.0)),
                                             SizedBox(
@@ -655,6 +665,17 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                                     .format(DateTime
                                                         .fromMillisecondsSinceEpoch(
                                                             item.assignday))),
+                                                const SizedBox(
+                                                  height: 5,
+                                                )
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(item.deadline),
                                                 const SizedBox(
                                                   height: 5,
                                                 )

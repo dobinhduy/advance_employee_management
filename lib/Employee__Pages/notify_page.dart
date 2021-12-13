@@ -48,7 +48,6 @@ class _NotificationPageState extends State<NotificationPage> {
   Widget build(BuildContext context) {
     getUserID();
     getNotify();
-
     deplay();
     return timeout
         ? Scaffold(
@@ -63,7 +62,6 @@ class _NotificationPageState extends State<NotificationPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
-                  const Text("Your notification"),
                   const SizedBox(height: 20),
                   for (NotificationModel notify in notifies!.reversed)
                     Center(

@@ -147,7 +147,46 @@ class TableProvider with ChangeNotifier {
         value: "status",
         show: true,
         sortable: true,
-        textAlign: TextAlign.center),
+        textAlign: TextAlign.center,
+        sourceBuilder: (value, row) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  gradient: value == "Open"
+                      ? const LinearGradient(
+                          colors: [Colors.cyan, Colors.cyanAccent],
+                          begin: Alignment.bottomLeft,
+                          end: Alignment.topRight)
+                      : value == "In Progress"
+                          ? const LinearGradient(
+                              colors: [Colors.yellow, Colors.yellowAccent],
+                              begin: Alignment.bottomLeft,
+                              end: Alignment.topRight)
+                          : value == "Finish"
+                              ? const LinearGradient(
+                                  colors: [Colors.blueAccent, Colors.blue],
+                                  begin: Alignment.bottomLeft,
+                                  end: Alignment.topRight)
+                              : const LinearGradient(
+                                  colors: [Colors.red, Colors.redAccent],
+                                  begin: Alignment.bottomLeft,
+                                  end: Alignment.topRight),
+                  boxShadow: const [
+                    BoxShadow(
+                        color: Colors.grey,
+                        offset: Offset(0, 3),
+                        blurRadius: 16)
+                  ]),
+              child: Padding(
+                padding: const EdgeInsets.all(5),
+                child: Center(child: Text(value)),
+              ),
+            ),
+          );
+        }),
     DatatableHeader(
         text: "Department",
         value: "department",
