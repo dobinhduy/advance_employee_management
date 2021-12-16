@@ -40,26 +40,34 @@ class _SideMenuEmployeeDesktopState extends State<SideMenuEmployeeDesktop> {
 
   getNumberNotify() async {
     value1 = await notificationService.getNumNotification(userID);
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   getUserID() async {
     userID = await employeeServices.getEmployeeIDbyEmail(useremail);
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   void deplay() {
     Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        timeout = true;
-      });
+      if (mounted) {
+        setState(() {
+          timeout = true;
+        });
+      }
     });
   }
 
   void click() {
-    setState(() {
-      isClick = true;
-    });
+    if (mounted) {
+      setState(() {
+        isClick = true;
+      });
+    }
   }
 
   @override
@@ -178,7 +186,7 @@ class _SideMenuEmployeeDesktopState extends State<SideMenuEmployeeDesktop> {
       desc: description,
       btnCancelOnPress: () {},
       btnOkOnPress: () {
-        provider.changeCurrentPage(DisplayedPage.LOGOUT);
+        provider.changeCurrentPage(DisplayedPage.HOME);
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (builder) => const SignInPage()),

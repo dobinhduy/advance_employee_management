@@ -3,6 +3,7 @@ import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/department_service.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class EmployeeInformation extends StatefulWidget {
   const EmployeeInformation({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class _EmployeeInformationState extends State<EmployeeInformation> {
   getManagerInf() async {
     employeeInfor = await employeeServices.getEmployeebyEmail(email);
 
-    if (!mounted) {
+    if (mounted) {
       setState(() {});
     }
   }
@@ -49,7 +50,6 @@ class _EmployeeInformationState extends State<EmployeeInformation> {
   @override
   Widget build(BuildContext context) {
     getEmployeeInf();
-
     isLoading();
     return loading == true
         ? Center(
@@ -58,7 +58,10 @@ class _EmployeeInformationState extends State<EmployeeInformation> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: const <Widget>[
                 SizedBox(
-                  child: CircularProgressIndicator(),
+                  child: SpinKitCircle(
+                    color: Colors.blue,
+                    size: 50,
+                  ),
                   height: 50.0,
                   width: 50.0,
                 ),

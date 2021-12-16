@@ -11,6 +11,7 @@ import 'package:advance_employee_management/service/project_service.dart';
 import 'package:advance_employee_management/service/task_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:responsive_table/ResponsiveDatatable.dart';
@@ -224,7 +225,11 @@ class _EmployeeOfManagerPageState extends State<EmployeeOfManagerPage> {
                 ),
               ]))
         : const SizedBox(
-            child: Center(child: CircularProgressIndicator()),
+            child: Center(
+                child: SpinKitFadingCube(
+              color: Colors.black,
+              size: 60,
+            )),
             width: 50,
             height: 50,
           );

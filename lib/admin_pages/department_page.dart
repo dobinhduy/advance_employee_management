@@ -5,6 +5,7 @@ import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/department_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:responsive_table/responsive_table.dart';
@@ -80,12 +81,17 @@ class _DepartmentPageState extends State<DepartmentPage> {
                             width: 30,
                           ),
                           ElevatedButton.icon(
-                            onPressed: () {
-                              dialog(
-                                DialogType.QUESTION,
-                                "Are you sure?",
-                                "",
-                              );
+                            onPressed: () async {
+                              if (departmentProvider.selecteds.isEmpty) {
+                                await EasyLoading.showInfo(
+                                    "Please select department!!");
+                              } else {
+                                dialog(
+                                  DialogType.QUESTION,
+                                  "Are you sure?",
+                                  "",
+                                );
+                              }
                             },
                             icon: const Icon(
                               Icons.delete_forever,
@@ -187,15 +193,15 @@ class _DepartmentPageState extends State<DepartmentPage> {
       btnCancelOnPress: () {
         setState(() {});
       },
-      btnOkOnPress: () {
+      btnOkOnPress: () async {
         for (var department in provider.selecteds) {
           departmentService.deleteDepartment(department["id"]);
         }
-
         setState(() {
           provider.delectDepartment(provider.selecteds);
           provider.isSelect == false;
         });
+        await EasyLoading.showSuccess('Delete Success!');
       },
     )..show();
   }

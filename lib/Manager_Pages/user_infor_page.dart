@@ -6,6 +6,8 @@ import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 class EmployeeInfor extends StatefulWidget {
@@ -65,9 +67,11 @@ class _EmployeeInforState extends State<EmployeeInfor> {
   bool loading = true;
   isLoading() {
     Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        loading = false;
-      });
+      if (mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
     });
   }
 
@@ -76,7 +80,9 @@ class _EmployeeInforState extends State<EmployeeInfor> {
     Future.delayed(const Duration(seconds: 1), () {});
     managerIDcontroller = await employeeServices.getSupervisorID(widget.id);
     role = employeeInfor!.role;
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -127,17 +133,19 @@ class _EmployeeInforState extends State<EmployeeInfor> {
   }
 
   updateEmployee() {
-    setState(() {
-      idController = idController;
-      emailController = emailController;
-      addressController = addressController;
-      genderController = genderController;
-      birthdayController = birthdayController;
-      genderController = genderController;
+    if (mounted) {
+      setState(() {
+        idController = idController;
+        emailController = emailController;
+        addressController = addressController;
+        genderController = genderController;
+        birthdayController = birthdayController;
+        genderController = genderController;
 
-      phoneController = phoneController;
-      photoURLController = photoURLController;
-    });
+        phoneController = phoneController;
+        photoURLController = photoURLController;
+      });
+    }
   }
 
   @override
@@ -151,7 +159,7 @@ class _EmployeeInforState extends State<EmployeeInfor> {
         ? Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              backgroundColor: Colors.purpleAccent,
+              backgroundColor: Colors.deepPurple,
               title: const Text("Employee Information"),
             ),
             body: SingleChildScrollView(
@@ -173,7 +181,10 @@ class _EmployeeInforState extends State<EmployeeInfor> {
                           _imageURL != ""
                               ? Image.network(_imageURL,
                                   width: 300, height: 300, fit: BoxFit.fill)
-                              : const CircularProgressIndicator()
+                              : const SpinKitSpinningLines(
+                                  color: Colors.black,
+                                  size: 50,
+                                )
                         ],
                       ),
                     ),
@@ -285,9 +296,11 @@ class _EmployeeInforState extends State<EmployeeInfor> {
                             children: [
                               IconButton(
                                   onPressed: () {
-                                    setState(() {
-                                      isEdit = !isEdit;
-                                    });
+                                    if (mounted) {
+                                      setState(() {
+                                        isEdit = !isEdit;
+                                      });
+                                    }
                                   },
                                   icon: Icon(Icons.edit,
                                       color: isEdit ? Colors.red : Colors.blue,
@@ -358,8 +371,8 @@ class _EmployeeInforState extends State<EmployeeInfor> {
                                     }
                                   });
 
-                                  authClass.showSnackBar(
-                                      context, "Update success");
+                                  await EasyLoading.showSuccess(
+                                      'Update Success!');
                                   SchedulerBinding.instance
                                       ?.addPostFrameCallback((_) {
                                     Navigator.of(context).pushReplacementNamed(
@@ -390,7 +403,9 @@ class _EmployeeInforState extends State<EmployeeInfor> {
               SizedBox(
                 width: 50,
                 height: 50,
-                child: CircularProgressIndicator(),
+                child: SpinKitChasingDots(
+                  color: Colors.purpleAccent,
+                ),
               ),
             ],
           );

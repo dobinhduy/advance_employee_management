@@ -5,10 +5,11 @@ import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/department_service.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 class UserInforPage extends StatefulWidget {
@@ -70,7 +71,9 @@ class _UserInforPageState extends State<UserInforPage> {
 
   getAllDepartmentName() async {
     listDepartment = await departmentService.getAllDepartmentName();
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   DateTime selectedDate = DateTime.now();
@@ -81,16 +84,20 @@ class _UserInforPageState extends State<UserInforPage> {
   bool loading = true;
   isLoading() {
     Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        loading = false;
-      });
+      if (mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
     });
   }
 
   getEmployeeInf() async {
     Future.delayed(const Duration(seconds: 1), () {});
     managerIDcontroller = await employeeServices.getSupervisorID(widget.id);
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -199,22 +206,26 @@ class _UserInforPageState extends State<UserInforPage> {
   }
 
   updateEmployee() {
-    setState(() {
-      idController = idController;
-      emailController = emailController;
-      addressController = addressController;
-      genderController = genderController;
-      birthdayController = birthdayController;
-      genderController = genderController;
-      supervisorIDController = supervisorIDController;
-      phoneController = phoneController;
-      photoURLController = photoURLController;
-    });
+    if (mounted) {
+      setState(() {
+        idController = idController;
+        emailController = emailController;
+        addressController = addressController;
+        genderController = genderController;
+        birthdayController = birthdayController;
+        genderController = genderController;
+        supervisorIDController = supervisorIDController;
+        phoneController = phoneController;
+        photoURLController = photoURLController;
+      });
+    }
   }
 
   checkFinishAllProject() async {
     isChange = await projectService.checkFinishAllProject(widget.id);
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -230,7 +241,7 @@ class _UserInforPageState extends State<UserInforPage> {
         ? Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              backgroundColor: Colors.purpleAccent,
+              backgroundColor: Colors.deepPurpleAccent,
               title: const Text("Employee Information"),
             ),
             body: SingleChildScrollView(
@@ -254,7 +265,12 @@ class _UserInforPageState extends State<UserInforPage> {
                               _imageURL != ""
                                   ? Image.network(_imageURL,
                                       width: 300, height: 300, fit: BoxFit.fill)
-                                  : const CircularProgressIndicator()
+                                  : const Padding(
+                                      padding: EdgeInsets.only(top: 50),
+                                      child: SpinKitRotatingPlain(
+                                        color: Colors.green,
+                                      ),
+                                    )
                             ],
                           ),
                         ),
@@ -334,9 +350,9 @@ class _UserInforPageState extends State<UserInforPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     titlebox("Department:"),
-                                    isEdit == false
-                                        ? inputBox2(departmentName)
-                                        : selectDepartment(),
+                                    isEdit == true && isChange
+                                        ? selectDepartment()
+                                        : inputBox2(departmentName)
                                   ],
                                 ),
                                 Column(
@@ -375,9 +391,11 @@ class _UserInforPageState extends State<UserInforPage> {
                                 children: [
                                   IconButton(
                                       onPressed: () {
-                                        setState(() {
-                                          isEdit = !isEdit;
-                                        });
+                                        if (mounted) {
+                                          setState(() {
+                                            isEdit = !isEdit;
+                                          });
+                                        }
                                       },
                                       icon: Icon(Icons.edit,
                                           color:
@@ -462,8 +480,8 @@ class _UserInforPageState extends State<UserInforPage> {
                                             }
                                           });
 
-                                          authClass.showSnackBar(
-                                              context, "Update success");
+                                          await EasyLoading.showSuccess(
+                                              'Update Success!');
                                           SchedulerBinding.instance
                                               ?.addPostFrameCallback((_) {
                                             Navigator.of(context)
@@ -503,11 +521,7 @@ class _UserInforPageState extends State<UserInforPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: const [
-              SizedBox(
-                width: 50,
-                height: 50,
-                child: CircularProgressIndicator(),
-              ),
+              SpinKitSquareCircle(color: Colors.pink, size: 50.0),
             ],
           );
   }

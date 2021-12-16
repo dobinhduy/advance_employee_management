@@ -11,6 +11,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:math';
@@ -49,7 +51,7 @@ class _AddUserPageState extends State<AddUserPage> {
 
   String _imageURL = "";
   bool timeup = false;
-
+  bool loadImage = false;
   bool male = false;
   bool female = false;
   String gender = "";
@@ -110,7 +112,7 @@ class _AddUserPageState extends State<AddUserPage> {
             appBar: AppBar(
               automaticallyImplyLeading: false,
               title: const Text("Add New Employee"),
-              backgroundColor: Colors.purpleAccent,
+              backgroundColor: Colors.deepPurpleAccent,
             ),
             body: SingleChildScrollView(
               scrollDirection: Axis.vertical,
@@ -220,7 +222,17 @@ class _AddUserPageState extends State<AddUserPage> {
                                               height: 300,
                                               fit: BoxFit.fill,
                                             )
-                                          : Container(),
+                                          : loadImage == true && _imageURL == ""
+                                              ? const Padding(
+                                                  padding:
+                                                      EdgeInsets.only(top: 100),
+                                                  child: Center(
+                                                    child: SpinKitPianoWave(
+                                                      color: Colors.blue,
+                                                    ),
+                                                  ),
+                                                )
+                                              : Container(),
                                       const SizedBox(
                                         height: 20,
                                       ),
@@ -266,7 +278,9 @@ class _AddUserPageState extends State<AddUserPage> {
             child: SizedBox(
               width: 40,
               height: 40,
-              child: CircularProgressIndicator(),
+              child: SpinKitHourGlass(
+                color: Colors.yellow,
+              ),
             ),
           );
   }
@@ -339,6 +353,7 @@ class _AddUserPageState extends State<AddUserPage> {
   Widget uploadImageButton() {
     return ElevatedButton(
         onPressed: () async {
+          loadImage = true;
           FilePickerResult? result =
               await FilePicker.platform.pickFiles(type: FileType.image);
           if (result != null) {
@@ -354,6 +369,11 @@ class _AddUserPageState extends State<AddUserPage> {
                   _imageURL = image;
                 });
               }
+            });
+          }
+          if (result == null) {
+            setState(() {
+              loadImage = false;
             });
           }
         },
@@ -514,7 +534,7 @@ class _AddUserPageState extends State<AddUserPage> {
     );
     return ElevatedButton(
       style: raisedButtonStyle,
-      onPressed: () {
+      onPressed: () async {
         Navigator.pop(context);
       },
       child: const Text('Go Back'),
@@ -580,8 +600,7 @@ class _AddUserPageState extends State<AddUserPage> {
                     });
                     Navigator.pop(context);
                     locator<NavigationService>().navigateTo(EmployeeLayout);
-
-                    authClass.showSnackBar(context, "Add employee success");
+                    await EasyLoading.showSuccess('Add Success!');
 
                     setState(() {});
                   } catch (e) {

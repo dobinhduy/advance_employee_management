@@ -49,7 +49,7 @@ class ProjectService {
           members = (value.data() as dynamic)["members"];
           if (members.contains(employeeID)) {
             status = (value.data() as dynamic)["status"];
-            if (status != "Finish") {
+            if (status != "Finish" || status != "Close") {
               isFinish = false;
             }
           }

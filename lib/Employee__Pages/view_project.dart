@@ -1,11 +1,13 @@
 import 'package:advance_employee_management/models/task.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
+import 'package:advance_employee_management/service/notification_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
 import 'package:advance_employee_management/service/task_service.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 class ViewProject extends StatefulWidget {
   const ViewProject(
@@ -40,17 +42,20 @@ class _ViewProjectState extends State<ViewProject> {
   String email = AuthClass().user()!;
   EmployeeServices employeeServices = EmployeeServices();
   ProjectService projectService = ProjectService();
+  NotificationService notificationService = NotificationService();
   TaskService taskService = TaskService();
   String employeeID = "";
+  String employeeName = "";
   List<dynamic> members = [];
   List<dynamic> memberName = [];
   List<TaskModel>? tasks = [];
   String comple = "";
   num value = 0;
-
   bool timeout = false;
   getEmployeeID() async {
     employeeID = await employeeServices.getEmployeeIDbyEmail(email);
+    employeeName = await employeeServices.getEmployeeName(email);
+
     if (mounted) {
       setState(() {});
     }
@@ -243,7 +248,9 @@ class _ViewProjectState extends State<ViewProject> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: const [
-                CircularProgressIndicator(),
+                SpinKitWanderingCubes(
+                  color: Colors.red,
+                ),
               ],
             ));
   }
@@ -290,11 +297,21 @@ class _ViewProjectState extends State<ViewProject> {
                           taskService.updateStatus(task.id, "Complete");
                           projectService.addCompletion(
                               widget.projectid, task.percent);
+                          notificationService.createNotification(
+                              const Uuid().v4(),
+                              employeeID,
+                              widget.managerid,
+                              DateTime.now().millisecondsSinceEpoch,
+                              false,
+                              employeeName +
+                                  "has finished a task in project" +
+                                  widget.projectName);
+
                           setState(() {
                             value;
                           });
                         } else {
-                          print(
+                          AuthClass().showSnackBar(context,
                               "You can not change the status. Try to connect to you manager");
                         }
                       },

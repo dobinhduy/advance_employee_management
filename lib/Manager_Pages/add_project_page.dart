@@ -12,6 +12,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -160,7 +161,7 @@ class AddProjectPageState extends State<AddProjectPage> {
                         });
                       });
                       departmentService.addProjectID(departmentName, id.text);
-                      authClass.showSnackBar(context, "Add project success");
+                      await EasyLoading.showSuccess('Add project Success!');
                       SchedulerBinding.instance?.addPostFrameCallback((_) {
                         Navigator.of(context)
                             .pushReplacementNamed(ProjectPageRoute);

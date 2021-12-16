@@ -11,6 +11,8 @@ import 'package:advance_employee_management/service/project_service.dart';
 import 'package:advance_employee_management/service/task_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -109,7 +111,9 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
       selectedEndDate = picked;
       end.text = "${selectedEndDate.toLocal()}".split(' ')[0];
     }
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   Future<void> _dialogCall(BuildContext context, String memberid,
@@ -130,12 +134,16 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
   getAllTask() async {
     percent = await taskService.getComplete(widget.projectid);
     tasks = await taskService.getAllTask(widget.projectid);
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   getManagerName() async {
     managerName = await employeeServices.getEmployeeNamebyID(widget.managerid);
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   Future<void> _dialogAddMember(BuildContext context) {
@@ -171,7 +179,9 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
     for (var item in members) {
       memberName.add(await employeeServices.getEmployeeNamebyID(item));
     }
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -190,24 +200,32 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
     getMemberName(members);
     getManagerName();
     if (widget.status == "Open") {
-      setState(() {
-        isOpen == true;
-      });
+      if (mounted) {
+        setState(() {
+          isOpen == true;
+        });
+      }
     }
     if (widget.status == "In Progress") {
-      setState(() {
-        isProgress == true;
-      });
+      if (mounted) {
+        setState(() {
+          isProgress == true;
+        });
+      }
     }
     if (widget.status == "Finish") {
-      setState(() {
-        isFinish == true;
-      });
+      if (mounted) {
+        setState(() {
+          isFinish == true;
+        });
+      }
     }
     if (widget.status == "Close") {
-      setState(() {
-        isClose == true;
-      });
+      if (mounted) {
+        setState(() {
+          isClose == true;
+        });
+      }
     }
   }
 
@@ -220,7 +238,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
     return loading == false
         ? Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.purpleAccent[400],
+              backgroundColor: Colors.deepPurpleAccent,
               title: const Text('Project Information'),
             ),
             body: SingleChildScrollView(
@@ -414,6 +432,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                                                     percent,
                                                                     tasks,
                                                                     managerID);
+                                                                getAllTask();
                                                               }
                                                             },
                                                             icon: const Icon(
@@ -491,9 +510,11 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                       TextButton.icon(
                                           onPressed: () {
                                             if (status != "Finish") {
-                                              setState(() {
-                                                _dialogAddMember(context);
-                                              });
+                                              if (mounted) {
+                                                setState(() {
+                                                  _dialogAddMember(context);
+                                                });
+                                              }
                                             } else {
                                               dialog(
                                                   DialogType.INFO,
@@ -521,14 +542,16 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                     dialog(DialogType.INFO, "Request Denied",
                                         "You can not edit the project");
                                   } else {
-                                    setState(() {
-                                      isEdit = !isEdit;
-                                      isEditDes = !isEditDes;
-                                      isEditEnd = !isEditEnd;
-                                      isEditStart = !isEditStart;
-                                      isEditStatus = !isEditStatus;
-                                      isEditComplete = !isEditComplete;
-                                    });
+                                    if (mounted) {
+                                      setState(() {
+                                        isEdit = !isEdit;
+                                        isEditDes = !isEditDes;
+                                        isEditEnd = !isEditEnd;
+                                        isEditStart = !isEditStart;
+                                        isEditStatus = !isEditStatus;
+                                        isEditComplete = !isEditComplete;
+                                      });
+                                    }
                                   }
                                 },
                                 icon: isEdit == false
@@ -717,10 +740,9 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                     child: Row(
                                       children: [
                                         TextButton.icon(
-                                            onPressed: () {
+                                            onPressed: () async {
                                               projectService
                                                   .deleteProject(proID.text);
-
                                               departmentService.removeProject(
                                                   departmentName, proID.text);
                                               for (Map<String, dynamic> project
@@ -729,21 +751,23 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                                 if (project.values
                                                         .elementAt(0) ==
                                                     proID.text) {
-                                                  setState(() {
-                                                    projectProvider
-                                                        .projectSource
-                                                        .remove(project);
-                                                  });
+                                                  if (mounted) {
+                                                    setState(() {
+                                                      projectProvider
+                                                          .projectSource
+                                                          .remove(project);
+                                                    });
+                                                  }
                                                 }
                                               }
                                               Navigator.pop(context);
-                                              AuthClass().showSnackBar(
-                                                  context, "Delete Success");
+                                              await EasyLoading.showSuccess(
+                                                  'Delete Success!');
                                             },
                                             icon: const Icon(Icons.delete),
                                             label: const Text("Delete")),
                                         TextButton.icon(
-                                            onPressed: () {
+                                            onPressed: () async {
                                               if (description.text.isNotEmpty) {
                                                 if (status == "Finish" &&
                                                     int.parse(complete.text) <
@@ -837,9 +861,8 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                                   locator<NavigationService>()
                                                       .navigateTo(
                                                           ProjectPageRoute);
-                                                  AuthClass().showSnackBar(
-                                                      context,
-                                                      "Update Success");
+                                                  await EasyLoading.showSuccess(
+                                                      'Update Success!');
                                                 }
                                               } else {
                                                 AuthClass().showSnackBar(
@@ -867,7 +890,9 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
               SizedBox(
                 width: 50,
                 height: 50,
-                child: CircularProgressIndicator(),
+                child: SpinKitDualRing(
+                  color: Colors.deepPurpleAccent,
+                ),
               ),
             ],
           );

@@ -8,6 +8,7 @@ import 'package:advance_employee_management/service/auth_services.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:universal_io/io.dart';
 
@@ -17,7 +18,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   setupLocator();
-
+  configLoading();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider.value(value: AppProvider.init()),
@@ -25,6 +26,22 @@ void main() async {
     ],
     child: MyApp(),
   ));
+}
+
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.yellow
+    ..backgroundColor = Colors.green
+    ..indicatorColor = Colors.yellow
+    ..textColor = Colors.yellow
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = true
+    ..dismissOnTap = false;
 }
 
 // ignore: must_be_immutable
@@ -43,6 +60,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.green),
       onGenerateRoute: generateRoute,
       initialRoute: LonginRoute,
+      builder: EasyLoading.init(),
     );
   }
 }

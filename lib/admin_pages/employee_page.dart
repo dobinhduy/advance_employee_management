@@ -13,6 +13,7 @@ import 'package:advance_employee_management/service/task_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:responsive_table/ResponsiveDatatable.dart';
@@ -75,10 +76,10 @@ class _EmployeePageState extends State<EmployeePage> {
                       width: 30,
                     ),
                     ElevatedButton.icon(
-                      onPressed: () {
+                      onPressed: () async {
                         if (employeeProvider.selecteds.isEmpty) {
-                          AuthClass().showSnackBar(
-                              context, "Please select employee!!");
+                          await EasyLoading.showInfo(
+                              "Please select employee!!");
                         } else {
                           dialog(
                             DialogType.INFO,

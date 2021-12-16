@@ -37,23 +37,16 @@ class _SignUpPageState extends State<SignInPage> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment(
-                  0.8, 0.0), // 10% of the width, so there are ten blinds.
-              colors: <Color>[
-                Color(0xFFB2EBF2),
-                Color(0xFF81D4FA)
-              ], // red to yellow
-              tileMode:
-                  TileMode.repeated, // repeats the gradient over the canvas
+            image: DecorationImage(
+              image: AssetImage("images/backgroupImage.jpg"),
+              fit: BoxFit.cover,
             ),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                "Sign In",
+                "Login",
                 style: TextStyle(
                     fontSize: 35,
                     color: Colors.black,
@@ -88,7 +81,7 @@ class _SignUpPageState extends State<SignInPage> {
                     child: const Text(
                       "Forget Password ?",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.white70,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -121,7 +114,8 @@ class _SignUpPageState extends State<SignInPage> {
             labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
-                borderSide: const BorderSide(width: 1, color: Colors.amber)),
+                borderSide:
+                    const BorderSide(width: 1, color: Colors.tealAccent)),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
                 borderSide: const BorderSide(width: 1, color: Colors.grey)),
@@ -147,7 +141,8 @@ class _SignUpPageState extends State<SignInPage> {
             labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
-                borderSide: const BorderSide(width: 1, color: Colors.amber)),
+                borderSide:
+                    const BorderSide(width: 1, color: Colors.tealAccent)),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
                 borderSide: const BorderSide(width: 1, color: Colors.grey)),
@@ -205,7 +200,7 @@ class _SignUpPageState extends State<SignInPage> {
         width: MediaQuery.of(context).size.width / 4.5,
         height: 60,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(17), color: Colors.blueAccent),
+            borderRadius: BorderRadius.circular(17), color: Colors.purple[200]),
         child: Center(
           child: circular
               ? const CircularProgressIndicator()

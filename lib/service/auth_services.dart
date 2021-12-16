@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -80,8 +81,8 @@ class AuthClass {
     auth.currentUser!
         .reauthenticateWithCredential(authCredentials)
         .then((value) {
-      auth.currentUser!.updatePassword(newPassword).then((_) {
-        AuthClass().showSnackBar(context, "Password was changed");
+      auth.currentUser!.updatePassword(newPassword).then((_) async {
+        await EasyLoading.showSuccess('Change Success!');
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (builder) => const SignInPage()),
@@ -90,8 +91,8 @@ class AuthClass {
         AuthClass().showSnackBar(context, "Not success");
       });
     }).catchError((error) {
-      AuthClass().showSnackBar(
-          context, "Current Password is  incorrect, Please input again!!");
+      EasyLoading.showError(
+          "Current Password is  incorrect, Please input again!!");
     });
   }
 

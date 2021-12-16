@@ -26,7 +26,6 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
   String memid = "";
   bool isADD = false;
   int i = 0;
-  bool loading = true;
 
   @override
   void initState() {

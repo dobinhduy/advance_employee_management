@@ -3,6 +3,7 @@ import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/notification_service.dart';
 import 'package:advance_employee_management/service/task_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
@@ -159,10 +160,10 @@ class _AssignTaskState extends State<AssignTask> {
                         widget.memberid,
                         DateTime.now().millisecondsSinceEpoch,
                         false,
-                        "You was assigned a new task in project" +
+                        "You was assigned a new task in project " +
                             widget.projectName);
                     Navigator.pop(context);
-                    AuthClass().showSnackBar(context, "Assign Success");
+                    await EasyLoading.showSuccess('Assign task success!');
                     setState(() {});
                   } else {
                     message = "The percent of this task must be less than " +

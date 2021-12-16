@@ -1,6 +1,7 @@
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class RecoverPassword extends StatefulWidget {
   const RecoverPassword({Key? key}) : super(key: key);
@@ -16,34 +17,49 @@ class _RecoverPasswordState extends State<RecoverPassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.blueAccent,
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [
+            Colors.blue,
+            Colors.green,
+          ],
+        )),
         child: Center(
-          child: Container(
-            width: 400,
-            height: 400,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  "Recover Password",
-                  style: TextStyle(
-                      fontSize: 35,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(
-                  height: 70,
-                ),
-                textItem("Input your email", email, false),
-                const SizedBox(
-                  height: 10,
-                ),
-                sendButton(),
-              ],
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "Forgot your password ?",
+                style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              const Text(
+                "No worries! Enter your email and we will send you a reset.",
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white60,
+                    fontWeight: FontWeight.normal),
+              ),
+              const SizedBox(
+                height: 70,
+              ),
+              textItem("Input your email here....", email, false),
+              const SizedBox(
+                height: 30,
+              ),
+              sendButton(),
+              const SizedBox(
+                height: 15,
+              ),
+              goBackButton(),
+            ],
           ),
         ),
       ),
@@ -58,10 +74,14 @@ class _RecoverPasswordState extends State<RecoverPassword> {
       child: TextFormField(
           controller: controller,
           obscureText: obscureText,
-          style: const TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
+            prefixIcon: const Icon(
+              Icons.email_outlined,
+              color: Colors.white,
+            ),
             labelText: text,
-            labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
+            labelStyle: const TextStyle(fontSize: 15, color: Colors.white70),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
                 borderSide: const BorderSide(width: 1, color: Colors.amber)),
@@ -75,28 +95,49 @@ class _RecoverPasswordState extends State<RecoverPassword> {
   Widget sendButton() {
     return InkWell(
       onTap: () async {
-        try {
-          await FirebaseAuth.instance.sendPasswordResetEmail(email: email.text);
-          authClass.showSnackBar(context, "Email was sended...");
-          Navigator.pop(context);
-        } catch (e) {
-          authClass.showSnackBar(context, e.toString());
+        if (email.text.isEmpty) {
+          EasyLoading.showInfo('Input your email...');
+        } else {
+          try {
+            await FirebaseAuth.instance
+                .sendPasswordResetEmail(email: email.text);
+            EasyLoading.showInfo('Email was sended...');
+            Navigator.pop(context);
+          } catch (e) {
+            authClass.showSnackBar(context, e.toString());
+          }
         }
       },
       child: Container(
         width: MediaQuery.of(context).size.width / 4.5,
-        height: 60,
+        height: 50,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(17),
-          gradient: const LinearGradient(colors: [
-            Color(0xfffd746c),
-            Color(0xffff9068),
-            Color(0xfffd746c)
-          ]),
-        ),
+            borderRadius: BorderRadius.circular(17),
+            color: Colors.tealAccent[700]),
         child: const Center(
           child: Text(
-            "Send",
+            "Send Request",
+            style: TextStyle(fontSize: 17, color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget goBackButton() {
+    return InkWell(
+      onTap: () async {
+        Navigator.pop(context);
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width / 4.5,
+        height: 50,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(17),
+            color: Colors.tealAccent[700]),
+        child: const Center(
+          child: Text(
+            "Go Back",
             style: TextStyle(fontSize: 17, color: Colors.white),
           ),
         ),

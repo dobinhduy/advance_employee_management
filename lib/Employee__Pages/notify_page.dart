@@ -3,6 +3,8 @@ import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/notification_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -53,7 +55,7 @@ class _NotificationPageState extends State<NotificationPage> {
         ? Scaffold(
             appBar: AppBar(
               title: const Text('Notification'),
-              backgroundColor: Colors.purpleAccent,
+              backgroundColor: Colors.deepPurpleAccent,
               automaticallyImplyLeading: false,
             ),
             body: SingleChildScrollView(
@@ -69,7 +71,7 @@ class _NotificationPageState extends State<NotificationPage> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 20),
                           child: notify.isread == false
-                              ? notification(notify, Colors.amberAccent)
+                              ? notification(notify, const Color(0xFF81D4F4))
                               : notification(notify, Colors.white)),
                     )
                 ],
@@ -82,8 +84,16 @@ class _NotificationPageState extends State<NotificationPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                CircularProgressIndicator(),
+              children: [
+                SpinKitFadingCircle(
+                  itemBuilder: (BuildContext context, int index) {
+                    return DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: index.isEven ? Colors.red : Colors.green,
+                      ),
+                    );
+                  },
+                ),
               ],
             ));
   }
@@ -111,7 +121,8 @@ class _NotificationPageState extends State<NotificationPage> {
       children: [
         Container(
           decoration: BoxDecoration(
-            border: Border.all(width: 1),
+            borderRadius: BorderRadius.circular(1),
+            border: Border.all(width: 0.5),
             color: textColor,
           ),
           width: 550,
@@ -140,17 +151,19 @@ class _NotificationPageState extends State<NotificationPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ElevatedButton(
+                  ElevatedButton.icon(
+                      icon: const Icon(Icons.delete_forever),
                       style: ElevatedButton.styleFrom(
                           primary: Colors.redAccent,
                           textStyle: const TextStyle(fontSize: 18)),
                       onPressed: () {
                         notificationService.updateStatus(notify.id, true);
+                        EasyLoading.showInfo('Delete Success!');
                         setState(() {
                           notificationService.deleteNotification(notify.id);
                         });
                       },
-                      child: const Text('Delete')),
+                      label: const Text('Delete')),
                   const SizedBox(
                     width: 20,
                   ),

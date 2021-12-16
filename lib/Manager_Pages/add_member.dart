@@ -6,6 +6,7 @@ import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:advance_employee_management/service/notification_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:uuid/uuid.dart';
 
 // ignore: must_be_immutable
@@ -101,11 +102,11 @@ class _AddMemberState extends State<AddMember> {
                       false,
                       "You was add to new project: " + widget.proName);
                   Navigator.pop(context);
-                  AuthClass().showSnackBar(context, "Add success");
+                  await EasyLoading.showSuccess('Add Success!');
                   setState(() {});
                 } else {
-                  AuthClass()
-                      .showSnackBar(context, "Employee is not belong to you");
+                  AuthClass().showSnackBar(
+                      context, "This employee is not belong to you");
                   Navigator.of(context).pop();
                 }
               } else {

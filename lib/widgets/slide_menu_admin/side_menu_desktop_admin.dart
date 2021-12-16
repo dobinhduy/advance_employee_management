@@ -16,7 +16,6 @@ class SildeMenuAdminDesktop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppProvider appProvider = Provider.of<AppProvider>(context);
-
     return Container(
       decoration: const BoxDecoration(
           color: Colors.white,
@@ -81,7 +80,7 @@ class SildeMenuAdminDesktop extends StatelessWidget {
       desc: description,
       btnCancelOnPress: () {},
       btnOkOnPress: () {
-        provider.changeCurrentPage(DisplayedPage.LOGOUT);
+        provider.changeCurrentPage(DisplayedPage.HOME);
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (builder) => const SignInPage()),

@@ -8,6 +8,7 @@ import 'package:advance_employee_management/service/department_service.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -71,15 +72,6 @@ class _AddDepartmentState extends State<AddDepartment> {
                   width: 300,
                   child: Row(
                     children: [
-                      // TextField(
-                      //   controller: widget.id,
-                      // decoration: const InputDecoration(
-                      //   icon: Icon(
-                      //     Icons.vpn_key_rounded,
-                      //   ),
-                      //   labelText: 'Department ID',
-                      // ),
-                      // ),
                       randomBox(),
                       const SizedBox(
                         width: 5,
@@ -92,7 +84,7 @@ class _AddDepartmentState extends State<AddDepartment> {
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 6,
                 ),
                 SizedBox(
@@ -169,8 +161,8 @@ class _AddDepartmentState extends State<AddDepartment> {
                       });
                     });
                     Navigator.pop(context);
+                    await EasyLoading.showSuccess('Add Success!');
                     locator<NavigationService>().navigateTo(DepartmentLayout);
-                    AuthClass().showSnackBar(context, "Add success");
                   } else {
                     Navigator.pop(context);
                     AuthClass().showSnackBar(
