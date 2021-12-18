@@ -72,8 +72,8 @@ class _EmployeeInformationState extends State<EmployeeInformation> {
             backgroundColor: Colors.white,
             appBar: AppBar(
               automaticallyImplyLeading: false,
-              backgroundColor: Colors.purpleAccent,
-              title: const Text("Employee Data"),
+              backgroundColor: Colors.deepPurpleAccent,
+              title: const Text("Your profile"),
             ),
             body: SingleChildScrollView(
               child: Column(

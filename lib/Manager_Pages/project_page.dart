@@ -8,6 +8,7 @@ import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -273,6 +274,7 @@ class _ProjectPageState extends State<ProjectPage> {
             provider.isSelect == false;
           }
         });
+        EasyLoading.showSuccess('Delete Success!');
       },
     )..show();
   }

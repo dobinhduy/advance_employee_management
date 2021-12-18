@@ -206,19 +206,17 @@ class _UserInforPageState extends State<UserInforPage> {
   }
 
   updateEmployee() {
-    if (mounted) {
-      setState(() {
-        idController = idController;
-        emailController = emailController;
-        addressController = addressController;
-        genderController = genderController;
-        birthdayController = birthdayController;
-        genderController = genderController;
-        supervisorIDController = supervisorIDController;
-        phoneController = phoneController;
-        photoURLController = photoURLController;
-      });
-    }
+    setState(() {
+      idController = idController;
+      emailController = emailController;
+      addressController = addressController;
+      genderController = genderController;
+      birthdayController = birthdayController;
+      genderController = genderController;
+      supervisorIDController = supervisorIDController;
+      phoneController = phoneController;
+      photoURLController = photoURLController;
+    });
   }
 
   checkFinishAllProject() async {

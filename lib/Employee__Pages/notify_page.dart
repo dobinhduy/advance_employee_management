@@ -32,12 +32,16 @@ class _NotificationPageState extends State<NotificationPage> {
 
   getUserID() async {
     userID = await employeeServices.getEmployeeIDbyEmail(useremail);
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   getNotify() async {
     notifies = await notificationService.getAllNotification(userID);
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   void deplay() {

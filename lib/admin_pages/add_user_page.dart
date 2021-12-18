@@ -600,7 +600,7 @@ class _AddUserPageState extends State<AddUserPage> {
                     });
                     Navigator.pop(context);
                     locator<NavigationService>().navigateTo(EmployeeLayout);
-                    await EasyLoading.showSuccess('Add Success!');
+                    EasyLoading.showSuccess('Add Success!');
 
                     setState(() {});
                   } catch (e) {

@@ -18,12 +18,16 @@ class _NavBarLogoEmployeeState extends State<NavBarLogoEmployee> {
   String name = "";
   getPhotoURl() async {
     photoURL = await employeeServices.getphotoURL(email);
-    setState(() {}); //????????
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   getName() async {
     name = await employeeServices.getEmployeeName(email);
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
