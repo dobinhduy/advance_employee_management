@@ -227,7 +227,7 @@ class _AddUserPageState extends State<AddUserPage> {
                                                   padding:
                                                       EdgeInsets.only(top: 100),
                                                   child: Center(
-                                                    child: SpinKitPianoWave(
+                                                    child: SpinKitFadingCircle(
                                                       color: Colors.blue,
                                                     ),
                                                   ),

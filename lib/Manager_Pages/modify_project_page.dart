@@ -242,7 +242,8 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
               title: const Text('Project Information'),
             ),
             body: SingleChildScrollView(
-              physics: const ScrollPhysics(),
+              // physics: const ScrollPhysics(),
+
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 40, horizontal: 50),
@@ -461,7 +462,6 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                                                   ProjectService
                                                                       projectService =
                                                                       ProjectService();
-
                                                                   taskService
                                                                       .removeAllTasknwithMemberID(
                                                                           members[
@@ -479,6 +479,17 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                                                       memberName[
                                                                           i]);
                                                                 });
+                                                                print(
+                                                                    members[i]);
+
+                                                                // setState(() {
+                                                                //   tasks.removeWhere(
+                                                                //       (element) =>
+                                                                //           element
+                                                                //               .memberid ==
+                                                                //           members[
+                                                                //               i]);
+                                                                // });
                                                               } else {
                                                                 dialog(
                                                                     DialogType
@@ -604,7 +615,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                             SizedBox(
                                               height: 5,
                                             ),
-                                            Text('Member Id',
+                                            Text('Member ID',
                                                 style:
                                                     TextStyle(fontSize: 20.0)),
                                             SizedBox(

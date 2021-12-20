@@ -30,9 +30,11 @@ class _EmployeeInformationState extends State<EmployeeInformation> {
 
   isLoading() {
     Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        loading = false;
-      });
+      if (mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
     });
   }
 
@@ -44,7 +46,9 @@ class _EmployeeInformationState extends State<EmployeeInformation> {
 
   getEmployeeInf() async {
     employeeInfor = await employeeServices.getEmployeebyEmail(email);
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override

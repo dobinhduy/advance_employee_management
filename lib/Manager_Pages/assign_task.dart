@@ -164,19 +164,27 @@ class _AssignTaskState extends State<AssignTask> {
                             widget.projectName);
                     Navigator.pop(context);
                     await EasyLoading.showSuccess('Assign task success!');
-                    setState(() {});
+                    if (mounted) {
+                      setState(() {});
+                    }
                   } else {
-                    message = "The percent of this task must be less than " +
+                    message = "The percent of this task can not greater than " +
                         (100 - widget.percent).toString();
-                    setState(() {});
+                    if (mounted) {
+                      setState(() {});
+                    }
                   }
                 } else {
                   message = "Percent must be a number !!";
-                  setState(() {});
+                  if (mounted) {
+                    setState(() {});
+                  }
                 }
               } else {
                 message = "Please, Fill all information";
-                setState(() {});
+                if (mounted) {
+                  setState(() {});
+                }
               }
             }),
       ],

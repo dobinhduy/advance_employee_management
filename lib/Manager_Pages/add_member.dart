@@ -89,11 +89,13 @@ class _AddMemberState extends State<AddMember> {
                   String employeeName =
                       await employeeServices.getEmployeeNamebyID(id.text);
 
-                  setState(() {
-                    projectService.addMember(id.text, widget.proID);
-                    widget.members.add(id.text);
-                    widget.memberName.add(employeeName);
-                  });
+                  if (mounted) {
+                    setState(() {
+                      projectService.addMember(id.text, widget.proID);
+                      widget.members.add(id.text);
+                      widget.memberName.add(employeeName);
+                    });
+                  }
                   notificationService.createNotification(
                       const Uuid().v4(),
                       widget.managerID,
@@ -103,7 +105,9 @@ class _AddMemberState extends State<AddMember> {
                       "You was add to new project: " + widget.proName);
                   Navigator.pop(context);
                   await EasyLoading.showSuccess('Add Success!');
-                  setState(() {});
+                  if (mounted) {
+                    setState(() {});
+                  }
                 } else {
                   AuthClass().showSnackBar(
                       context, "This employee is not belong to you");

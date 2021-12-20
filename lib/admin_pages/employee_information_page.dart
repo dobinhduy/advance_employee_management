@@ -265,7 +265,7 @@ class _UserInforPageState extends State<UserInforPage> {
                                       width: 300, height: 300, fit: BoxFit.fill)
                                   : const Padding(
                                       padding: EdgeInsets.only(top: 50),
-                                      child: SpinKitRotatingPlain(
+                                      child: SpinKitFadingCircle(
                                         color: Colors.green,
                                       ),
                                     )

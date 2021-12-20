@@ -95,7 +95,6 @@ class _DepartmentPageState extends State<DepartmentPage> {
                             },
                             icon: const Icon(
                               Icons.delete_forever,
-                              color: Colors.redAccent,
                             ),
                             label: const Text("DELETE"),
                           ),
