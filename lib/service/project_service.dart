@@ -39,6 +39,17 @@ class ProjectService {
     return doc.length == 1;
   }
 
+  Future<num> getComplete(String id) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: id)
+        .get();
+    DocumentSnapshot doc = querySnapshot.docs[0];
+    num complete = (doc.data() as dynamic)["complete"];
+
+    return complete;
+  }
+
   //check employee is finish all project
   Future<bool> checkFinishAllProject(String employeeID) =>
       FirebaseFirestore.instance.collection(collection).get().then((value) {

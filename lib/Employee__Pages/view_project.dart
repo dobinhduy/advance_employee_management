@@ -1,3 +1,4 @@
+import 'package:advance_employee_management/Employee__Pages/answertask.dart';
 import 'package:advance_employee_management/models/task.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
@@ -7,7 +8,6 @@ import 'package:advance_employee_management/service/task_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
-import 'package:uuid/uuid.dart';
 
 class ViewProject extends StatefulWidget {
   const ViewProject(
@@ -49,9 +49,13 @@ class _ViewProjectState extends State<ViewProject> {
   List<dynamic> members = [];
   List<dynamic> memberName = [];
   List<TaskModel>? tasks = [];
-  String comple = "";
-  num value = 0;
+  num completion = 0;
   bool timeout = false;
+
+  getComplete() async {
+    completion = await projectService.getComplete(widget.projectid);
+  }
+
   getEmployeeID() async {
     employeeID = await employeeServices.getEmployeeIDbyEmail(email);
     employeeName = await employeeServices.getEmployeeName(email);
@@ -86,25 +90,48 @@ class _ViewProjectState extends State<ViewProject> {
     }
   }
 
+  Future<void> _dialogAnswerTask(
+    BuildContext context,
+    TaskModel task,
+    String employeeID,
+    String projectid,
+    String managerid,
+    String employeeName,
+  ) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AnswerTask(
+              projectName: widget.projectName,
+              task: task,
+              employeeID: employeeID,
+              projectid: projectid,
+              managerID: managerid,
+              employeeName: employeeName,
+              complete: widget.complete);
+        });
+  }
+
   @override
   void initState() {
-    value = int.parse(widget.complete);
     super.initState();
     members = widget.member;
     getAllTask();
+    getEmployeeID();
     getMemberName(members);
-    comple = widget.complete;
+    getComplete();
   }
 
   @override
   Widget build(BuildContext context) {
     getAllTask();
+    getComplete();
     deplay();
 
     return timeout
         ? Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.purpleAccent[400],
+              backgroundColor: Colors.deepPurpleAccent,
               title: const Text('Project Information'),
             ),
             body: SingleChildScrollView(
@@ -156,7 +183,7 @@ class _ViewProjectState extends State<ViewProject> {
                           Row(
                             children: [
                               titlebox("Complete:"),
-                              titlebox2(value.toString()),
+                              titlebox2(completion.toString()),
                               const Text(" %"),
                             ],
                           ),
@@ -229,7 +256,7 @@ class _ViewProjectState extends State<ViewProject> {
                           children: [
                             for (TaskModel task in tasks!.reversed)
                               task.status == "Uncomplete"
-                                  ? taskBox(task, "Mark as Complete",
+                                  ? taskBox(task, "Write answer",
                                       const Color(0xFFe0e0e0))
                                   : taskBox(task, "Completed",
                                       const Color(0xFFE8EAF6))
@@ -281,6 +308,11 @@ class _ViewProjectState extends State<ViewProject> {
                 titlebox("DeadLine:  " + task.deadline),
               ],
             ),
+            Row(
+              children: [
+                titlebox("Percent:  " + task.percent.toString()),
+              ],
+            ),
             Padding(
               padding: const EdgeInsets.only(right: 10),
               child: Row(
@@ -291,28 +323,16 @@ class _ViewProjectState extends State<ViewProject> {
                       style: ElevatedButton.styleFrom(
                           textStyle: const TextStyle(fontSize: 18)),
                       onPressed: () {
-                        value = value + task.percent;
-
-                        if (task.status == "Uncomplete") {
-                          taskService.updateStatus(task.id, "Complete");
-                          projectService.addCompletion(
-                              widget.projectid, task.percent);
-                          notificationService.createNotification(
-                              const Uuid().v4(),
-                              employeeID,
-                              widget.managerid,
-                              DateTime.now().millisecondsSinceEpoch,
-                              false,
-                              employeeName +
-                                  "has finished a task in project" +
-                                  widget.projectName);
-
-                          setState(() {
-                            value;
-                          });
+                        if (task.status == "Complete") {
                         } else {
-                          AuthClass().showSnackBar(context,
-                              "You can not change the status. Try to connect to you manager");
+                          _dialogAnswerTask(
+                            context,
+                            task,
+                            employeeID,
+                            widget.projectid,
+                            widget.managerid,
+                            employeeName,
+                          );
                         }
                       },
                       child: Text(title))
@@ -327,12 +347,12 @@ class _ViewProjectState extends State<ViewProject> {
 
   Widget titlebox(String title) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
       child: Text(
         title,
         style: const TextStyle(
             color: Colors.black,
-            fontSize: 17,
+            fontSize: 16,
             letterSpacing: 0.5,
             fontWeight: FontWeight.bold),
       ),

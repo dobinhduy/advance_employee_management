@@ -10,6 +10,8 @@ class TaskModel {
   static const DEADLINE = "deadline";
   static const DESCRIPTION = "description";
   static const PERCENT = "percent";
+  static const ANSWER = "answer";
+  static const FILE = "file";
   late String _id;
   late String _projectid;
   late String _memberid;
@@ -18,6 +20,8 @@ class TaskModel {
   late String _deadline;
   late String _description;
   late int _percent;
+  late String _answer;
+  late String _file;
   String get id => _id;
   String get projectid => _projectid;
   String get memberid => _memberid;
@@ -25,9 +29,20 @@ class TaskModel {
   String get status => _status;
   String get deadline => _deadline;
   String get description => _description;
+  String get answer => _answer;
   num get percent => _percent;
-  TaskModel(String id, String projectid, String memberid, int assignday,
-      String status, String deadline, String description, int percent) {
+  String get file => _file;
+  TaskModel(
+      String id,
+      String projectid,
+      String memberid,
+      int assignday,
+      String status,
+      String deadline,
+      String description,
+      int percent,
+      String answer,
+      String file) {
     _id = id;
     _projectid = projectid;
     _memberid = memberid;
@@ -36,6 +51,8 @@ class TaskModel {
     _deadline = deadline;
     _description = description;
     _percent = percent;
+    _answer = answer;
+    _file = file;
   }
 
   TaskModel.fromSnapshot(DocumentSnapshot snapshot) {
@@ -47,5 +64,7 @@ class TaskModel {
     _deadline = (snapshot.data() as dynamic)[DEADLINE];
     _description = (snapshot.data() as dynamic)[DESCRIPTION];
     _percent = (snapshot.data() as dynamic)[PERCENT];
+    _answer = (snapshot.data() as dynamic)[ANSWER];
+    _file = (snapshot.data() as dynamic)[FILE];
   }
 }

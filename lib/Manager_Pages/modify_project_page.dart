@@ -1,3 +1,4 @@
+import 'package:advance_employee_management/Employee__Pages/view_answer_box.dart';
 import 'package:advance_employee_management/Manager_Pages/add_member.dart';
 import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/models/task.dart';
@@ -7,6 +8,7 @@ import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/department_service.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
+import 'package:advance_employee_management/service/notification_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
 import 'package:advance_employee_management/service/task_service.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -15,6 +17,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import 'assign_task.dart';
 
@@ -157,6 +160,16 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
               members: members,
               memberName: memberName,
               managerName: managerName);
+        });
+  }
+
+  Future<void> _dialogViewAnswer(BuildContext context, TaskModel task) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return ViewAnswer(
+            task: task,
+          );
         });
   }
 
@@ -432,7 +445,8 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                                                     proID.text,
                                                                     percent,
                                                                     tasks,
-                                                                    managerID);
+                                                                    widget
+                                                                        .managerid);
                                                                 getAllTask();
                                                               }
                                                             },
@@ -459,6 +473,23 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                                               if (status !=
                                                                   "Finish") {
                                                                 setState(() {
+                                                                  NotificationService
+                                                                      notificationService =
+                                                                      NotificationService();
+                                                                  notificationService.createNotification(
+                                                                      const Uuid()
+                                                                          .v4(),
+                                                                      widget
+                                                                          .managerid,
+                                                                      members[
+                                                                          i],
+                                                                      DateTime.now()
+                                                                          .millisecondsSinceEpoch,
+                                                                      false,
+                                                                      "Yous was removed from " +
+                                                                          widget
+                                                                              .projectName +
+                                                                          " project ");
                                                                   ProjectService
                                                                       projectService =
                                                                       ProjectService();
@@ -481,15 +512,6 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                                                 });
                                                                 print(
                                                                     members[i]);
-
-                                                                // setState(() {
-                                                                //   tasks.removeWhere(
-                                                                //       (element) =>
-                                                                //           element
-                                                                //               .memberid ==
-                                                                //           members[
-                                                                //               i]);
-                                                                // });
                                                               } else {
                                                                 dialog(
                                                                     DialogType
@@ -589,11 +611,11 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                         isEdit == false
                             ? tasks.isNotEmpty
                                 ? Container(
-                                    margin: const EdgeInsets.all(20),
+                                    margin: const EdgeInsets.all(5),
                                     padding: const EdgeInsets.only(bottom: 50),
                                     child: Table(
                                       defaultColumnWidth:
-                                          const FixedColumnWidth(200.0),
+                                          const FixedColumnWidth(155.0),
                                       border: TableBorder.all(
                                           color: Colors.black,
                                           style: BorderStyle.solid,
@@ -660,6 +682,17 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                               height: 5,
                                             ),
                                             Text('Percent(%)',
+                                                style:
+                                                    TextStyle(fontSize: 20.0)),
+                                            SizedBox(
+                                              height: 5,
+                                            )
+                                          ]),
+                                          Column(children: const [
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text('Action',
                                                 style:
                                                     TextStyle(fontSize: 20.0)),
                                             SizedBox(
@@ -737,6 +770,42 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                                                 )
                                               ],
                                             ),
+                                            item.answer.isNotEmpty
+                                                ? Column(
+                                                    children: [
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      TextButton.icon(
+                                                          onPressed: () {
+                                                            if (mounted) {
+                                                              setState(() {
+                                                                _dialogViewAnswer(
+                                                                    context,
+                                                                    item);
+                                                              });
+                                                            }
+                                                          },
+                                                          icon: const Icon(Icons
+                                                              .remove_red_eye),
+                                                          label: const Text(
+                                                              "View Answer")),
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      )
+                                                    ],
+                                                  )
+                                                : Column(
+                                                    children: const [
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(""),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      )
+                                                    ],
+                                                  ),
                                           ]),
                                       ],
                                     ),

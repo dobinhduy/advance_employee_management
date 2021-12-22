@@ -1,5 +1,4 @@
 import 'package:advance_employee_management/models/task.dart';
-import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/notification_service.dart';
 import 'package:advance_employee_management/service/task_service.dart';
 import 'package:flutter/material.dart';
@@ -142,7 +141,9 @@ class _AssignTaskState extends State<AssignTask> {
                         description,
                         DateTime.now().millisecondsSinceEpoch,
                         "Uncomplete",
-                        int.parse(percent));
+                        int.parse(percent),
+                        "",
+                        "");
                     TaskModel task = TaskModel(
                         id,
                         widget.projectid,
@@ -151,7 +152,9 @@ class _AssignTaskState extends State<AssignTask> {
                         "Uncomplete",
                         DateFormat("dd/MM/yyyy").format(deadline),
                         description,
-                        int.parse(percent));
+                        int.parse(percent),
+                        "",
+                        "");
                     widget.list.add(task);
 
                     notificationService.createNotification(

@@ -358,9 +358,9 @@ class _AddUserPageState extends State<AddUserPage> {
               await FilePicker.platform.pickFiles(type: FileType.image);
           if (result != null) {
             Uint8List? uploadfile = result.files.single.bytes;
-            // String fileName = result.files.single.name;
+            String fileName = result.files.single.name;
             Reference reference =
-                FirebaseStorage.instance.ref().child(const Uuid().v1());
+                FirebaseStorage.instance.ref().child(fileName);
             final UploadTask uploadTask = reference.putData(uploadfile!);
             uploadTask.whenComplete(() async {
               String image = await uploadTask.snapshot.ref.getDownloadURL();

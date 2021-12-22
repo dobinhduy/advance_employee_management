@@ -4,8 +4,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class TaskService {
   String collection = "tasks";
 
-  void createTask(String id, String projectid, String deadline, String memberID,
-      String description, int assignday, String status, int percent) {
+  void createTask(
+      String id,
+      String projectid,
+      String deadline,
+      String memberID,
+      String description,
+      int assignday,
+      String status,
+      int percent,
+      String answer,
+      String file) {
     FirebaseFirestore.instance.collection(collection).add({
       "id": id,
       "projectid": projectid,
@@ -14,7 +23,9 @@ class TaskService {
       "memberid": memberID,
       "description": description,
       "status": status,
-      "percent": percent
+      "percent": percent,
+      "answer": answer,
+      "file": file,
     });
   }
 
@@ -50,6 +61,26 @@ class TaskService {
     QueryDocumentSnapshot doc = querySnapshot.docs[0];
     DocumentReference docref = doc.reference;
     docref.update({'status': status});
+  }
+
+  void updateAnswer(String taskID, String answer) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: taskID)
+        .get();
+    QueryDocumentSnapshot doc = querySnapshot.docs[0];
+    DocumentReference docref = doc.reference;
+    docref.update({'answer': answer});
+  }
+
+  void updateFilePath(String taskID, String path) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where("id", isEqualTo: taskID)
+        .get();
+    QueryDocumentSnapshot doc = querySnapshot.docs[0];
+    DocumentReference docref = doc.reference;
+    docref.update({'file': path});
   }
 
   Future<List<TaskModel>> getAllTask(String projectid) async =>
