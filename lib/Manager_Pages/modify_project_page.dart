@@ -253,10 +253,19 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
     return loading == false
         ? Scaffold(
             appBar: AppBar(
+              leading: BackButton(
+                  color:
+                      themeProvider.isLightMode ? Colors.black : Colors.white),
               // backgroundColor: Colors.deepPurpleAccent,
               backgroundColor:
                   themeProvider.isLightMode ? Colors.brown[50] : Colors.black,
-              title: const Text('Project Information'),
+              title: Text(
+                'Project Information',
+                style: TextStyle(
+                    color: themeProvider.isLightMode
+                        ? Colors.black
+                        : Colors.white),
+              ),
             ),
             body: SingleChildScrollView(
               // physics: const ScrollPhysics(),
@@ -994,10 +1003,12 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
           enabled: enable,
           controller: controller,
           obscureText: obscureText,
-          style: const TextStyle(color: Colors.black),
+          // style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             hintText: text,
-            labelStyle: const TextStyle(fontSize: 13, color: Colors.black),
+            labelStyle: const TextStyle(
+              fontSize: 13,
+            ),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(0),
                 borderSide: const BorderSide(width: 1, color: Colors.blue)),
@@ -1010,7 +1021,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
 
   Widget descriptionProject(TextEditingController desciption, bool enable) {
     return Container(
-      height: 200,
+      height: 150,
       width: 400,
       decoration: BoxDecoration(
         color: Colors.white12,
@@ -1020,7 +1031,9 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
         enabled: enable,
         controller: desciption,
         maxLines: 7,
-        style: const TextStyle(color: Colors.black, fontSize: 17),
+        style: const TextStyle(
+            // color: Colors.black,
+            fontSize: 17),
         decoration: const InputDecoration(
           border:
               OutlineInputBorder(borderSide: BorderSide(color: Colors.teal)),
@@ -1133,7 +1146,7 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
       child: Text(
         title,
         style: const TextStyle(
-            color: Colors.black,
+            // color: Colors.black,
             fontSize: 17,
             letterSpacing: 0.5,
             fontWeight: FontWeight.bold),
@@ -1147,7 +1160,9 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
       child: Text(
         title,
         style: const TextStyle(
-            color: Colors.grey, fontSize: 17, fontWeight: FontWeight.normal),
+            // color: Colors.grey,
+            fontSize: 17,
+            fontWeight: FontWeight.normal),
       ),
     );
   }

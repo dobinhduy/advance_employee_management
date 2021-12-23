@@ -1,5 +1,6 @@
 import 'package:advance_employee_management/models/employee.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:advance_employee_management/provider/theme_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/department_service.dart';
@@ -235,14 +236,23 @@ class _UserInforPageState extends State<UserInforPage> {
     checkFinishAllProject();
     isLoading();
 
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     TableProvider provider = Provider.of<TableProvider>(context);
     return loading == false
         ? Scaffold(
-            backgroundColor: Colors.white,
             appBar: AppBar(
-              actions: [const ChangeThemeButton()],
-              // backgroundColor: Colors.deepPurpleAccent,
-              title: const Text("Employee Information"),
+              leading: BackButton(
+                  color:
+                      themeProvider.isLightMode ? Colors.black : Colors.white),
+              backgroundColor:
+                  themeProvider.isLightMode ? Colors.brown[50] : Colors.black,
+              title: Text(
+                "Employee Information",
+                style: TextStyle(
+                    color: themeProvider.isLightMode
+                        ? Colors.black
+                        : Colors.white),
+              ),
             ),
             body: SingleChildScrollView(
               child: Column(
@@ -517,12 +527,21 @@ class _UserInforPageState extends State<UserInforPage> {
               ),
             ),
           )
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
-              SpinKitSquareCircle(color: Colors.pink, size: 50.0),
-            ],
+        : Container(
+            color: themeProvider.isLightMode ? Colors.white : Colors.brown,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const [
+                SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: SpinKitChasingDots(
+                    color: Colors.purpleAccent,
+                  ),
+                ),
+              ],
+            ),
           );
   }
 
@@ -590,7 +609,6 @@ class _UserInforPageState extends State<UserInforPage> {
       child: Text(
         title,
         style: const TextStyle(
-          color: Colors.black,
           fontSize: 17,
           letterSpacing: 2,
         ),
@@ -604,7 +622,6 @@ class _UserInforPageState extends State<UserInforPage> {
       child: Text(
         title,
         style: const TextStyle(
-          color: Colors.black,
           fontSize: 15,
           letterSpacing: 2,
         ),

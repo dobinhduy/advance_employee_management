@@ -71,7 +71,6 @@ class _NotificationPageState extends State<NotificationPage> {
               backgroundColor: themeProvider.isLightMode
                   ? const Color(0XFFEFEBE9)
                   : Colors.black,
-              // backgroundColor: Colors.deepPurpleAccent,
               automaticallyImplyLeading: false,
             ),
             body: SingleChildScrollView(
@@ -79,16 +78,23 @@ class _NotificationPageState extends State<NotificationPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 20),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 40),
                   for (NotificationModel notify in notifies!.reversed)
                     Center(
                       child: Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 20),
                           child: notify.isread == false
-                              ? notification(notify, const Color(0xFF81D4F4))
-                              : notification(notify, Colors.white)),
+                              ? notification(
+                                  notify,
+                                  themeProvider.isLightMode
+                                      ? const Color(0xFFBDBDBD)
+                                      : const Color(0xFF5D4037))
+                              : notification(
+                                  notify,
+                                  themeProvider.isLightMode
+                                      ? const Color(0xFFE0E0E0)
+                                      : const Color(0xFF212121))),
                     )
                 ],
               ),
@@ -123,10 +129,7 @@ class _NotificationPageState extends State<NotificationPage> {
       child: Text(
         title,
         style: const TextStyle(
-            color: Colors.black,
-            fontSize: 13,
-            letterSpacing: 0.5,
-            fontWeight: FontWeight.bold),
+            fontSize: 13, letterSpacing: 0.5, fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -139,13 +142,14 @@ class _NotificationPageState extends State<NotificationPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(1),
-            border: Border.all(width: 0.5),
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(width: 1),
             color: textColor,
           ),
           width: 550,
-          height: 100,
+          // height: 120,
           child: Column(
             children: [
               Row(

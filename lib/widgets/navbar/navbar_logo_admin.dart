@@ -21,7 +21,6 @@ class _NavBarLogoAdminState extends State<NavBarLogoAdmin> {
             width: 100,
             child: Icon(
               Icons.home,
-              color: Colors.white,
               size: 100,
             ),
           ),

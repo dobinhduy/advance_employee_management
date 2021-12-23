@@ -82,19 +82,10 @@ class _SideMenuManagerDesktopState extends State<SideMenuManagerDesktop> {
     return timeout == true
         ? Container(
             decoration: BoxDecoration(
-                color: themeProvider.isLightMode
-                    ? const Color(0XFFEFEBE9)
-                    : Colors.black,
-                // color: Colors.white,
-                // gradient: LinearGradient(
-                //   colors: [Colors.deepPurple, Colors.deepPurpleAccent],
-                // ),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Color(0xFFFAFAFA),
-                      offset: Offset(3, 5),
-                      blurRadius: 10)
-                ]),
+              color: themeProvider.isLightMode
+                  ? const Color(0XFFEFEBE9)
+                  : Colors.black,
+            ),
             width: 220,
             child: Column(
               children: [

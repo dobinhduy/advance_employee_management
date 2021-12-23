@@ -2,6 +2,7 @@ import 'package:advance_employee_management/authentication/sign_in_page.dart';
 import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/provider/app_provider.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:advance_employee_management/provider/theme_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:advance_employee_management/widgets/change_button/change_theme_button.dart';
@@ -16,17 +17,13 @@ class SildeMenuAdminDesktop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     final AppProvider appProvider = Provider.of<AppProvider>(context);
     return Container(
-      decoration: const BoxDecoration(
-          color: Colors.white,
-          gradient: LinearGradient(
-            colors: [Colors.deepPurple, Colors.deepPurpleAccent],
-          ),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.lightBlue, offset: Offset(3, 5), blurRadius: 10)
-          ]),
+      decoration: BoxDecoration(
+        color:
+            themeProvider.isLightMode ? const Color(0XFFEFEBE9) : Colors.black,
+      ),
       width: 220,
       child: Column(
         children: [

@@ -162,9 +162,11 @@ class _EmployeeInforState extends State<EmployeeInfor> {
     return loading == false
         ? Scaffold(
             appBar: AppBar(
+              leading: BackButton(
+                  color:
+                      themeProvider.isLightMode ? Colors.black : Colors.white),
               backgroundColor:
                   themeProvider.isLightMode ? Colors.brown[50] : Colors.black,
-              // backgroundColor: Colors.deepPurple,
               title: Text(
                 "Employee Information",
                 style: TextStyle(

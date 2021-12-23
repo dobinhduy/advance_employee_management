@@ -235,7 +235,7 @@ class _ProjectPageState extends State<ProjectPage> {
               ]))
         : Container(
             color: themeProvider.isLightMode ? Colors.white : Colors.brown,
-            child: Center(
+            child: const Center(
                 child: SpinKitPouringHourGlass(
               color: Colors.orangeAccent,
             )),

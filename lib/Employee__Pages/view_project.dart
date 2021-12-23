@@ -154,10 +154,14 @@ class _ViewProjectState extends State<ViewProject> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
                           color: themeProvider.isLightMode
                               ? Colors.brown[50]
                               : Colors.black,
-                          border: Border.all(color: Colors.black)),
+                          border: Border.all(
+                              color: themeProvider.isLightMode
+                                  ? Colors.black
+                                  : Colors.brown)),
                       child: Table(children: [
                         TableRow(children: [
                           Row(
@@ -272,10 +276,18 @@ class _ViewProjectState extends State<ViewProject> {
                           children: [
                             for (TaskModel task in tasks!.reversed)
                               task.status == "Uncomplete"
-                                  ? taskBox(task, "Write answer",
-                                      const Color(0xFFe0e0e0))
-                                  : taskBox(task, "Completed",
-                                      const Color(0xFFE8EAF6))
+                                  ? taskBox(
+                                      task,
+                                      "Write answer",
+                                      themeProvider.isLightMode
+                                          ? const Color(0xFFD7CCC8)
+                                          : Colors.black)
+                                  : taskBox(
+                                      task,
+                                      "Completed",
+                                      themeProvider.isLightMode
+                                          ? const Color(0xFFD7CCC8)
+                                          : Colors.black)
                           ],
                         ),
                       ],
@@ -302,9 +314,12 @@ class _ViewProjectState extends State<ViewProject> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: Container(
-        color: color,
+        decoration: BoxDecoration(
+            color: color,
+            border: Border.all(color: Colors.black),
+            borderRadius: BorderRadius.circular(15)),
         width: 700,
-        height: 160,
+        height: 172,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -330,7 +345,7 @@ class _ViewProjectState extends State<ViewProject> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 10),
+              padding: const EdgeInsets.only(right: 10, bottom: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
