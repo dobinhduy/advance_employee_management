@@ -1,4 +1,5 @@
 import 'package:advance_employee_management/models/notification.dart';
+import 'package:advance_employee_management/provider/theme_provider.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/notification_service.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -52,14 +54,24 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     getUserID();
     getNotify();
     deplay();
     return timeout
         ? Scaffold(
             appBar: AppBar(
-              title: const Text('Notification'),
-              backgroundColor: Colors.deepPurpleAccent,
+              title: Text(
+                'Notification',
+                style: TextStyle(
+                    color: themeProvider.isLightMode
+                        ? Colors.black
+                        : Colors.white),
+              ),
+              backgroundColor: themeProvider.isLightMode
+                  ? const Color(0XFFEFEBE9)
+                  : Colors.black,
+              // backgroundColor: Colors.deepPurpleAccent,
               automaticallyImplyLeading: false,
             ),
             body: SingleChildScrollView(
@@ -82,24 +94,27 @@ class _NotificationPageState extends State<NotificationPage> {
               ),
             ),
           )
-        : SizedBox(
-            width: 200,
-            height: 200,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SpinKitFadingCircle(
-                  itemBuilder: (BuildContext context, int index) {
-                    return DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: index.isEven ? Colors.red : Colors.green,
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ));
+        : Container(
+            color: themeProvider.isLightMode ? Colors.white : Colors.brown,
+            child: SizedBox(
+                width: 200,
+                height: 200,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SpinKitFadingCircle(
+                      itemBuilder: (BuildContext context, int index) {
+                        return DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: index.isEven ? Colors.red : Colors.green,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                )),
+          );
   }
 
   Widget titlebox(String title) {

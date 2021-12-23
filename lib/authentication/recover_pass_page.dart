@@ -74,7 +74,7 @@ class _RecoverPasswordState extends State<RecoverPassword> {
       child: TextFormField(
           controller: controller,
           obscureText: obscureText,
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             prefixIcon: const Icon(
               Icons.email_outlined,

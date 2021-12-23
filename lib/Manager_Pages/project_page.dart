@@ -3,6 +3,7 @@ import 'package:advance_employee_management/Manager_Pages/modify_project_page.da
 import 'package:advance_employee_management/admin_pages/page_header.dart';
 import 'package:advance_employee_management/models/project.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:advance_employee_management/provider/theme_provider.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
@@ -82,6 +83,8 @@ class _ProjectPageState extends State<ProjectPage> {
   @override
   Widget build(BuildContext context) {
     TableProvider projectProvider = Provider.of<TableProvider>(context);
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
+
     return loading == false
         ? SingleChildScrollView(
             child: Column(
@@ -89,13 +92,11 @@ class _ProjectPageState extends State<ProjectPage> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                 const PageHeader(
-                  text: 'Project Table',
+                  text: '  Project Table',
                 ),
                 Container(
-                  margin: const EdgeInsets.all(5),
-                  padding: const EdgeInsets.all(0),
                   constraints: const BoxConstraints(
-                    maxHeight: 700,
+                    maxHeight: 745,
                   ),
                   child: Card(
                     elevation: 1,
@@ -131,7 +132,6 @@ class _ProjectPageState extends State<ProjectPage> {
                                   },
                                   icon: const Icon(
                                     Icons.delete_forever,
-                                    color: Colors.redAccent,
                                   ),
                                   label: const Text("DELETE"),
                                 ),
@@ -233,13 +233,12 @@ class _ProjectPageState extends State<ProjectPage> {
                   ),
                 ),
               ]))
-        : const SizedBox(
+        : Container(
+            color: themeProvider.isLightMode ? Colors.white : Colors.brown,
             child: Center(
                 child: SpinKitPouringHourGlass(
               color: Colors.orangeAccent,
             )),
-            width: 50,
-            height: 50,
           );
   }
 

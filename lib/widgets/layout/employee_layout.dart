@@ -1,8 +1,10 @@
+import 'package:advance_employee_management/provider/app_provider.dart';
 import 'package:advance_employee_management/rounting/route.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:advance_employee_management/widgets/Side_menu_employee/side_menu_employee.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../locator.dart';
 
@@ -25,7 +27,7 @@ class EmployeeLayoutRoute extends StatelessWidget {
                     child: Navigator(
                   key: locator<NavigationService>().navigatorKey,
                   onGenerateRoute: generateRoute,
-                  initialRoute: MainHomeP,
+                  initialRoute: EmployeeInformationRoute,
                 ))
               ],
             ),

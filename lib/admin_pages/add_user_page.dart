@@ -112,7 +112,7 @@ class _AddUserPageState extends State<AddUserPage> {
             appBar: AppBar(
               automaticallyImplyLeading: false,
               title: const Text("Add New Employee"),
-              backgroundColor: Colors.deepPurpleAccent,
+              // backgroundColor: Colors.deepPurpleAccent,
             ),
             body: SingleChildScrollView(
               scrollDirection: Axis.vertical,

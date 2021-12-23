@@ -1,5 +1,7 @@
 import 'package:advance_employee_management/Custom/custom_text.dart';
+import 'package:advance_employee_management/provider/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SileMenuItemDesktop extends StatelessWidget {
   final bool active;
@@ -17,18 +19,43 @@ class SileMenuItemDesktop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: onTap,
-      tileColor: active ? Colors.green.withOpacity(0.3) : null,
-      title: CustomText(
-          text: text,
-          size: active ? 19 : 16,
-          color: active ? Colors.white : Colors.white60,
-          fontWeight: FontWeight.bold),
-      leading: Icon(
-        icon,
-        color: Colors.white,
-      ),
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
+    return Column(
+      children: [
+        ListView(shrinkWrap: true, children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              color: themeProvider.isLightMode
+                  ? active
+                      ? Colors.white
+                      : Colors.brown[50]
+                  : !active
+                      ? Colors.black
+                      : Colors.brown,
+              shape: BoxShape.rectangle,
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(25.0),
+                bottomRight: Radius.circular(25),
+              ),
+            ),
+            child: ListTile(
+              hoverColor: Colors.blue,
+              onTap: onTap,
+              tileColor: active ? Colors.white : Colors.white,
+              title: CustomText(
+                  text: text,
+                  size: active ? 19 : 16,
+                  fontWeight: FontWeight.normal),
+              leading: Icon(
+                icon,
+                color: themeProvider.isLightMode
+                    ? Colors.black
+                    : const Color(0XFFEFEBE9),
+              ),
+            ),
+          )
+        ]),
+      ],
     );
   }
 }

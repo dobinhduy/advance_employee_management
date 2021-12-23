@@ -81,7 +81,7 @@ class _SignUpPageState extends State<SignInPage> {
                     child: const Text(
                       "Forget Password ?",
                       style: TextStyle(
-                        color: Colors.white70,
+                        color: Colors.black,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),

@@ -45,7 +45,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         ),
                         const Text("Change Password",
                             style: TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.bold)),
+                                color: Colors.black,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold)),
                         const SizedBox(
                           height: 10,
                         ),
@@ -55,33 +57,37 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         ),
                         TextFormField(
                           enabled: true,
+                          style: const TextStyle(color: Colors.black),
                           decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.check),
-                          ),
+                              prefixIcon: Icon(Icons.check),
+                              prefixIconColor: Colors.black),
                           initialValue: 'At Least 8 characters',
                           readOnly: true,
                         ),
                         TextFormField(
+                          style: const TextStyle(color: Colors.black),
                           enabled: true,
                           decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.check),
-                          ),
+                              prefixIcon: Icon(Icons.check),
+                              prefixIconColor: Colors.black),
                           initialValue: 'At least 1 upper case letter(A-Z)',
                           readOnly: true,
                         ),
                         TextFormField(
                           enabled: true,
+                          style: const TextStyle(color: Colors.black),
                           decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.check),
-                          ),
+                              prefixIcon: Icon(Icons.check),
+                              prefixIconColor: Colors.black),
                           initialValue: 'At Least 1 lower case letter(A-Z)',
                           readOnly: true,
                         ),
                         TextFormField(
+                          style: const TextStyle(color: Colors.black),
                           enabled: true,
                           decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.check),
-                          ),
+                              prefixIcon: Icon(Icons.check),
+                              prefixIconColor: Colors.black),
                           initialValue: 'At Least 1 number(0-9)',
                           readOnly: true,
                         ),
@@ -124,12 +130,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       padding: const EdgeInsets.only(bottom: 20),
       child: SizedBox(
         width: 250,
-        height: 38,
+        height: 50,
         child: TextFormField(
             controller: controller,
             obscureText: obscureText,
             style: const TextStyle(color: Colors.black),
             decoration: InputDecoration(
+              hintStyle: const TextStyle(
+                color: Colors.black,
+              ),
               hintText: text,
               labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
               focusedBorder: OutlineInputBorder(

@@ -2,11 +2,13 @@ import 'package:advance_employee_management/authentication/sign_in_page.dart';
 import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/provider/app_provider.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:advance_employee_management/provider/theme_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:advance_employee_management/service/notification_service.dart';
+import 'package:advance_employee_management/widgets/change_button/change_theme_button.dart';
 import 'package:advance_employee_management/widgets/navbar/navbar_logo_employee.dart';
 import 'package:advance_employee_management/widgets/slide_menu_admin/side_menu_items.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -76,19 +78,14 @@ class _SideMenuEmployeeDesktopState extends State<SideMenuEmployeeDesktop> {
     getNumberNotify();
     deplay();
     final AppProvider appProvider = Provider.of<AppProvider>(context);
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     return timeout == true
         ? Container(
-            decoration: const BoxDecoration(
-                color: Colors.white,
-                gradient: LinearGradient(
-                  colors: [Colors.deepPurple, Colors.deepPurpleAccent],
-                ),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.purpleAccent,
-                      offset: Offset(3, 5),
-                      blurRadius: 10)
-                ]),
+            decoration: BoxDecoration(
+              color: themeProvider.isLightMode
+                  ? const Color(0XFFEFEBE9)
+                  : Colors.black,
+            ),
             width: 220,
             child: Column(
               children: [
@@ -153,8 +150,9 @@ class _SideMenuEmployeeDesktopState extends State<SideMenuEmployeeDesktop> {
                       locator<NavigationService>()
                           .globalNavigateTo(changePasswordRoute, context);
                     }),
+                const ChangeThemeButton(),
                 const SizedBox(
-                  height: 240,
+                  height: 200,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(

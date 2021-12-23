@@ -1,9 +1,11 @@
 import 'package:advance_employee_management/models/employee.dart';
+import 'package:advance_employee_management/provider/theme_provider.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/department_service.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 
 class EmployeeInformation extends StatefulWidget {
   const EmployeeInformation({Key? key}) : super(key: key);
@@ -53,31 +55,44 @@ class _EmployeeInformationState extends State<EmployeeInformation> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     getEmployeeInf();
     isLoading();
     return loading == true
-        ? Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
-                SizedBox(
-                  child: SpinKitCircle(
-                    color: Colors.blue,
-                    size: 50,
+        ? Container(
+            color: themeProvider.isLightMode ? Colors.white : Colors.brown,
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const <Widget>[
+                  SizedBox(
+                    child: SpinKitCircle(
+                      color: Colors.blue,
+                      size: 50,
+                    ),
+                    height: 50.0,
+                    width: 50.0,
                   ),
-                  height: 50.0,
-                  width: 50.0,
-                ),
-              ],
+                ],
+              ),
             ),
           )
         : Scaffold(
-            backgroundColor: Colors.white,
+            // backgroundColor: Colors.white,
             appBar: AppBar(
+              backgroundColor: themeProvider.isLightMode
+                  ? const Color(0XFFEFEBE9)
+                  : Colors.black,
+              // ignore: prefer_const_literals_to_create_immutables
+              // actions: [const ChangeThemeButton()],
               automaticallyImplyLeading: false,
-              backgroundColor: Colors.deepPurpleAccent,
-              title: const Text("Your profile"),
+              // backgroundColor: Colors.deepPurpleAccent,
+              title: Text("Your profile",
+                  style: TextStyle(
+                    color:
+                        themeProvider.isLightMode ? Colors.black : Colors.white,
+                  )),
             ),
             body: SingleChildScrollView(
               child: Column(
@@ -204,7 +219,7 @@ class _EmployeeInformationState extends State<EmployeeInformation> {
       child: Text(
         title,
         style: const TextStyle(
-          color: Colors.black,
+          // color: Colors.black,
           fontSize: 17,
           letterSpacing: 2,
         ),

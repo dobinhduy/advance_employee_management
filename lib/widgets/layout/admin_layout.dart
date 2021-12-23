@@ -25,7 +25,7 @@ class AdminLayoutRoute extends StatelessWidget {
                     child: Navigator(
                   key: locator<NavigationService>().navigatorKey,
                   onGenerateRoute: generateRoute,
-                  initialRoute: MainHomeP,
+                  initialRoute: EmployeeLayout,
                 ))
               ],
             ),

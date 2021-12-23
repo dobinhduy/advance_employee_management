@@ -2,6 +2,7 @@ import 'dart:html';
 
 import 'package:advance_employee_management/models/employee.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:advance_employee_management/provider/theme_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
@@ -152,6 +153,7 @@ class _EmployeeInforState extends State<EmployeeInfor> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     getImage();
     getEmployeeInf();
     isLoading();
@@ -159,10 +161,17 @@ class _EmployeeInforState extends State<EmployeeInfor> {
     TableProvider provider = Provider.of<TableProvider>(context);
     return loading == false
         ? Scaffold(
-            backgroundColor: Colors.white,
             appBar: AppBar(
-              backgroundColor: Colors.deepPurple,
-              title: const Text("Employee Information"),
+              backgroundColor:
+                  themeProvider.isLightMode ? Colors.brown[50] : Colors.black,
+              // backgroundColor: Colors.deepPurple,
+              title: Text(
+                "Employee Information",
+                style: TextStyle(
+                    color: themeProvider.isLightMode
+                        ? Colors.black
+                        : Colors.white),
+              ),
             ),
             body: SingleChildScrollView(
               child: Row(
@@ -398,18 +407,21 @@ class _EmployeeInforState extends State<EmployeeInfor> {
                   ]),
             ),
           )
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
-              SizedBox(
-                width: 50,
-                height: 50,
-                child: SpinKitChasingDots(
-                  color: Colors.purpleAccent,
+        : Container(
+            color: themeProvider.isLightMode ? Colors.white : Colors.brown,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const [
+                SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: SpinKitChasingDots(
+                    color: Colors.purpleAccent,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
   }
 
@@ -466,7 +478,7 @@ class _EmployeeInforState extends State<EmployeeInfor> {
       child: Text(
         title,
         style: const TextStyle(
-          color: Colors.black,
+          // color: Colors.black,
           fontSize: 17,
           letterSpacing: 2,
         ),
@@ -480,7 +492,7 @@ class _EmployeeInforState extends State<EmployeeInfor> {
       child: Text(
         title,
         style: const TextStyle(
-          color: Colors.black,
+          // color: Colors.black,
           fontSize: 15,
           letterSpacing: 2,
         ),
@@ -519,10 +531,10 @@ class _EmployeeInforState extends State<EmployeeInfor> {
       height: 40,
       child: TextFormField(
           enabled: false,
-          style: const TextStyle(color: Colors.black),
+          // style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             hintText: text,
-            labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
+            // labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
             enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(width: 1, color: Colors.grey)),
           )),

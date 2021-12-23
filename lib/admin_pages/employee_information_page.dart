@@ -5,6 +5,7 @@ import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/department_service.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
+import 'package:advance_employee_management/widgets/change_button/change_theme_button.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/scheduler.dart';
@@ -239,7 +240,8 @@ class _UserInforPageState extends State<UserInforPage> {
         ? Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              backgroundColor: Colors.deepPurpleAccent,
+              actions: [const ChangeThemeButton()],
+              // backgroundColor: Colors.deepPurpleAccent,
               title: const Text("Employee Information"),
             ),
             body: SingleChildScrollView(

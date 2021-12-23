@@ -3,6 +3,7 @@ import 'package:advance_employee_management/Manager_Pages/add_member.dart';
 import 'package:advance_employee_management/locator.dart';
 import 'package:advance_employee_management/models/task.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:advance_employee_management/provider/theme_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/department_service.dart';
@@ -248,10 +249,13 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
     TableProvider projectProvider = Provider.of<TableProvider>(
       context,
     );
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     return loading == false
         ? Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.deepPurpleAccent,
+              // backgroundColor: Colors.deepPurpleAccent,
+              backgroundColor:
+                  themeProvider.isLightMode ? Colors.brown[50] : Colors.black,
               title: const Text('Project Information'),
             ),
             body: SingleChildScrollView(
@@ -963,18 +967,21 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
                 ),
               ),
             ))
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
-              SizedBox(
-                width: 50,
-                height: 50,
-                child: SpinKitDualRing(
-                  color: Colors.deepPurpleAccent,
+        : Container(
+            color: themeProvider.isLightMode ? Colors.white : Colors.brown,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const [
+                SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: SpinKitDualRing(
+                    color: Colors.deepPurpleAccent,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
   }
 

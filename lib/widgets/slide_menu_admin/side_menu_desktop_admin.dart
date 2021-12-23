@@ -4,6 +4,7 @@ import 'package:advance_employee_management/provider/app_provider.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
+import 'package:advance_employee_management/widgets/change_button/change_theme_button.dart';
 import 'package:advance_employee_management/widgets/navbar/navbar_logo_admin.dart';
 import 'package:advance_employee_management/widgets/slide_menu_admin/side_menu_items.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -50,8 +51,9 @@ class SildeMenuAdminDesktop extends StatelessWidget {
                 appProvider.changeCurrentPage(DisplayedPage.DEPARTMENT);
                 locator<NavigationService>().navigateTo(DepartmentLayout);
               }),
+          const ChangeThemeButton(),
           const SizedBox(
-            height: 270,
+            height: 240,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),

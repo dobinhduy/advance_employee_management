@@ -127,7 +127,7 @@ class AddProjectPageState extends State<AddProjectPage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('New Project'),
-          backgroundColor: Colors.deepPurpleAccent,
+          // backgroundColor: Colors.deepPurpleAccent,
           actions: [
             TextButton(
                 onPressed: () async {
@@ -469,7 +469,7 @@ class AddProjectPageState extends State<AddProjectPage> {
           enabled: enable,
           controller: controller,
           obscureText: obscureText,
-          style: const TextStyle(color: Colors.black),
+          // style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             hintText: text,
             labelStyle: const TextStyle(fontSize: 13, color: Colors.black),
@@ -485,7 +485,7 @@ class AddProjectPageState extends State<AddProjectPage> {
 
   Widget description(TextEditingController desciption) {
     return Container(
-      height: 300,
+      height: 150,
       width: 900,
       decoration: BoxDecoration(
         color: Colors.white12,
@@ -500,7 +500,7 @@ class AddProjectPageState extends State<AddProjectPage> {
               OutlineInputBorder(borderSide: BorderSide(color: Colors.teal)),
           hintText: "Description",
           hintStyle: TextStyle(
-            color: Colors.grey,
+            // color: Colors.grey,
             fontSize: 17,
           ),
           contentPadding: EdgeInsets.all(10),
@@ -515,7 +515,7 @@ class AddProjectPageState extends State<AddProjectPage> {
       child: Text(
         title,
         style: const TextStyle(
-            color: Colors.black,
+            // color: Colors.black,
             fontSize: 13,
             letterSpacing: 0.5,
             fontWeight: FontWeight.bold),

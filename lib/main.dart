@@ -2,11 +2,13 @@ import 'package:advance_employee_management/locator.dart';
 
 import 'package:advance_employee_management/provider/app_provider.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:advance_employee_management/provider/theme_provider.dart';
 import 'package:advance_employee_management/rounting/route.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
@@ -51,16 +53,23 @@ class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    // ignore: avoid_print
-    print('Platform: ${Platform.operatingSystem}');
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Advance Employee Management',
-      theme: ThemeData(primarySwatch: Colors.green),
-      onGenerateRoute: generateRoute,
-      initialRoute: LonginRoute,
-      builder: EasyLoading.init(),
-    );
-  }
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      builder: (context, _) {
+        print('Platform: ${Platform.operatingSystem}');
+        final themeProvider = Provider.of<ThemeProvider>(context);
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Advance Employee Management',
+          // theme: ThemeData(primarySwatch: Colors.green),
+          // theme: FlexColorScheme.light(scheme: FlexScheme.gold).toTheme,
+          theme: MyThemes.lightTheme,
+          themeMode: themeProvider.themeMode,
+          darkTheme: MyThemes.darkTheme,
+          // FlexColorScheme.dark(scheme: FlexScheme.deepPurple).toTheme,
+          onGenerateRoute: generateRoute,
+          initialRoute: LonginRoute,
+          builder: EasyLoading.init(),
+        );
+      });
 }

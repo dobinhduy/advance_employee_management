@@ -4,6 +4,7 @@ import 'package:advance_employee_management/Manager_Pages/user_infor_page.dart';
 import 'package:advance_employee_management/admin_pages/page_header.dart';
 import 'package:advance_employee_management/models/employee.dart';
 import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:advance_employee_management/provider/theme_provider.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/notification_service.dart';
@@ -91,7 +92,7 @@ class _EmployeeOfManagerPageState extends State<EmployeeOfManagerPage> {
   @override
   Widget build(BuildContext context) {
     TableProvider employeeProvider = Provider.of<TableProvider>(context);
-
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     return loading == false
         ? SingleChildScrollView(
             child: Column(
@@ -99,13 +100,11 @@ class _EmployeeOfManagerPageState extends State<EmployeeOfManagerPage> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                 const PageHeader(
-                  text: 'Employee Table',
+                  text: '  Employee Table',
                 ),
                 Container(
-                  margin: const EdgeInsets.all(5),
-                  padding: const EdgeInsets.all(0),
                   constraints: const BoxConstraints(
-                    maxHeight: 700,
+                    maxHeight: 740,
                   ),
                   child: Card(
                     elevation: 1,
@@ -224,14 +223,13 @@ class _EmployeeOfManagerPageState extends State<EmployeeOfManagerPage> {
                   ),
                 ),
               ]))
-        : const SizedBox(
-            child: Center(
+        : Container(
+            color: themeProvider.isLightMode ? Colors.white : Colors.brown,
+            child: const Center(
                 child: SpinKitFadingCube(
               color: Colors.black,
               size: 60,
             )),
-            width: 50,
-            height: 50,
           );
   }
 

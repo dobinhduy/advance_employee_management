@@ -57,14 +57,14 @@ class CardItem extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 height: 120,
-                width: 350,
+                width: 360,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
                     gradient: LinearGradient(
                         colors: [color1, color2],
-                        begin: Alignment.bottomLeft,
-                        end: Alignment.topRight),
+                        begin: Alignment.bottomRight,
+                        end: Alignment.topLeft),
                     boxShadow: const [
                       BoxShadow(
                           color: Colors.grey,
@@ -84,7 +84,7 @@ class CardItem extends StatelessWidget {
                           CustomTextProject(
                               text: projectname,
                               size: 16,
-                              color: Colors.black,
+                              // color: Colors.black,
                               weight: FontWeight.bold)
                         ],
                       ),
@@ -100,7 +100,7 @@ class CardItem extends StatelessWidget {
                           CustomTextProject(
                               text: projectid,
                               size: 16,
-                              color: Colors.black,
+                              // color: Colors.black,
                               weight: FontWeight.bold)
                         ],
                       ),
@@ -116,7 +116,7 @@ class CardItem extends StatelessWidget {
                           CustomTextProject(
                               text: manager,
                               size: 16,
-                              color: Colors.black,
+                              // color: Colors.black,
                               weight: FontWeight.bold)
                         ],
                       ),
@@ -132,7 +132,7 @@ class CardItem extends StatelessWidget {
                           CustomTextProject(
                               text: endday.replaceAll("-", "/"),
                               size: 16,
-                              color: Colors.black,
+                              // color: Colors.black,
                               weight: FontWeight.bold)
                         ],
                       ),

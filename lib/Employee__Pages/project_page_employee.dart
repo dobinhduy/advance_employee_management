@@ -1,9 +1,11 @@
 import 'package:advance_employee_management/Custom/carditem_custom.dart';
 import 'package:advance_employee_management/models/project.dart';
+import 'package:advance_employee_management/provider/theme_provider.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/project_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProjectEmployeePage extends StatefulWidget {
   const ProjectEmployeePage({Key? key}) : super(key: key);
@@ -17,7 +19,6 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
   ProjectService projectService = ProjectService();
   EmployeeServices employeeServices = EmployeeServices();
   List<ProjectModel> _projects = <ProjectModel>[];
-  final List<ProjectModel> _employeeProject = <ProjectModel>[];
   final List<ProjectModel> _openproject = <ProjectModel>[];
   final List<ProjectModel> _inprocessproject = <ProjectModel>[];
   final List<ProjectModel> _finishproject = <ProjectModel>[];
@@ -31,23 +32,12 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
   void initState() {
     super.initState();
     getMemberID(employeeEmail);
-
     getALLProject();
-    getEmployeeProject();
   }
 
   getALLProject() async {
     _projects = await projectService.getAllProject();
-    setState(() {});
-  }
-
-  getMemberID(String email) async {
-    memid = await employeeServices.getEmployeeIDbyEmail(email);
-    setState(() {});
-  }
-
-  classifyProject() {
-    for (var project in _employeeProject) {
+    for (var project in _projects) {
       if (project.status == "Open") {
         _openproject.add(project);
       }
@@ -64,14 +54,8 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
     setState(() {});
   }
 
-  getEmployeeProject() {
-    for (ProjectModel project in _projects) {
-      for (String member in project.members) {
-        if (member == memid) {
-          _employeeProject.add(project);
-        }
-      }
-    }
+  getMemberID(String email) async {
+    memid = await employeeServices.getEmployeeIDbyEmail(email);
     setState(() {});
   }
 
@@ -83,9 +67,8 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
 
   @override
   Widget build(BuildContext context) {
-    getEmployeeProject();
-    classifyProject();
     setisADD();
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -106,7 +89,9 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
                               project: project,
                               projectname: project.name,
                               projectid: project.id,
-                              color1: Colors.white,
+                              color1: themeProvider.isLightMode
+                                  ? Colors.white
+                                  : Colors.pink,
                               color2: Colors.pinkAccent,
                               icon: Icons.book,
                               startday: project.start,
@@ -128,7 +113,9 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
                               project: project,
                               projectname: project.name,
                               projectid: project.id,
-                              color1: Colors.white,
+                              color1: themeProvider.isLightMode
+                                  ? Colors.white
+                                  : Colors.purple,
                               color2: Colors.purpleAccent,
                               icon: Icons.book,
                               startday: project.start,
@@ -150,7 +137,9 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
                               project: project,
                               projectname: project.name,
                               projectid: project.id,
-                              color1: Colors.white,
+                              color1: themeProvider.isLightMode
+                                  ? Colors.white
+                                  : Colors.orange,
                               color2: Colors.orangeAccent,
                               icon: Icons.book,
                               startday: project.start,
@@ -172,7 +161,9 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
                               project: project,
                               projectname: project.name,
                               projectid: project.id,
-                              color1: Colors.white,
+                              color1: themeProvider.isLightMode
+                                  ? Colors.white
+                                  : Colors.blue,
                               color2: Colors.blueAccent,
                               icon: Icons.book,
                               startday: project.start,
@@ -196,7 +187,7 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
       child: Text(
         title,
         style: const TextStyle(
-          color: Colors.black,
+          // color: Colors.black,
           fontSize: 13,
           letterSpacing: 0.5,
         ),
@@ -210,7 +201,7 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
       child: Text(
         title,
         style: const TextStyle(
-          color: Colors.black,
+          // color: Colors.black,
           fontSize: 17,
           letterSpacing: 2,
         ),
