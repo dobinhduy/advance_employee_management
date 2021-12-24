@@ -31,7 +31,7 @@ class _EmployeeInformationState extends State<EmployeeInformation> {
   }
 
   isLoading() {
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
         setState(() {
           loading = false;

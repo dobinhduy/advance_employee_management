@@ -27,7 +27,9 @@ class DepartmentService {
       docref.update({
         'projectid': FieldValue.arrayRemove([projectid])
       });
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Future<bool> checkExistDepartment(String id) async {
@@ -71,7 +73,9 @@ class DepartmentService {
       docref.update({
         'projectid': FieldValue.arrayUnion([projectid])
       });
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   void deleteDepartment(String id) async {
@@ -83,7 +87,9 @@ class DepartmentService {
       QueryDocumentSnapshot doc = querySnapshot.docs[0];
       DocumentReference docref = doc.reference;
       await docref.delete();
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   void updateProject(String id, Map<String, dynamic> map) async {
@@ -96,7 +102,9 @@ class DepartmentService {
       DocumentReference docref = doc.reference;
 
       await docref.update(map);
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Future<List<String>> getAllDepartmentName() async =>

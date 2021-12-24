@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 class AssignTask extends StatefulWidget {
-  AssignTask(
+  const AssignTask(
       {Key? key,
       required this.projectName,
       required this.projectid,

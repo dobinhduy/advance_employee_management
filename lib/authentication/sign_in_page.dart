@@ -41,7 +41,7 @@ class _SignUpPageState extends State<SignInPage> {
           width: MediaQuery.of(context).size.width,
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("images/backgroupImage.jpg"),
+              image: AssetImage("images/back.png"),
               fit: BoxFit.cover,
             ),
           ),
@@ -52,7 +52,7 @@ class _SignUpPageState extends State<SignInPage> {
                 "Login",
                 style: TextStyle(
                     fontSize: 35,
-                    color: Colors.black,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold),
               ),
               const SizedBox(
@@ -84,7 +84,7 @@ class _SignUpPageState extends State<SignInPage> {
                     child: const Text(
                       "Forget Password ?",
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -107,14 +107,14 @@ class _SignUpPageState extends State<SignInPage> {
       child: TextFormField(
           controller: controller,
           obscureText: obscureText,
-          style: const TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             prefixIcon: const Icon(
               Icons.people,
-              color: Colors.black,
+              color: Colors.white,
             ),
             labelText: text,
-            labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
+            labelStyle: const TextStyle(fontSize: 17, color: Colors.white),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
                 borderSide:
@@ -134,14 +134,14 @@ class _SignUpPageState extends State<SignInPage> {
       child: TextFormField(
           controller: controller,
           obscureText: obscureText,
-          style: const TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             prefixIcon: const Icon(
               Icons.vpn_key,
-              color: Colors.black,
+              color: Colors.white,
             ),
             labelText: text,
-            labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
+            labelStyle: const TextStyle(fontSize: 17, color: Colors.white),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
                 borderSide:
@@ -206,7 +206,7 @@ class _SignUpPageState extends State<SignInPage> {
         width: MediaQuery.of(context).size.width / 4.5,
         height: 60,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(17), color: Colors.purple[200]),
+            borderRadius: BorderRadius.circular(17), color: Colors.blue),
         child: Center(
           child: circular
               ? const CircularProgressIndicator()

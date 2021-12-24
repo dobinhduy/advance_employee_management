@@ -8,11 +8,9 @@ import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
-import 'package:universal_io/io.dart';
 
 // flutter run -d edge --web-hostname localhost --web-port 5000 --no-sound-null-safety --web-renderer canvaskit
 

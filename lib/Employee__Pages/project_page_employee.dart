@@ -206,7 +206,6 @@ class _ProjectPageEmployeeState extends State<ProjectEmployeePage> {
               color: Colors.orangeAccent,
             )),
           );
-    ;
   }
 
   Widget titlebox2(String title) {

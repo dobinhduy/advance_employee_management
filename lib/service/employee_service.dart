@@ -51,7 +51,9 @@ class EmployeeServices {
       DocumentReference docref = doc.reference;
 
       await docref.delete();
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Future<String> getphotoURL(String email) async {
@@ -63,7 +65,9 @@ class EmployeeServices {
     try {
       DocumentSnapshot doc = querySnapshot.docs[0];
       photoURL = (doc.data() as dynamic)['photourl'];
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
     return photoURL;
   }
 
@@ -76,7 +80,9 @@ class EmployeeServices {
     try {
       DocumentSnapshot doc = querySnapshot.docs[0];
       departmentName = (doc.data() as dynamic)['department'];
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
     return departmentName;
   }
 
@@ -89,7 +95,9 @@ class EmployeeServices {
     try {
       DocumentSnapshot doc = querySnapshot.docs[0];
       name = (doc.data() as dynamic)['name'];
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
     return name;
   }
 
@@ -102,7 +110,9 @@ class EmployeeServices {
     try {
       DocumentSnapshot doc = querySnapshot.docs[0];
       id = (doc.data() as dynamic)['id'];
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
     return id;
   }
 
@@ -115,7 +125,9 @@ class EmployeeServices {
     try {
       DocumentSnapshot doc = querySnapshot.docs[0];
       name = (doc.data() as dynamic)['name'];
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
     return name;
   }
 

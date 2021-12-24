@@ -15,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 import 'dart:math';
 
 import '../locator.dart';

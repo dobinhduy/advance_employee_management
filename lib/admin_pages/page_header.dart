@@ -18,11 +18,7 @@ class PageHeader extends StatelessWidget {
         Container(
           width: MediaQuery.of(context).size.width - 220,
           color: themeProvider.isLightMode ? Colors.white : Colors.black,
-          child: CustomText(
-              text: text,
-              size: 35,
-              // color: Colors.deepOrangeAccent,
-              fontWeight: FontWeight.bold),
+          child: CustomText(text: text, size: 35, fontWeight: FontWeight.bold),
         ),
       ],
     );
