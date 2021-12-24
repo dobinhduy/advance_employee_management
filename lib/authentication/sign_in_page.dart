@@ -1,5 +1,6 @@
 // ignore: file_names
 
+import 'package:advance_employee_management/provider/app_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/admin_service.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
@@ -7,6 +8,7 @@ import 'package:advance_employee_management/service/employee_service.dart';
 import 'package:advance_employee_management/service/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:provider/provider.dart';
 
 import '../../locator.dart';
 
@@ -30,6 +32,7 @@ class _SignUpPageState extends State<SignInPage> {
   String employeeID = "";
   @override
   Widget build(BuildContext context) {
+    AppProvider appProvider = Provider.of<AppProvider>(context, listen: false);
     return Scaffold(
       body: SingleChildScrollView(
         physics: const ScrollPhysics(),
@@ -63,7 +66,7 @@ class _SignUpPageState extends State<SignInPage> {
               const SizedBox(
                 height: 30,
               ),
-              loginButton(),
+              loginButton(appProvider),
               const SizedBox(
                 height: 15,
               ),
@@ -150,7 +153,7 @@ class _SignUpPageState extends State<SignInPage> {
     );
   }
 
-  Widget loginButton() {
+  Widget loginButton(AppProvider appProvider) {
     return InkWell(
       onTap: () async {
         setState(() {
@@ -174,12 +177,15 @@ class _SignUpPageState extends State<SignInPage> {
             });
 
             if (isAdmin) {
+              appProvider.changeCurrentPage(DisplayedPage.EMPLOYEES);
               locator<NavigationService>()
                   .globalNavigateTo(AdLayOutRoute, context);
             } else if (isManager) {
+              appProvider.changeCurrentPage(DisplayedPage.MANAGERINFORMATION);
               locator<NavigationService>()
                   .globalNavigateTo(ManagerRouteLayout, context);
             } else {
+              appProvider.changeCurrentPage(DisplayedPage.EMPLOYEEINFORMATION);
               locator<NavigationService>()
                   .globalNavigateTo(EmployeeRouteLayout, context);
             }

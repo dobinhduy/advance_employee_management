@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:advance_employee_management/provider/table_provider.dart';
+import 'package:advance_employee_management/provider/theme_provider.dart';
 import 'package:advance_employee_management/rounting/route_names.dart';
 import 'package:advance_employee_management/service/auth_services.dart';
 import 'package:advance_employee_management/service/department_service.dart';
@@ -105,14 +106,22 @@ class _AddUserPageState extends State<AddUserPage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     getAllDepartmentName();
     deplay();
     return timeup == true
         ? Scaffold(
             appBar: AppBar(
+              backgroundColor:
+                  themeProvider.isLightMode ? Colors.brown[50] : Colors.black,
               automaticallyImplyLeading: false,
-              title: const Text("Add New Employee"),
-              // backgroundColor: Colors.deepPurpleAccent,
+              title: Text(
+                "Add New Employee",
+                style: TextStyle(
+                    color: themeProvider.isLightMode
+                        ? Colors.black
+                        : Colors.white),
+              ),
             ),
             body: SingleChildScrollView(
               scrollDirection: Axis.vertical,
@@ -121,7 +130,6 @@ class _AddUserPageState extends State<AddUserPage> {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
-                    color: Colors.white,
                     padding: const EdgeInsets.only(left: 30),
                     child: Row(
                       children: <Widget>[
@@ -135,7 +143,7 @@ class _AddUserPageState extends State<AddUserPage> {
                             titlebox("Frist Name"),
                             inputBox("First name", fisrtname, false),
                             titlebox("Gender"),
-                            genderSelectedBox(),
+                            genderSelectedBox(themeProvider),
                             titlebox("Birthday"),
                             birthdayButton(),
                             titlebox("Employee ID"),
@@ -274,12 +282,15 @@ class _AddUserPageState extends State<AddUserPage> {
               ),
             ),
           )
-        : const Center(
-            child: SizedBox(
-              width: 40,
-              height: 40,
-              child: SpinKitHourGlass(
-                color: Colors.yellow,
+        : Container(
+            color: themeProvider.isLightMode ? Colors.white : Colors.brown,
+            child: const Center(
+              child: SizedBox(
+                width: 40,
+                height: 40,
+                child: SpinKitHourGlass(
+                  color: Colors.yellow,
+                ),
               ),
             ),
           );
@@ -296,7 +307,7 @@ class _AddUserPageState extends State<AddUserPage> {
           style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             hintText: text,
-            labelStyle: const TextStyle(fontSize: 17, color: Colors.black),
+            labelStyle: const TextStyle(fontSize: 17),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide: const BorderSide(width: 1, color: Colors.amber)),
@@ -385,7 +396,7 @@ class _AddUserPageState extends State<AddUserPage> {
       value: dropdownDeName,
       iconSize: 24,
       elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
+      // style: const TextStyle(color: Colors.deepPurple),
       underline: Container(
         height: 2,
         color: Colors.deepPurpleAccent,
@@ -410,7 +421,6 @@ class _AddUserPageState extends State<AddUserPage> {
       value: dropDownRole,
       iconSize: 24,
       elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
       underline: Container(
         height: 2,
         color: Colors.deepPurpleAccent,
@@ -437,14 +447,16 @@ class _AddUserPageState extends State<AddUserPage> {
     );
   }
 
-  Widget genderSelectedBox() {
+  Widget genderSelectedBox(ThemeProvider themeProvider) {
     return Padding(
       padding: const EdgeInsets.only(left: 30),
       child: Row(
         children: [
-          const Text(
+          Text(
             "Male",
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(
+                fontSize: 18,
+                color: themeProvider.isLightMode ? Colors.black : Colors.white),
           ),
           Checkbox(
             checkColor: Colors.black,
@@ -463,9 +475,11 @@ class _AddUserPageState extends State<AddUserPage> {
           const SizedBox(
             width: 30,
           ),
-          const Text(
+          Text(
             "Female",
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(
+                fontSize: 18,
+                color: themeProvider.isLightMode ? Colors.black : Colors.white),
           ),
           Checkbox(
             checkColor: Colors.black,
@@ -641,7 +655,6 @@ class _AddUserPageState extends State<AddUserPage> {
       child: Text(
         title,
         style: const TextStyle(
-          color: Colors.black,
           fontSize: 17,
           letterSpacing: 2,
         ),

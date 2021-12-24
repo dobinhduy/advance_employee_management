@@ -187,6 +187,19 @@ class ProjectService {
           .then((doc) {
         return ProjectModel.fromSnapshot(doc);
       });
+  Future<List<ProjectModel>> getAllProjectOfEmployee(String employeeID) async =>
+      FirebaseFirestore.instance.collection(collection).get().then((result) {
+        List<ProjectModel> projects = [];
+        List<dynamic> membersid = [];
+        for (DocumentSnapshot project in result.docs) {
+          membersid = (project.data() as dynamic)['members'];
+          if (membersid.contains(employeeID)) {
+            projects.add(ProjectModel.fromSnapshot(project));
+          }
+        }
+
+        return projects;
+      });
   Future<List<ProjectModel>> getAllProject() async =>
       FirebaseFirestore.instance.collection(collection).get().then((result) {
         List<ProjectModel> projects = [];

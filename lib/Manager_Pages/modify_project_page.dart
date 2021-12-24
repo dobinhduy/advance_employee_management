@@ -256,7 +256,6 @@ class _ModifyProjectPageState extends State<ModifyProjectPage> {
               leading: BackButton(
                   color:
                       themeProvider.isLightMode ? Colors.black : Colors.white),
-              // backgroundColor: Colors.deepPurpleAccent,
               backgroundColor:
                   themeProvider.isLightMode ? Colors.brown[50] : Colors.black,
               title: Text(
