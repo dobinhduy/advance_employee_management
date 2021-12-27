@@ -44,7 +44,7 @@ class SileMenuItemDesktop extends StatelessWidget {
               tileColor: active ? Colors.white : Colors.white,
               title: CustomText(
                   text: text,
-                  size: active ? 19 : 16,
+                  size: active ? 17 : 16,
                   fontWeight: FontWeight.normal),
               leading: Icon(
                 icon,

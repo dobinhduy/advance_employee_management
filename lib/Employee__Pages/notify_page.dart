@@ -148,8 +148,9 @@ class _NotificationPageState extends State<NotificationPage> {
             border: Border.all(width: 1),
             color: textColor,
           ),
-          width: 550,
+          // width: 550,
           // height: 120,
+
           child: Column(
             children: [
               Row(

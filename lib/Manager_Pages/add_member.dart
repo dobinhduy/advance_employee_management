@@ -117,7 +117,7 @@ class _AddMemberState extends State<AddMember> {
             },
             child: const Text(
               "Add",
-              style: TextStyle(color: Colors.white, fontSize: 20),
+              style: TextStyle(fontSize: 20),
             )),
       ],
     );

@@ -494,7 +494,7 @@ class AddProjectPageState extends State<AddProjectPage> {
       child: TextFormField(
         controller: desciption,
         maxLines: 7,
-        style: const TextStyle(color: Colors.black, fontSize: 17),
+        style: const TextStyle(fontSize: 17),
         decoration: const InputDecoration(
           border:
               OutlineInputBorder(borderSide: BorderSide(color: Colors.teal)),

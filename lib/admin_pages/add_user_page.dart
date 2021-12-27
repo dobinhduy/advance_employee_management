@@ -303,7 +303,7 @@ class _AddUserPageState extends State<AddUserPage> {
       child: TextFormField(
           controller: controller,
           obscureText: obscureText,
-          style: const TextStyle(color: Colors.black),
+          // style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             hintText: text,
             labelStyle: const TextStyle(fontSize: 17),

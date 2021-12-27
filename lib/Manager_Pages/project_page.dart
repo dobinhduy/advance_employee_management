@@ -100,7 +100,8 @@ class _ProjectPageState extends State<ProjectPage> {
                   ),
                   child: Card(
                     elevation: 1,
-                    shadowColor: Colors.black,
+                    color:
+                        themeProvider.isLightMode ? Colors.white : Colors.brown,
                     clipBehavior: Clip.none,
                     child: ResponsiveDatatable(
                       headers: projectProvider.projectHeaders,

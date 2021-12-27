@@ -33,7 +33,7 @@ class SildeMenuAdminDesktop extends StatelessWidget {
           const NavBarLogoAdmin(),
           SileMenuItemDesktop(
               active: appProvider.currentPage == DisplayedPage.EMPLOYEES,
-              text: "Employee",
+              text: "Employee Table",
               icon: Icons.people_alt_outlined,
               onTap: () {
                 ChangeNotifierProvider.value(value: TableProvider.init());
@@ -42,7 +42,7 @@ class SildeMenuAdminDesktop extends StatelessWidget {
               }),
           SileMenuItemDesktop(
               active: appProvider.currentPage == DisplayedPage.DEPARTMENT,
-              text: "Department",
+              text: "Department Table",
               icon: Icons.home_filled,
               onTap: () {
                 appProvider.changeCurrentPage(DisplayedPage.DEPARTMENT);
@@ -50,7 +50,7 @@ class SildeMenuAdminDesktop extends StatelessWidget {
               }),
           const ChangeThemeButton(),
           const SizedBox(
-            height: 240,
+            height: 280,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),

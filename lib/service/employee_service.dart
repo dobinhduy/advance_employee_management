@@ -111,7 +111,7 @@ class EmployeeServices {
       DocumentSnapshot doc = querySnapshot.docs[0];
       id = (doc.data() as dynamic)['id'];
     } catch (e) {
-      print(e.toString());
+      print("");
     }
     return id;
   }
